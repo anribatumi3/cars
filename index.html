@@ -5,33 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Автосалон InterPlay</title>
     <style>
-        /* Общие стили в темных тонах сервера */
         body {
             background-color: #0b0c16;
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
         }
 
         h1 {
             text-align: center;
-            color: #e51b24; /* Стилизация под лаунчер/сервер */
+            color: #e51b24;
             margin-bottom: 30px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        /* Сетка для карточек (Grid) */
+        #loader {
+            text-align: center;
+            font-size: 18px;
+            color: #72768d;
+            margin-top: 50px;
+        }
+
         .catalog-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Стиль самой карточки (как на фото 2) */
         .car-card {
             background-color: #141622;
             border-radius: 12px;
@@ -49,7 +53,6 @@
             border-color: #e51b24;
         }
 
-        /* Контейнер для фото */
         .car-image {
             width: 100%;
             height: 180px;
@@ -66,7 +69,6 @@
             object-fit: contain;
         }
 
-        /* Плашка "Новинка" или "Класс" */
         .badge {
             position: absolute;
             top: 12px;
@@ -80,7 +82,6 @@
             text-transform: uppercase;
         }
 
-        /* Информационная часть */
         .car-info {
             padding: 20px;
             display: flex;
@@ -91,34 +92,42 @@
         .car-name {
             font-size: 20px;
             font-weight: bold;
-            margin: 0 0 4px 0;
+            margin: 0 0 2px 0;
         }
 
         .real-name {
             color: #72768d;
             font-size: 14px;
-            margin: 0 0 15px 0;
+            margin: 0 0 4px 0;
         }
 
-        /* Характеристики (Скорость, Бак) */
+        .dealership {
+            font-size: 12px;
+            color: #ff9800; /* Оранжевый цвет для автосалона */
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Блок технических характеристик */
         .car-specs {
-            display: flex;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
             font-size: 13px;
             color: #a3a7c2;
             margin-bottom: 20px;
             background: #1c1e2f;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
         }
 
         .spec-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
-        /* Кнопки и Цены */
+        /* Блок с ценами */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -130,10 +139,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(229, 27, 36, 0.1);
-            padding: 10px;
+            padding: 8px 12px;
             border-radius: 6px;
+        }
+
+        /* Стиль для основной цены покупки */
+        .price-row.main-price {
+            background: rgba(229, 27, 36, 0.1);
             border-left: 4px solid #e51b24;
+        }
+
+        /* Стиль для слива в гос */
+        .price-row.gos-price {
+            background: rgba(114, 118, 141, 0.1);
+            border-left: 4px solid #72768d;
         }
 
         .price-label {
@@ -142,85 +161,105 @@
         }
 
         .price-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
+        }
+
+        .main-price .price-value {
             color: #ffffff;
+            font-size: 17px;
         }
 
-        .btn-more {
-            background-color: #222538;
-            color: white;
-            border: none;
-            padding: 10px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .btn-more:hover {
-            background-color: #313552;
+        .gos-price .price-value {
+            color: #b0b4cc;
         }
     </style>
 </head>
 <body>
 
     <h1>Автосалон InterPlay — Каталог</h1>
+    
+    <div id="loader">Загрузка автопарка...</div>
+    <div class="catalog-container" id="catalog"></div>
 
-    <div class="catalog-container">
+    <script>
+        // СЮДА ВСТАВЬ ID СВОЕЙ ТАБЛИЦЫ
+        const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
+        
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        <div class="car-card">
-            <div class="car-image">
-                <img src="https://via.placeholder.com/260x140/0f101a/ffffff?text=Mercedes+GLS" alt="Benefactor 63 GLS">
-                <div class="badge">Внедорожник</div>
-            </div>
-            <div class="car-info">
-                <div class="car-name">Benefactor 63 GLS</div>
-                <div class="real-name">Mercedes 63 GLS</div>
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                const json = JSON.parse(data.substr(47).slice(0, -2));
+                const rows = json.table.rows;
                 
-                <div class="car-specs">
-                    <div class="spec-item">⚡ 217 км/ч</div>
-                    <div class="spec-item">⛽ 100 л</div>
-                    <div class="spec-item">🎒 25 слот</div>
-                </div>
+                const catalog = document.getElementById('catalog');
+                document.getElementById('loader').style.display = 'none';
 
-                <div class="price-container">
-                    <div class="price-row">
-                        <span class="price-label">Цена в салоне:</span>
-                        <span class="price-value">2 060 000 $</span>
-                    </div>
-                    <button class="btn-more">Подробнее</button>
-                </div>
-            </div>
-        </div>
+                // Начинаем со 2-й строки (индекс 1), так как 1-я — это заголовки таблицы
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (!cells || !cells[0]) continue; // Пропускаем пустые строки, если есть
+                    
+                    // Распределяем данные четко по столбцам твоей таблицы:
+                    const name = cells[0] ? cells[0].f || cells[0].v : 'Без названия';       // Столбец A (Название)
+                    const realName = cells[1] ? cells[1].f || cells[1].v : '';               // Столбец B (Название в ИРЛ)
+                    const carClass = cells[2] ? cells[2].f || cells[2].v : 'Транспорт';       // Столбец C (Класс)
+                    const speed = cells[3] ? cells[3].f || cells[3].v : '-';                  // Столбец D (Скорость)
+                    const acceleration = cells[4] ? cells[4].f || cells[4].v : '-';           // Столбец E (Ускорение)
+                    const handling = cells[5] ? cells[5].f || cells[5].v : '-';               // Столбец F (Управляемость)
+                    const slots = cells[6] ? cells[6].f || cells[6].v : '-';                  // Столбец G (Багажник)
+                    const tank = cells[7] ? cells[7].f || cells[7].v : '-';                    // Столбец H (Топливный бак)
+                    const fuelConsumption = cells[8] ? cells[8].f || cells[8].v : '-';         // Столбец I (Расход топлива)
+                    const dealership = cells[9] ? cells[9].f || cells[9].v : 'Неизвестно';     // Столбец J (Автосалон)
+                    const price = cells[10] ? cells[10].f || cells[10].v : '0';                // Столбец K (Цена)
+                    const gosPrice = cells[11] ? cells[11].f || cells[11].v : '0';             // Столбец L (Слив в гос)
 
-        <div class="car-card">
-            <div class="car-image">
-                <img src="https://via.placeholder.com/260x140/0f101a/ffffff?text=AMG+GT" alt="Benefactor AMG GT">
-                <div class="badge" style="background-color: #ff9800;">Спортивный</div>
-            </div>
-            <div class="car-info">
-                <div class="car-name">Benefactor AMG GT</div>
-                <div class="real-name">Mercedes AMG GT</div>
-                
-                <div class="car-specs">
-                    <div class="spec-item">⚡ 235 км/ч</div>
-                    <div class="spec-item">⛽ 60 л</div>
-                    <div class="spec-item">🎒 8 слот</div>
-                </div>
+                    // Ссылка-заглушка для картинок
+                    const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
 
-                <div class="price-container">
-                    <div class="price-row">
-                        <span class="price-label">Цена в салоне:</span>
-                        <span class="price-value">7 340 000 $</span>
-                    </div>
-                    <button class="btn-more">Подробнее</button>
-                </div>
-            </div>
-        </div>
+                    // Генерируем карточку автомобиля
+                    const card = document.createElement('div');
+                    card.className = 'car-card';
+                    card.innerHTML = `
+                        <div class="car-image">
+                            <img src="${imgUrl}" alt="${name}">
+                            <div class="badge">${carClass}</div>
+                        </div>
+                        <div class="car-info">
+                            <div class="car-name">${name}</div>
+                            <div class="real-name">${realName}</div>
+                            <div class="dealership">📍 ${dealership}</div>
+                            
+                            <div class="car-specs">
+                                <div class="spec-item">⚡ Скор: ${speed}</div>
+                                <div class="spec-item">🚀 Ускор: ${acceleration}</div>
+                                <div class="spec-item">🕹️ Управл: ${handling}</div>
+                                <div class="spec-item">🎒 Багаж: ${slots} сл.</div>
+                                <div class="spec-item">⛽ Бак: ${tank}</div>
+                                <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
+                            </div>
 
-    </div>
-
+                            <div class="price-container">
+                                <div class="price-row main-price">
+                                    <span class="price-label">Цена в салоне:</span>
+                                    <span class="price-value">${price} $</span>
+                                </div>
+                                <div class="price-row gos-price">
+                                    <span class="price-label">Слив в гос:</span>
+                                    <span class="price-value">${gosPrice} $</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    catalog.appendChild(card);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('loader').innerText = 'Ошибка загрузки данных. Проверьте ID таблицы и её публикацию.';
+            });
+    </script>
 </body>
 </html>
