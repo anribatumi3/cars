@@ -24,9 +24,10 @@
         }
 
         .header-logo {
-            width: 75px;
-            height: 75px;
-            margin-bottom: 12px;
+            width: 140px;
+            height: auto;
+            margin-bottom: 15px;
+            object-fit: contain;
         }
 
         .header-main h1 {
@@ -121,9 +122,17 @@
 
         #loader {
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             color: #626975;
             margin-top: 50px;
+            line-height: 1.6;
+        }
+
+        .error-hint {
+            color: #8c2d32;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
         }
 
         /* Сетка каталога */
@@ -298,17 +307,18 @@
             font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .premium-card .main-price .price-value {
             color: #d19a66;
         }
 
-        /* SVG иконка коина */
-        .coin-svg {
+        /* Оригинальная иконка коина */
+        .coin-img {
             width: 18px;
             height: 18px;
+            object-fit: contain;
             vertical-align: middle;
         }
     </style>
@@ -316,13 +326,7 @@
 <body>
 
     <div class="header-main">
-        <svg class="header-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.5 18.5L25.5 39.5L20.5 44.5L4.5 28.5V18.5Z" fill="#3B6E9C"/>
-            <path d="M25.5 39.5L52.5 12.5H59.5L51.5 20.5L30.5 41.5L25.5 39.5Z" fill="#3B6E9C"/>
-            <path d="M59.5 18.5L38.5 39.5L43.5 44.5L59.5 28.5V18.5Z" fill="#DE6B53"/>
-            <path d="M38.5 39.5L11.5 12.5H4.5L12.5 20.5L33.5 41.5L38.5 39.5Z" fill="#DE6B53"/>
-            <path d="M25.5 39.5L32.5 46.5L38.5 39.5L34.5 35.5L32.5 37.5L30.5 35.5L25.5 39.5Z" fill="#C93B6D"/>
-        </svg>
+        <img class="header-logo" src="logo.png" alt="InterPlay RP" onerror="this.style.display='none'">
         <h1>InterPlay<span> RP</span> — Каталог</h1>
     </div>
     
@@ -406,19 +410,8 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
-        // Векторная иконка коина InterPlay (SVG)
-        const COIN_SVG_HTML = `
-            <svg class="coin-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="url(#coinGrad)" stroke-width="2.5" fill="none"/>
-                <path d="M9 8H15M12 8V16M10 16H14" stroke="url(#coinGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <defs>
-                    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#f28e53"/>
-                        <stop offset="100%" stop-color="#e04a2b"/>
-                    </linearGradient>
-                </defs>
-            </svg>
-        `;
+        // Путь к оригинальной иконке коина в корне репозитория
+        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin">`;
 
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
@@ -433,7 +426,7 @@
             if (lower === 'не продается') return `<span>Не продается</span>`;
             
             if (lower.includes('coin') || lower.includes('ic') || lower.includes('кои') || lower.includes('mc')) {
-                return `${COIN_SVG_HTML} <span style="color: #f28e53;">${cleanNum.toLocaleString('ru-RU')}</span>`;
+                return `${COIN_IMG_HTML} <span style="color: #f28e53;">${cleanNum.toLocaleString('ru-RU')}</span>`;
             }
             
             return `<span>${cleanNum.toLocaleString('ru-RU')} $</span>`;
@@ -446,7 +439,7 @@
             })
             .then(csvText => {
                 if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login')) {
-                    throw new Error('Доступ ограничен');
+                    throw new Error('Доступ ограничен (CORS / Авторизация)');
                 }
 
                 const rows = parseCSV(csvText);
@@ -558,7 +551,12 @@
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerHTML = `<div style="color:#ef5350;">Ошибка подключения к данным. Убедитесь в публикации Лист1 (CSV).</div>`;
+                document.getElementById('loader').innerHTML = `
+                    <div class="error-hint">Ошибка загрузки данных.</div>
+                    <div style="color: #626975; font-size: 14px; margin-top: 5px;">
+                        Выполните Шаг 1: Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (CSV)
+                    </div>
+                `;
             });
 
         function setupFilterOptions(dealers, baggage, tanks, maxSpeed, maxPrice) {
