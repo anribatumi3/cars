@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автосалон InterPlay</title>
+    <title>Автосалон InterPlay — Каталог</title>
     <style>
         body {
             background-color: #0b0c16;
@@ -16,38 +16,81 @@
         h1 {
             text-align: center;
             color: #e51b24;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 28px;
         }
 
-        /* Поисковая строка */
-        .search-container {
-            max-width: 500px;
-            margin: 0 auto 35px auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 20px;
+        /* Панель фильтров в стиле Fletcher Wiki */
+        .filters-panel {
             background-color: #141622;
             border: 2px solid #222538;
-            border-radius: 30px;
+            border-radius: 14px;
+            padding: 20px;
+            max-width: 1360px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-item label {
+            font-size: 12px;
+            color: #a3a7c2;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Стилизация селектов и инпутов */
+        .filter-select, .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #1c1e2f;
+            border: 1px solid #2d314d;
+            border-radius: 8px;
             color: #ffffff;
-            font-size: 16px;
+            font-size: 14px;
             outline: none;
             box-sizing: border-box;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s;
         }
 
-        .search-input:focus {
+        .filter-select:focus, .search-input:focus {
             border-color: #e51b24;
-            box-shadow: 0 0 12px rgba(229, 27, 36, 0.3);
         }
 
-        .search-input::placeholder {
-            color: #72768d;
+        /* Стилизация ползунков (Range) */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .range-slider {
+            flex-grow: 1;
+            accent-color: #e51b24;
+            cursor: pointer;
+        }
+
+        .range-value {
+            font-size: 13px;
+            color: #ff9800;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: right;
         }
 
         #loader {
@@ -66,7 +109,7 @@
             margin: 0 auto;
         }
 
-        /* Карточка Fletcher Wiki */
+        /* Карточки */
         .car-card {
             background-color: #141622;
             border-radius: 14px;
@@ -76,7 +119,6 @@
             border: 2px solid #222538;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .car-card.hidden {
@@ -89,7 +131,6 @@
             border-color: #e51b24;
         }
 
-        /* Фиолетовый неон для машин за донат/коины */
         .car-card.premium-card {
             border-color: #9c27b0;
         }
@@ -114,7 +155,6 @@
             object-fit: contain;
         }
 
-        /* Бейдж класса автомобиля */
         .badge {
             position: absolute;
             top: 12px;
@@ -126,7 +166,6 @@
             font-weight: bold;
             border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .premium-card .badge {
@@ -144,13 +183,13 @@
             font-size: 22px;
             font-weight: bold;
             margin: 0 0 3px 0;
-            letter-spacing: 0.3px;
         }
 
         .real-name-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #72768d;
             margin: 0;
+            text-transform: uppercase;
         }
 
         .real-name {
@@ -167,7 +206,6 @@
             font-weight: 600;
         }
 
-        /* Параметры ТС */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -186,7 +224,6 @@
             gap: 6px;
         }
 
-        /* Блок цен */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -222,7 +259,6 @@
             color: #a3a7c2;
             text-transform: uppercase;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
 
         .price-value {
@@ -230,16 +266,8 @@
             font-weight: bold;
         }
 
-        .main-price .price-value {
-            color: #ffffff;
-        }
-
         .premium-card .main-price .price-value {
             color: #e040fb;
-        }
-
-        .gos-price .price-value {
-            color: #b0b4cc;
         }
     </style>
 </head>
@@ -247,37 +275,108 @@
 
     <h1>Автосалон InterPlay — Каталог</h1>
     
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Введите название автомобиля...">
+    <div class="filters-panel">
+        <div class="filters-grid">
+            <div class="filter-item">
+                <label>Поиск транспорта</label>
+                <input type="text" id="searchInput" class="search-input" placeholder="Введите название...">
+            </div>
+
+            <div class="filter-item">
+                <label>Автосалон</label>
+                <select id="dealerFilter" class="filter-select">
+                    <option value="all">Все автосалоны</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Сортировка</label>
+                <select id="sortFilter" class="filter-select">
+                    <option value="none">Без сортировки</option>
+                    <option value="alpha-asc">Алфавит: А -> Я</option>
+                    <option value="alpha-desc">Алфавит: Я -> А</option>
+                    <option value="price-asc">Цена: По возрастанию</option>
+                    <option value="price-desc">Цена: По убыванию</option>
+                    <option value="gos-asc">Гос. цена: По возрастанию</option>
+                    <option value="gos-desc">Гос. цена: По убыванию</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Вместимость багажника</label>
+                <select id="baggageFilter" class="filter-select">
+                    <option value="all">Любой багажник</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Топливный бак</label>
+                <select id="tankFilter" class="filter-select">
+                    <option value="all">Любой объём</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters-grid">
+            <div class="filter-item">
+                <label>Максимальная скорость</label>
+                <div class="range-container">
+                    <input type="range" id="speedSlider" class="range-slider" min="0" max="500" value="0">
+                    <span id="speedSliderVal" class="range-value">От 0 км/ч</span>
+                </div>
+            </div>
+
+            <div class="filter-item">
+                <label>Макс. цена салона ($)</label>
+                <div class="range-container">
+                    <input type="range" id="priceSlider" class="range-slider" min="0" max="10000000" value="10000000">
+                    <span id="priceSliderVal" class="range-value">До 10M $</span>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <div id="loader">Загрузка автопарка...</div>
+    <div id="loader">Загрузка базы данных машин...</div>
     <div class="catalog-container" id="catalog"></div>
 
     <script>
-        // Твой ID таблицы из скриншота URL
+        // Использование защищенного прямого метода экспорта данных
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
-        
-        // Альтернативный, более стабильный адрес экспорта в CSV напрямую из листов
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
         let allCars = [];
 
+        // Элементы управления
+        const searchInput = document.getElementById('searchInput');
+        const dealerFilter = document.getElementById('dealerFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const baggageFilter = document.getElementById('baggageFilter');
+        const tankFilter = document.getElementById('tankFilter');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedSliderVal = document.getElementById('speedSliderVal');
+        const priceSlider = document.getElementById('priceSlider');
+        const priceSliderVal = document.getElementById('priceSliderVal');
+
         fetch(url)
             .then(res => {
-                if (!res.ok) throw new Error('Ошибка сети при чтении');
+                if (!res.ok) throw new Error('Ошибка сети');
                 return res.text();
             })
             .then(csvText => {
-                // Если Google прислал HTML страницу входа вместо таблицы, значит доступ всё еще закрыт
                 if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login')) {
-                    throw new Error('Ограничение доступа');
+                    throw new Error('Доступ ограничен');
                 }
 
                 const rows = parseCSV(csvText);
-                
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
+
+                // Списки для динамических фильтров
+                const dealerships = new Set();
+                const baggageCaps = new Set();
+                const tankCaps = new Set();
+                let maxTableSpeed = 0;
+                let maxTablePrice = 0;
 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
@@ -286,41 +385,53 @@
                     const name = cells[0].trim();              
                     const realName = cells[1].trim();          
                     const carClass = cells[2].trim();          
-                    const speed = cells[3].trim();             
+                    const rawSpeed = cells[3].trim();             
                     const acceleration = cells[4].trim();      
                     const handling = cells[5].trim();          
-                    const slots = cells[6].trim();             
-                    const tank = cells[7].trim();              
+                    const rawSlots = cells[6].trim();             
+                    const rawTank = cells[7].trim();              
                     const fuelConsumption = cells[8].trim();   
                     const dealership = cells[9].trim();        
-                    let price = cells[10].trim();              
-                    let gosPrice = cells[11] ? cells[11].trim() : '0'; 
+                    let priceStr = cells[10].trim();              
+                    let gosPriceStr = cells[11] ? cells[11].trim() : '0'; 
 
-                    if (price === '' || price === '0') price = 'Не продается';
+                    if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
-                    // Логика валюты (поддержка IC coin / коинов)
+                    // Преобразование характеристик в чистые числа для фильтров
+                    const numSpeed = parseInt(rawSpeed.replace(/[^0-9]/g, '')) || 0;
+                    const numSlots = parseInt(rawSlots.replace(/[^0-9]/g, '')) || 0;
+                    const numTank = parseInt(rawTank.replace(/[^0-9]/g, '')) || 0;
+
+                    if (numSpeed > maxTableSpeed) maxTableSpeed = numSpeed;
+
+                    // Парсинг цен
                     let isPremiumCurrency = false;
-                    const checkPrice = price.toLowerCase();
+                    let numPrice = 0;
+                    const checkPrice = priceStr.toLowerCase();
                     
                     if (checkPrice.includes('coin') || checkPrice.includes('ic') || checkPrice.includes('кои') || checkPrice.includes('mc')) {
                         isPremiumCurrency = true;
-                    } else if (price !== 'Не продается') {
-                        price = price + ' $';
+                    } else if (priceStr !== 'Не продается') {
+                        numPrice = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+                        if (numPrice > maxTablePrice) maxTablePrice = numPrice;
+                        priceStr = numPrice.toLocaleString('ru-RU') + ' $';
                     }
 
-                    const checkGos = gosPrice.toLowerCase();
-                    if (!checkGos.includes('coin') && !checkGos.includes('ic') && !checkGos.includes('кои') && gosPrice !== '0' && gosPrice !== '') {
-                        gosPrice = gosPrice + ' $';
+                    let numGosPrice = parseInt(gosPriceStr.replace(/[^0-9]/g, '')) || 0;
+                    if (!gosPriceStr.toLowerCase().includes('coin') && !gosPriceStr.toLowerCase().includes('ic') && numGosPrice > 0) {
+                        gosPriceStr = numGosPrice.toLocaleString('ru-RU') + ' $';
                     }
 
-                    // Картинка-заглушка
+                    // Наполнение сетов фильтрации
+                    if (dealership) dealerships.add(dealership);
+                    if (rawSlots) baggageCaps.add(numSlots);
+                    if (rawTank) tankCaps.add(numTank);
+
+                    // Рендеринг разметки
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
-
                     const card = document.createElement('div');
                     card.className = 'car-card';
-                    if (isPremiumCurrency) {
-                        card.classList.add('premium-card');
-                    }
+                    if (isPremiumCurrency) card.classList.add('premium-card');
 
                     card.innerHTML = `
                         <div class="car-image">
@@ -334,62 +445,139 @@
                             <div class="dealership">📍 ${dealership}</div>
                             
                             <div class="car-specs">
-                                <div class="spec-item">⚡ Скор: ${speed}</div>
+                                <div class="spec-item">⚡ Скор: ${rawSpeed}</div>
                                 <div class="spec-item">🚀 Ускор: ${acceleration}</div>
                                 <div class="spec-item">🕹️ Управл: ${handling}</div>
-                                <div class="spec-item">🎒 Багаж: ${slots}</div>
-                                <div class="spec-item">⛽ Бак: ${tank}</div>
+                                <div class="spec-item">🎒 Багаж: ${rawSlots}</div>
+                                <div class="spec-item">⛽ Бак: ${rawTank}</div>
                                 <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-row main-price">
                                     <span class="price-label">Цена в салоне:</span>
-                                    <span class="price-value">${price}</span>
+                                    <span class="price-value">${priceStr}</span>
                                 </div>
                                 <div class="price-row gos-price">
                                     <span class="price-label">Слив в гос:</span>
-                                    <span class="price-value">${gosPrice}</span>
+                                    <span class="price-value">${gosPriceStr}</span>
                                 </div>
                             </div>
                         </div>
                     `;
-                    catalog.appendChild(card);
 
                     allCars.push({
                         element: card,
                         name: name.toLowerCase(),
-                        realName: realName.toLowerCase()
+                        realName: realName.toLowerCase(),
+                        dealer: dealership,
+                        speed: numSpeed,
+                        baggage: numSlots,
+                        tank: numTank,
+                        price: numPrice,
+                        gosPrice: numGosPrice,
+                        isPremium: isPremiumCurrency
                     });
                 }
+
+                // Динамическое заполнение селекторов параметров на основе данных таблицы
+                setupFilterOptions(dealerships, baggageCaps, tankCaps, maxTableSpeed, maxTablePrice);
+                renderCatalog();
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerHTML = `
-                    <div style="color:#ef5350; line-height: 1.6;">
-                        Ошибка загрузки данных.<br>
-                        <span style="color: #a3a7c2; font-size: 15px;">
-                            Убедитесь, что в Настройках доступа таблицы выставлено <b>«Все, у кого есть ссылка» (Читатель)</b>.<br>
-                            Также нажмите: <b>Файл -> Поделиться -> Опубликовать в интернете</b>.
-                        </span>
-                    </div>
-                `;
+                document.getElementById('loader').innerHTML = `<div style="color:#ef5350;">Ошибка подключения к данным. Убедитесь в публикации Лист1 (CSV).</div>`;
             });
 
-        // Поиск на лету
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value.trim().toLowerCase();
+        function setupFilterOptions(dealers, baggage, tanks, maxSpeed, maxPrice) {
+            // Заполнение дилеров
+            Array.from(dealers).sort().forEach(d => {
+                dealerFilter.innerHTML += `<option value="${d}">${d}</option>`;
+            });
+            // Багажник
+            Array.from(baggage).sort((a,b)=>a-b).forEach(b => {
+                baggageFilter.innerHTML += `<option value="${b}">${b} кг / слот</option>`;
+            });
+            // Топливо
+            Array.from(tanks).sort((a,b)=>a-b).forEach(t => {
+                tankFilter.innerHTML += `<option value="${t}">${t} л</option>`;
+            });
+
+            // Настройка лимитов ползунков под твою таблицу
+            speedSlider.max = maxSpeed;
+            speedSlider.value = 0;
+            speedSliderVal.innerText = `От 0 км/ч`;
+
+            priceSlider.max = maxPrice;
+            priceSlider.value = maxPrice;
+            priceSliderVal.innerText = `До ${maxPrice.toLocaleString('ru-RU')} $`;
+        }
+
+        // Слушатели событий изменения фильтров
+        [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter].forEach(el => {
+            el.addEventListener('input', renderCatalog);
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            speedSliderVal.innerText = `От ${e.target.value} км/ч`;
+            renderCatalog();
+        });
+
+        priceSlider.addEventListener('input', (e) => {
+            priceSliderVal.innerText = `До ${parseInt(e.target.value).toLocaleString('ru-RU')} $`;
+            renderCatalog();
+        });
+
+        // Главный движок фильтрации и сортировки
+        function renderCatalog() {
+            const query = searchInput.value.trim().toLowerCase();
+            const selectedDealer = dealerFilter.value;
+            const selectedBaggage = baggageFilter.value;
+            const selectedTank = tankFilter.value;
+            const minSpeed = parseInt(speedSlider.value);
+            const maxPrice = parseInt(priceSlider.value);
+            const sortType = sortFilter.value;
+
+            // 1. Фильтрация
             allCars.forEach(car => {
-                if (car.name.includes(query) || car.realName.includes(query)) {
+                const matchesSearch = car.name.includes(query) || car.realName.includes(query);
+                const matchesDealer = selectedDealer === 'all' || car.dealer === selectedDealer;
+                const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
+                const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
+                const matchesSpeed = car.speed >= minSpeed;
+                
+                // Машины за донат/не продающиеся проходят ценовой фильтр автоматически
+                const matchesPrice = car.isPremium || car.price === 0 || car.price <= maxPrice;
+
+                if (matchesSearch && matchesDealer && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
                     car.element.classList.remove('hidden');
                 } else {
                     car.element.classList.add('hidden');
                 }
             });
-        });
 
-        // Парсер CSV ячеек
+            // 2. Сортировка структуры элементов на странице
+            let sortedCars = [...allCars];
+
+            if (sortType === 'alpha-asc') {
+                sortedCars.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortType === 'alpha-desc') {
+                sortedCars.sort((a, b) => b.name.localeCompare(a.name));
+            } else if (sortType === 'price-asc') {
+                sortedCars.sort((a, b) => a.price - b.price);
+            } else if (sortType === 'price-desc') {
+                sortedCars.sort((a, b) => b.price - a.price);
+            } else if (sortType === 'gos-asc') {
+                sortedCars.sort((a, b) => a.gosPrice - b.gosPrice);
+            } else if (sortType === 'gos-desc') {
+                sortedCars.sort((a, b) => b.gosPrice - a.gosPrice);
+            }
+
+            const catalog = document.getElementById('catalog');
+            sortedCars.forEach(car => catalog.appendChild(car.element));
+        }
+
+        // Парсер CSV формата данных
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
