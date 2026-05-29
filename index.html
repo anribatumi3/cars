@@ -89,7 +89,7 @@
             font-size: 13px;
             color: #ff9800;
             font-weight: bold;
-            min-width: 80px;
+            min-width: 100px;
             text-align: right;
         }
 
@@ -340,7 +340,6 @@
     <div class="catalog-container" id="catalog"></div>
 
     <script>
-        // Использование защищенного прямого метода экспорта данных
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
@@ -357,6 +356,22 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
+        // Умная функция для очистки цен от копеек (,00) и конвертации в чистое число
+        function cleanPrice(priceRaw) {
+            let str = priceRaw.trim();
+            if (!str || str === '0' || str.toLowerCase() === 'не продается') return 0;
+            
+            // Если есть копейки через запятую или точку (например ,00 или .00), отрезаем их
+            if (str.includes(',')) {
+                str = str.split(',')[0];
+            } else if (str.includes('.')) {
+                str = str.split('.')[0];
+            }
+            
+            // Убираем всё, кроме цифр
+            return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+        }
+
         fetch(url)
             .then(res => {
                 if (!res.ok) throw new Error('Ошибка сети');
@@ -371,7 +386,6 @@
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
-                // Списки для динамических фильтров
                 const dealerships = new Set();
                 const baggageCaps = new Set();
                 const tankCaps = new Set();
@@ -397,14 +411,14 @@
 
                     if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
-                    // Преобразование характеристик в чистые числа для фильтров
+                    // Преобразование характеристик в числа
                     const numSpeed = parseInt(rawSpeed.replace(/[^0-9]/g, '')) || 0;
                     const numSlots = parseInt(rawSlots.replace(/[^0-9]/g, '')) || 0;
                     const numTank = parseInt(rawTank.replace(/[^0-9]/g, '')) || 0;
 
                     if (numSpeed > maxTableSpeed) maxTableSpeed = numSpeed;
 
-                    // Парсинг цен
+                    // Безопасный парсинг цен с отсечением копеек
                     let isPremiumCurrency = false;
                     let numPrice = 0;
                     const checkPrice = priceStr.toLowerCase();
@@ -412,22 +426,20 @@
                     if (checkPrice.includes('coin') || checkPrice.includes('ic') || checkPrice.includes('кои') || checkPrice.includes('mc')) {
                         isPremiumCurrency = true;
                     } else if (priceStr !== 'Не продается') {
-                        numPrice = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+                        numPrice = cleanPrice(priceStr);
                         if (numPrice > maxTablePrice) maxTablePrice = numPrice;
                         priceStr = numPrice.toLocaleString('ru-RU') + ' $';
                     }
 
-                    let numGosPrice = parseInt(gosPriceStr.replace(/[^0-9]/g, '')) || 0;
+                    let numGosPrice = cleanPrice(gosPriceStr);
                     if (!gosPriceStr.toLowerCase().includes('coin') && !gosPriceStr.toLowerCase().includes('ic') && numGosPrice > 0) {
                         gosPriceStr = numGosPrice.toLocaleString('ru-RU') + ' $';
                     }
 
-                    // Наполнение сетов фильтрации
                     if (dealership) dealerships.add(dealership);
                     if (rawSlots) baggageCaps.add(numSlots);
                     if (rawTank) tankCaps.add(numTank);
 
-                    // Рендеринг разметки
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
                     const card = document.createElement('div');
                     card.className = 'car-card';
@@ -480,7 +492,6 @@
                     });
                 }
 
-                // Динамическое заполнение селекторов параметров на основе данных таблицы
                 setupFilterOptions(dealerships, baggageCaps, tankCaps, maxTableSpeed, maxTablePrice);
                 renderCatalog();
             })
@@ -490,20 +501,16 @@
             });
 
         function setupFilterOptions(dealers, baggage, tanks, maxSpeed, maxPrice) {
-            // Заполнение дилеров
             Array.from(dealers).sort().forEach(d => {
                 dealerFilter.innerHTML += `<option value="${d}">${d}</option>`;
             });
-            // Багажник
             Array.from(baggage).sort((a,b)=>a-b).forEach(b => {
                 baggageFilter.innerHTML += `<option value="${b}">${b} кг / слот</option>`;
             });
-            // Топливо
             Array.from(tanks).sort((a,b)=>a-b).forEach(t => {
                 tankFilter.innerHTML += `<option value="${t}">${t} л</option>`;
             });
 
-            // Настройка лимитов ползунков под твою таблицу
             speedSlider.max = maxSpeed;
             speedSlider.value = 0;
             speedSliderVal.innerText = `От 0 км/ч`;
@@ -513,7 +520,6 @@
             priceSliderVal.innerText = `До ${maxPrice.toLocaleString('ru-RU')} $`;
         }
 
-        // Слушатели событий изменения фильтров
         [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter].forEach(el => {
             el.addEventListener('input', renderCatalog);
         });
@@ -528,7 +534,6 @@
             renderCatalog();
         });
 
-        // Главный движок фильтрации и сортировки
         function renderCatalog() {
             const query = searchInput.value.trim().toLowerCase();
             const selectedDealer = dealerFilter.value;
@@ -538,15 +543,12 @@
             const maxPrice = parseInt(priceSlider.value);
             const sortType = sortFilter.value;
 
-            // 1. Фильтрация
             allCars.forEach(car => {
                 const matchesSearch = car.name.includes(query) || car.realName.includes(query);
                 const matchesDealer = selectedDealer === 'all' || car.dealer === selectedDealer;
                 const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
                 const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
                 const matchesSpeed = car.speed >= minSpeed;
-                
-                // Машины за донат/не продающиеся проходят ценовой фильтр автоматически
                 const matchesPrice = car.isPremium || car.price === 0 || car.price <= maxPrice;
 
                 if (matchesSearch && matchesDealer && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
@@ -556,7 +558,6 @@
                 }
             });
 
-            // 2. Сортировка структуры элементов на странице
             let sortedCars = [...allCars];
 
             if (sortType === 'alpha-asc') {
@@ -577,7 +578,6 @@
             sortedCars.forEach(car => catalog.appendChild(car.element));
         }
 
-        // Парсер CSV формата данных
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
