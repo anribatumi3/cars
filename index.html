@@ -16,9 +16,38 @@
         h1 {
             text-align: center;
             color: #e51b24;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
+        }
+
+        /* Стиль для блока поиска */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #141622;
+            border: 2px solid #222538;
+            border-radius: 30px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #e51b24;
+            box-shadow: 0 0 10px rgba(229, 27, 36, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: #72768d;
         }
 
         #loader {
@@ -45,6 +74,11 @@
             border: 1px solid #222538;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Класс для скрытия карточек при поиске */
+        .car-card.hidden {
+            display: none !important;
         }
 
         .car-card:hover {
@@ -103,12 +137,11 @@
 
         .dealership {
             font-size: 12px;
-            color: #ff9800; /* Оранжевый цвет для автосалона */
+            color: #ff9800;
             margin-bottom: 15px;
             font-weight: 600;
         }
 
-        /* Блок технических характеристик */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -127,7 +160,6 @@
             gap: 6px;
         }
 
-        /* Блок с ценами */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -143,13 +175,11 @@
             border-radius: 6px;
         }
 
-        /* Стиль для основной цены покупки */
         .price-row.main-price {
             background: rgba(229, 27, 36, 0.1);
             border-left: 4px solid #e51b24;
         }
 
-        /* Стиль для слива в гос */
         .price-row.gos-price {
             background: rgba(114, 118, 141, 0.1);
             border-left: 4px solid #72768d;
@@ -179,133 +209,176 @@
 
     <h1>Автосалон InterPlay — Каталог</h1>
     
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Введите название автомобиля...">
+    </div>
+    
     <div id="loader">Загрузка автопарка...</div>
     <div class="catalog-container" id="catalog"></div>
 
     <script>
-        // Твой ID таблицы со скриншота
-const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
-// Запрашиваем стабильный CSV формат выгрузки
-const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
+        const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
 
-fetch(url)
-    .then(res => {
-        if (!res.ok) throw new Error('Сетевая ошибка');
-        return res.text();
-    })
-    .then(csvText => {
-        const rows = parseCSV(csvText);
-        
-        const catalog = document.getElementById('catalog');
-        document.getElementById('loader').style.display = 'none';
+        // Массив, где мы будем хранить данные всех машин для быстрого поиска
+        let allCars = [];
 
-        // Начинаем со 2-й строчки (индекс 1), так как первая — заголовки
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i];
-            if (cells.length < 11 || !cells[0]) continue; 
+        fetch(url)
+            .then(res => {
+                if (!res.ok) throw new Error('Сетевая ошибка');
+                return res.text();
+            })
+            .then(csvText => {
+                const rows = parseCSV(csvText);
+                if (rows.length === 0) return;
 
-            const name = cells[0].trim();
-            const realName = cells[1].trim();
-            const carClass = cells[2].trim();
-            const speed = cells[3].trim();
-            const acceleration = cells[4].trim();
-            const handling = cells[5].trim();
-            const slots = cells[6].trim();
-            const tank = cells[7].trim();
-            const fuelConsumption = cells[8].trim();
-            const dealership = cells[9].trim();
-            let price = cells[10].trim();
-            let gosPrice = cells[11] ? cells[11].trim() : '0';
+                const headers = rows[0].map(h => h.trim().toLowerCase());
+                const idxName = headers.indexOf('название');
+                const idxRealName = headers.indexOf('название в ирл');
+                const idxClass = headers.indexOf('класс');
+                const idxSpeed = headers.indexOf('скорость');
+                const idxAccel = headers.indexOf('ускорение');
+                const idxHandl = headers.indexOf('управляемость');
+                const idxSlots = headers.indexOf('багажник(слот)');
+                const idxTank = headers.indexOf('топливный бак');
+                const idxFuel = headers.indexOf('расход топлива');
+                const idxDealer = headers.indexOf('автосалон');
+                const idxPrice = headers.indexOf('цена');
+                const idxGosPrice = headers.indexOf('слив в гос');
 
-            // --- ЛОГИКА ОПРЕДЕЛЕНИЯ ВАЛЮТЫ ---
-            let isPremiumCurrency = false;
-            
-            // Проверяем, содержит ли цена упоминание коинов (IC coin, MC, донат и т.д.)
-            if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic')) {
-                isPremiumCurrency = true;
-                // Оставляем текст цены как есть (например, "4 600(IC coin)"), значок $ добавлять не будем
-                price = price; 
-            } else {
-                // Если это обычная цена, добавляем пробел и знак доллара
-                price = price + ' $';
-            }
+                const catalog = document.getElementById('catalog');
+                document.getElementById('loader').style.display = 'none';
 
-            // То же самое проверяем для слива в гос
-            if (gosPrice.toLowerCase().includes('coin') || gosPrice.toLowerCase().includes('ic')) {
-                gosPrice = gosPrice;
-            } else {
-                gosPrice = gosPrice + ' $';
-            }
-            // ---------------------------------
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i];
+                    if (!cells[idxName]) continue; 
 
-            const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
-
-            const card = document.createElement('div');
-            card.className = 'car-card';
-            
-            // Если машина за коины — сделаем ей красивую неоновую рамку, чтобы выделить
-            if (isPremiumCurrency) {
-                card.style.borderColor = '#9c27b0'; // Фиолетовый премиум-цвет
-            }
-
-            card.innerHTML = `
-                <div class="car-image">
-                    <img src="${imgUrl}" alt="${name}">
-                    <div class="badge" style="${isPremiumCurrency ? 'background-color: #9c27b0;' : ''}">${carClass}</div>
-                </div>
-                <div class="car-info">
-                    <div class="car-name">${name}</div>
-                    <div class="real-name">${realName}</div>
-                    <div class="dealership">📍 ${dealership}</div>
+                    const name = cells[idxName].trim();
+                    const realName = idxRealName !== -1 && cells[idxRealName] ? cells[idxRealName].trim() : '';
+                    const carClass = idxClass !== -1 && cells[idxClass] ? cells[idxClass].trim() : 'Транспорт';
+                    const speed = idxSpeed !== -1 && cells[idxSpeed] ? cells[idxSpeed].trim() : '-';
+                    const acceleration = idxAccel !== -1 && cells[idxAccel] ? cells[idxAccel].trim() : '-';
+                    const handling = idxHandl !== -1 && cells[idxHandl] ? cells[idxHandl].trim() : '-';
+                    const slots = idxSlots !== -1 && cells[idxSlots] ? cells[idxSlots].trim() : '-';
+                    const tank = idxTank !== -1 && cells[idxTank] ? cells[idxTank].trim() : '-';
+                    const fuelConsumption = idxFuel !== -1 && cells[idxFuel] ? cells[idxFuel].trim() : '-';
+                    const dealership = idxDealer !== -1 && cells[idxDealer] ? cells[idxDealer].trim() : 'Неизвестно';
                     
-                    <div class="car-specs">
-                        <div class="spec-item">⚡ Скор: ${speed}</div>
-                        <div class="spec-item">🚀 Ускор: ${acceleration}</div>
-                        <div class="spec-item">🕹️ Управл: ${handling}</div>
-                        <div class="spec-item">🎒 Багаж: ${slots} сл.</div>
-                        <div class="spec-item">⛽ Бак: ${tank}</div>
-                        <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
-                    </div>
+                    let price = idxPrice !== -1 && cells[idxPrice] ? cells[idxPrice].trim() : '0';
+                    let gosPrice = idxGosPrice !== -1 && cells[idxGosPrice] ? cells[idxGosPrice].trim() : '0';
 
-                    <div class="price-container">
-                        <div class="price-row main-price" style="${isPremiumCurrency ? 'border-left-color: #9c27b0; background: rgba(156, 39, 176, 0.1);' : ''}">
-                            <span class="price-label">Цена в салоне:</span>
-                            <span class="price-value" style="${isPremiumCurrency ? 'color: #e040fb;' : ''}">${price}</span>
-                        </div>
-                        <div class="price-row gos-price">
-                            <span class="price-label">Слив в гос:</span>
-                            <span class="price-value">${gosPrice}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            catalog.appendChild(card);
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        document.getElementById('loader').innerText = 'Ошибка загрузки данных. Убедитесь, что таблица Опубликована в интернете.';
-    });
+                    if (price === '' || price === '0') price = 'Не продается';
 
-// Функция для правильного разбора CSV формата
-function parseCSV(text) {
-    let p = '', r = [];
-    let q = false;
-    let row = [''];
-    for (let i=0; i<text.length; i++) {
-        let c = text[i];
-        if (c === '"') {
-            q = !q;
-        } else if (c === ',' && !q) {
-            row.push('');
-        } else if ((c === '\r' || c === '\n') && !q) {
-            if (c === '\r' && text[i+1] === '\n') { i++; }
-            r.push(row);
-            row = [''];
-        } else {
-            row[row.length-1] += c;
+                    let isPremiumCurrency = false;
+                    if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic')) {
+                        isPremiumCurrency = true;
+                    } else if (price !== 'Не продается') {
+                        price = price + ' $';
+                    }
+
+                    if (!gosPrice.toLowerCase().includes('coin') && !gosPrice.toLowerCase().includes('ic') && gosPrice !== '0' && gosPrice !== '') {
+                        gosPrice = gosPrice + ' $';
+                    }
+
+                    const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
+
+                    const card = document.createElement('div');
+                    card.className = 'car-card';
+                    
+                    if (isPremiumCurrency) {
+                        card.style.borderColor = '#9c27b0'; 
+                    }
+
+                    card.innerHTML = `
+                        <div class="car-image">
+                            <img src="${imgUrl}" alt="${name}">
+                            <div class="badge" style="${isPremiumCurrency ? 'background-color: #9c27b0;' : ''}">${carClass}</div>
+                        </div>
+                        <div class="car-info">
+                            <div class="car-name">${name}</div>
+                            <div class="real-name">${realName}</div>
+                            <div class="dealership">📍 ${dealership}</div>
+                            
+                            <div class="car-specs">
+                                <div class="spec-item">⚡ Скор: ${speed}</div>
+                                <div class="spec-item">🚀 Ускор: ${acceleration}</div>
+                                <div class="spec-item">🕹️ Управл: ${handling}</div>
+                                <div class="spec-item">🎒 Багаж: ${slots}</div>
+                                <div class="spec-item">⛽ Бак: ${tank}</div>
+                                <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-row main-price" style="${isPremiumCurrency ? 'border-left-color: #9c27b0; background: rgba(156, 39, 176, 0.1);' : ''}">
+                                    <span class="price-label">Цена в салоне:</span>
+                                    <span class="price-value" style="${isPremiumCurrency ? 'color: #e040fb;' : ''}">${price}</span>
+                                </div>
+                                <div class="price-row gos-price">
+                                    <span class="price-label">Слив в гос:</span>
+                                    <span class="price-value">${gosPrice}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    catalog.appendChild(card);
+
+                    // Сохраняем объект в массив, чтобы потом фильтровать по имени/реальному имени
+                    allCars.push({
+                        element: card,
+                        name: name.toLowerCase(),
+                        realName: realName.toLowerCase()
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('loader').innerText = 'Ошибка загрузки данных.';
+            });
+
+        // ЛОГИКА РАБОТЫ ПОИСКОВИКА
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.trim().toLowerCase();
+            
+            allCars.forEach(car => {
+                // Если поисковый запрос есть в игровом ИЛИ реальном названии машины
+                if (car.name.includes(query) || car.realName.includes(query)) {
+                    car.element.classList.remove('hidden'); // Показываем
+                } else {
+                    car.element.classList.add('hidden'); // Скрываем
+                }
+            });
+        });
+
+        // Безопасный и точный парсер CSV (разбивает строго по запятым, игнорируя пустоты)
+        function parseCSV(text) {
+            let lines = text.split(/\r\n|\n/);
+            let result = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                if (!line) continue;
+                
+                let row = [];
+                let inQuotes = false;
+                let currentCell = '';
+                
+                for (let j = 0; j < line.length; j++) {
+                    let char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(currentCell);
+                        currentCell = '';
+                    } else {
+                        currentCell += char;
+                    }
+                }
+                row.push(currentCell);
+                result.push(row);
+            }
+            return result;
         }
-    }
-    if (row.length > 1 || row[0] !== '') r.push(row);
-    return r;
-}
+    </script>
+</body>
+</html>
