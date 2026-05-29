@@ -25,7 +25,6 @@
         .search-container {
             max-width: 500px;
             margin: 0 auto 30px auto;
-            position: relative;
         }
 
         .search-input {
@@ -76,7 +75,6 @@
             flex-direction: column;
         }
 
-        /* Класс для скрытия карточек при поиске */
         .car-card.hidden {
             display: none !important;
         }
@@ -220,7 +218,6 @@
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
 
-        // Массив, где мы будем хранить данные всех машин для быстрого поиска
         let allCars = [];
 
         fetch(url)
@@ -230,45 +227,31 @@
             })
             .then(csvText => {
                 const rows = parseCSV(csvText);
-                if (rows.length === 0) return;
-
-                const headers = rows[0].map(h => h.trim().toLowerCase());
-                const idxName = headers.indexOf('название');
-                const idxRealName = headers.indexOf('название в ирл');
-                const idxClass = headers.indexOf('класс');
-                const idxSpeed = headers.indexOf('скорость');
-                const idxAccel = headers.indexOf('ускорение');
-                const idxHandl = headers.indexOf('управляемость');
-                const idxSlots = headers.indexOf('багажник(слот)');
-                const idxTank = headers.indexOf('топливный бак');
-                const idxFuel = headers.indexOf('расход топлива');
-                const idxDealer = headers.indexOf('автосалон');
-                const idxPrice = headers.indexOf('цена');
-                const idxGosPrice = headers.indexOf('слив в гос');
-
+                
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
+                // Идем строго по индексам столбцов: А=0, B=1, C=2 и т.д.
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
-                    if (!cells[idxName]) continue; 
+                    if (!cells || cells.length < 11 || !cells[0]) continue; 
 
-                    const name = cells[idxName].trim();
-                    const realName = idxRealName !== -1 && cells[idxRealName] ? cells[idxRealName].trim() : '';
-                    const carClass = idxClass !== -1 && cells[idxClass] ? cells[idxClass].trim() : 'Транспорт';
-                    const speed = idxSpeed !== -1 && cells[idxSpeed] ? cells[idxSpeed].trim() : '-';
-                    const acceleration = idxAccel !== -1 && cells[idxAccel] ? cells[idxAccel].trim() : '-';
-                    const handling = idxHandl !== -1 && cells[idxHandl] ? cells[idxHandl].trim() : '-';
-                    const slots = idxSlots !== -1 && cells[idxSlots] ? cells[idxSlots].trim() : '-';
-                    const tank = idxTank !== -1 && cells[idxTank] ? cells[idxTank].trim() : '-';
-                    const fuelConsumption = idxFuel !== -1 && cells[idxFuel] ? cells[idxFuel].trim() : '-';
-                    const dealership = idxDealer !== -1 && cells[idxDealer] ? cells[idxDealer].trim() : 'Неизвестно';
-                    
-                    let price = idxPrice !== -1 && cells[idxPrice] ? cells[idxPrice].trim() : '0';
-                    let gosPrice = idxGosPrice !== -1 && cells[idxGosPrice] ? cells[idxGosPrice].trim() : '0';
+                    const name = cells[0].trim();              // Столбец A (Название)
+                    const realName = cells[1].trim();          // Столбец B (ИРЛ)
+                    const carClass = cells[2].trim();          // Столбец C (Класс)
+                    const speed = cells[3].trim();             // Столбец D (Скорость)
+                    const acceleration = cells[4].trim();      // Столбец E (Ускорение)
+                    const handling = cells[5].trim();          // Столбец F (Управляемость)
+                    const slots = cells[6].trim();             // Столбец G (Багажник)
+                    const tank = cells[7].trim();              // Столбец H (Бак)
+                    const fuelConsumption = cells[8].trim();   // Столбец I (Расход)
+                    const dealership = cells[9].trim();        // Столбец J (Автосалон)
+                    let price = cells[10].trim();              // Столбец K (Цена)
+                    let gosPrice = cells[11] ? cells[11].trim() : '0'; // Столбец L (Гос)
 
                     if (price === '' || price === '0') price = 'Не продается';
 
+                    // Логика валюты
                     let isPremiumCurrency = false;
                     if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic')) {
                         isPremiumCurrency = true;
@@ -322,7 +305,6 @@
                     `;
                     catalog.appendChild(card);
 
-                    // Сохраняем объект в массив, чтобы потом фильтровать по имени/реальному имени
                     allCars.push({
                         element: card,
                         name: name.toLowerCase(),
@@ -335,28 +317,25 @@
                 document.getElementById('loader').innerText = 'Ошибка загрузки данных.';
             });
 
-        // ЛОГИКА РАБОТЫ ПОИСКОВИКА
+        // Работа поисковика
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.trim().toLowerCase();
-            
             allCars.forEach(car => {
-                // Если поисковый запрос есть в игровом ИЛИ реальном названии машины
                 if (car.name.includes(query) || car.realName.includes(query)) {
-                    car.element.classList.remove('hidden'); // Показываем
+                    car.element.classList.remove('hidden');
                 } else {
-                    car.element.classList.add('hidden'); // Скрываем
+                    car.element.classList.add('hidden');
                 }
             });
         });
 
-        // Безопасный и точный парсер CSV (разбивает строго по запятым, игнорируя пустоты)
+        // Сверхнадежный парсер CSV строк
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
-            
             for (let i = 0; i < lines.length; i++) {
-                let line = lines[i];
+                let line = lines[i].trim();
                 if (!line) continue;
                 
                 let row = [];
