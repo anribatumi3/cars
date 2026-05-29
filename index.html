@@ -19,12 +19,13 @@
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-size: 28px;
         }
 
         /* Поисковая строка */
         .search-container {
             max-width: 500px;
-            margin: 0 auto 30px auto;
+            margin: 0 auto 35px auto;
         }
 
         .search-input {
@@ -42,7 +43,7 @@
 
         .search-input:focus {
             border-color: #e51b24;
-            box-shadow: 0 0 10px rgba(229, 27, 36, 0.3);
+            box-shadow: 0 0 12px rgba(229, 27, 36, 0.3);
         }
 
         .search-input::placeholder {
@@ -56,24 +57,26 @@
             margin-top: 50px;
         }
 
-        /* Сетка каталога */
+        /* Контейнер каталога */
         .catalog-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
+        /* Карточка в стиле Fletcher Wiki */
         .car-card {
             background-color: #141622;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
             border: 2px solid #222538;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .car-card.hidden {
@@ -82,8 +85,17 @@
 
         .car-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(229, 27, 36, 0.2);
+            box-shadow: 0 12px 24px rgba(229, 27, 36, 0.25);
             border-color: #e51b24;
+        }
+
+        /* Премиум карточка (за коины) */
+        .car-card.premium-card {
+            border-color: #9c27b0;
+        }
+        .car-card.premium-card:hover {
+            box-shadow: 0 12px 24px rgba(156, 39, 176, 0.35);
+            border-color: #e040fb;
         }
 
         .car-image {
@@ -97,22 +109,28 @@
         }
 
         .car-image img {
-            max-width: 90%;
+            max-width: 85%;
             max-height: 85%;
             object-fit: contain;
         }
 
+        /* Бейдж класса автомобиля */
         .badge {
             position: absolute;
             top: 12px;
             right: 12px;
             background-color: #e51b24;
             color: white;
-            padding: 4px 10px;
+            padding: 5px 12px;
             font-size: 11px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 20px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .premium-card .badge {
+            background-color: #9c27b0;
         }
 
         .car-info {
@@ -125,13 +143,21 @@
         .car-name {
             font-size: 22px;
             font-weight: bold;
-            margin: 0 0 2px 0;
+            margin: 0 0 3px 0;
+            letter-spacing: 0.3px;
+        }
+
+        .real-name-label {
+            font-size: 12px;
+            color: #72768d;
+            margin: 0;
         }
 
         .real-name {
-            color: #72768d;
+            color: #ffffff;
             font-size: 14px;
-            margin: 0 0 6px 0;
+            font-weight: 500;
+            margin: 0 0 8px 0;
         }
 
         .dealership {
@@ -141,7 +167,7 @@
             font-weight: 600;
         }
 
-        /* Технические характеристики */
+        /* Параметры ТС */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -151,7 +177,7 @@
             margin-bottom: 20px;
             background: #1c1e2f;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
         .spec-item {
@@ -160,7 +186,7 @@
             gap: 6px;
         }
 
-        /* Контейнер цен */
+        /* Блок цен */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -172,8 +198,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 12px;
-            border-radius: 6px;
+            padding: 10px 14px;
+            border-radius: 8px;
         }
 
         .price-row.main-price {
@@ -181,16 +207,22 @@
             border-left: 4px solid #e51b24;
         }
 
+        .premium-card .price-row.main-price {
+            background: rgba(156, 39, 176, 0.15);
+            border-left: 4px solid #9c27b0;
+        }
+
         .price-row.gos-price {
             background: rgba(114, 118, 141, 0.1);
-            border-left: 4px solid #72768d;
+            border-left: 4px solid #56596e;
         }
 
         .price-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #a3a7c2;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
         .price-value {
@@ -200,6 +232,10 @@
 
         .main-price .price-value {
             color: #ffffff;
+        }
+
+        .premium-card .main-price .price-value {
+            color: #e040fb;
         }
 
         .gos-price .price-value {
@@ -219,7 +255,6 @@
     <div class="catalog-container" id="catalog"></div>
 
     <script>
-        // Твой ID таблицы из скриншота URL
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
 
@@ -227,7 +262,7 @@
 
         fetch(url)
             .then(res => {
-                if (!res.ok) throw new Error('Ошибка сети');
+                if (!res.ok) throw new Error('Сетевой сбой при чтении');
                 return res.text();
             })
             .then(csvText => {
@@ -236,60 +271,57 @@
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
-                // Читаем строки со 2-й (индекс 1)
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
                     if (!cells || cells.length < 11 || !cells[0]) continue; 
 
-                    const name = cells[0].trim();              // Столбец A (Название)
-                    const realName = cells[1].trim();          // Столбец B (Название в ИРЛ)
-                    const carClass = cells[2].trim();          // Столбец C (Класс)
-                    const speed = cells[3].trim();             // Столбец D (Скорость)
-                    const acceleration = cells[4].trim();      // Столбец E (Ускорение)
-                    const handling = cells[5].trim();          // Столбец F (Управляемость)
-                    const slots = cells[6].trim();             // Столбец G (Багажник)
-                    const tank = cells[7].trim();              // Столбец H (Топливный бак)
-                    const fuelConsumption = cells[8].trim();   // Столбец I (Расход топлива)
-                    const dealership = cells[9].trim();        // Столбец J (Автосалон)
-                    let price = cells[10].trim();              // Столбец K (Цена)
-                    let gosPrice = cells[11] ? cells[11].trim() : '0'; // Столбец L (Слив в гос)
+                    const name = cells[0].trim();              
+                    const realName = cells[1].trim();          
+                    const carClass = cells[2].trim();          
+                    const speed = cells[3].trim();             
+                    const acceleration = cells[4].trim();      
+                    const handling = cells[5].trim();          
+                    const slots = cells[6].trim();             
+                    const tank = cells[7].trim();              
+                    const fuelConsumption = cells[8].trim();   
+                    const dealership = cells[9].trim();        
+                    let price = cells[10].trim();              
+                    let gosPrice = cells[11] ? cells[11].trim() : '0'; 
 
                     if (price === '' || price === '0') price = 'Не продается';
 
-                    // --- ЖЕСТКАЯ ПРОВЕРКА НА КЛИЕНТСКИЕ COINS / ДОНАТ ВАЛЮТУ ---
+                    // Определение валюты (Коины / Доллары)
                     let isPremiumCurrency = false;
-                    const cleanPriceLower = price.toLowerCase();
+                    const checkPrice = price.toLowerCase();
                     
-                    if (cleanPriceLower.includes('coin') || cleanPriceLower.includes('ic') || cleanPriceLower.includes('кои') || cleanPriceLower.includes('mc')) {
+                    if (checkPrice.includes('coin') || checkPrice.includes('ic') || checkPrice.includes('кои') || checkPrice.includes('mc')) {
                         isPremiumCurrency = true;
-                        // Оставляем исходный текст из ячейки таблицы, например "18 500(IC coin)"
                     } else if (price !== 'Не продается') {
                         price = price + ' $';
                     }
 
-                    const cleanGosLower = gosPrice.toLowerCase();
-                    if (!cleanGosLower.includes('coin') && !cleanGosLower.includes('ic') && !cleanGosLower.includes('кои') && gosPrice !== '0' && gosPrice !== '') {
+                    const checkGos = gosPrice.toLowerCase();
+                    if (!checkGos.includes('coin') && !checkGos.includes('ic') && !checkGos.includes('кои') && gosPrice !== '0' && gosPrice !== '') {
                         gosPrice = gosPrice + ' $';
                     }
 
-                    // Генерация картинок-заглушек (в будущем заменишь на свои ссылки)
+                    // Временная заглушка под фото машин
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
 
                     const card = document.createElement('div');
                     card.className = 'car-card';
-                    
-                    // Если за коины — перекрашиваем рамку в премиальный фиолетовый неон
                     if (isPremiumCurrency) {
-                        card.style.borderColor = '#9c27b0'; 
+                        card.classList.add('premium-card');
                     }
 
                     card.innerHTML = `
                         <div class="car-image">
                             <img src="${imgUrl}" alt="${name}">
-                            <div class="badge" style="${isPremiumCurrency ? 'background-color: #9c27b0;' : ''}">${carClass}</div>
+                            <div class="badge">${carClass}</div>
                         </div>
                         <div class="car-info">
                             <div class="car-name">${name}</div>
+                            <p class="real-name-label">Реальное название</p>
                             <div class="real-name">${realName ? realName : '—'}</div>
                             <div class="dealership">📍 ${dealership}</div>
                             
@@ -303,9 +335,9 @@
                             </div>
 
                             <div class="price-container">
-                                <div class="price-row main-price" style="${isPremiumCurrency ? 'border-left-color: #9c27b0; background: rgba(156, 39, 176, 0.1);' : ''}">
+                                <div class="price-row main-price">
                                     <span class="price-label">Цена в салоне:</span>
-                                    <span class="price-value" style="${isPremiumCurrency ? 'color: #e040fb;' : ''}">${price}</span>
+                                    <span class="price-value">${price}</span>
                                 </div>
                                 <div class="price-row gos-price">
                                     <span class="price-label">Слив в гос:</span>
@@ -316,7 +348,6 @@
                     `;
                     catalog.appendChild(card);
 
-                    // Добавляем в список для фильтрации поисковика
                     allCars.push({
                         element: card,
                         name: name.toLowerCase(),
@@ -326,10 +357,10 @@
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerText = 'Ошибка загрузки данных. Убедитесь, что доступ к таблице открыт («Все, у кого есть ссылка»).';
+                document.getElementById('loader').innerHTML = 'Ошибка загрузки данных.<br><small style="color:#ef5350;">Выполните Шаг 1: Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (CSV)</small>';
             });
 
-        // Контроллер обработки поиска
+        // Живой поиск
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.trim().toLowerCase();
@@ -342,7 +373,7 @@
             });
         });
 
-        // Мощный парсер CSV, учитывающий текстовое экранирование ячеек
+        // Парсер CSV
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
