@@ -310,7 +310,7 @@
             gap: 6px;
         }
 
-        /* Оригинальная иконка IC коина */
+        /* Иконка IC коина */
         .coin-img {
             width: 18px;
             height: 18px;
@@ -322,7 +322,7 @@
 <body>
 
     <div class="header-main">
-        <img class="header-logo" src="https://anribatumi3.github.io/cars/logo.png" alt="InterPlay RP">
+        <img class="header-logo" src="logo.png" alt="InterPlay RP" onerror="this.src='https://anribatumi3.github.io/logo.png'">
         <h1>InterPlay<span> RP</span> — Каталог</h1>
     </div>
     
@@ -406,8 +406,8 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
-        // Ссылка на оригинальную иконку коина прямо из GitHub
-        const COIN_IMG_HTML = `<img src="https://anribatumi3.github.io/cars/coin.png" class="coin-img" alt="Coin">`;
+        // Умный вывод коина (ищет локально, если не находит — берёт из корня гитхаба)
+        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin" onerror="this.src='https://anribatumi3.github.io/coin.png'">`;
 
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
@@ -549,8 +549,9 @@
                 console.error(err);
                 document.getElementById('loader').innerHTML = `
                     <div class="error-hint">Ошибка загрузки данных.</div>
-                    <div style="color: #626975; font-size: 14px; margin-top: 5px;">
-                        Выполните Шаг 1: Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (CSV)
+                    <div style="color: #626975; font-size: 14px; margin-top: 15px; line-height: 1.6;">
+                        Выполните в таблице:<br>
+                        <strong>Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (формат CSV)</strong>
                     </div>
                 `;
             });
