@@ -183,83 +183,129 @@
     <div class="catalog-container" id="catalog"></div>
 
     <script>
-        // СЮДА ВСТАВЬ ID СВОЕЙ ТАБЛИЦЫ
-        const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
+        // Твой ID таблицы со скриншота
+const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
+// Запрашиваем стабильный CSV формат выгрузки
+const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
+
+fetch(url)
+    .then(res => {
+        if (!res.ok) throw new Error('Сетевая ошибка');
+        return res.text();
+    })
+    .then(csvText => {
+        const rows = parseCSV(csvText);
         
-        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+        const catalog = document.getElementById('catalog');
+        document.getElementById('loader').style.display = 'none';
 
-        fetch(url)
-            .then(res => res.text())
-            .then(data => {
-                const json = JSON.parse(data.substr(47).slice(0, -2));
-                const rows = json.table.rows;
-                
-                const catalog = document.getElementById('catalog');
-                document.getElementById('loader').style.display = 'none';
+        // Начинаем со 2-й строчки (индекс 1), так как первая — заголовки
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i];
+            if (cells.length < 11 || !cells[0]) continue; 
 
-                // Начинаем со 2-й строки (индекс 1), так как 1-я — это заголовки таблицы
-                for (let i = 1; i < rows.length; i++) {
-                    const cells = rows[i].c;
-                    if (!cells || !cells[0]) continue; // Пропускаем пустые строки, если есть
+            const name = cells[0].trim();
+            const realName = cells[1].trim();
+            const carClass = cells[2].trim();
+            const speed = cells[3].trim();
+            const acceleration = cells[4].trim();
+            const handling = cells[5].trim();
+            const slots = cells[6].trim();
+            const tank = cells[7].trim();
+            const fuelConsumption = cells[8].trim();
+            const dealership = cells[9].trim();
+            let price = cells[10].trim();
+            let gosPrice = cells[11] ? cells[11].trim() : '0';
+
+            // --- ЛОГИКА ОПРЕДЕЛЕНИЯ ВАЛЮТЫ ---
+            let isPremiumCurrency = false;
+            
+            // Проверяем, содержит ли цена упоминание коинов (IC coin, MC, донат и т.д.)
+            if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic')) {
+                isPremiumCurrency = true;
+                // Оставляем текст цены как есть (например, "4 600(IC coin)"), значок $ добавлять не будем
+                price = price; 
+            } else {
+                // Если это обычная цена, добавляем пробел и знак доллара
+                price = price + ' $';
+            }
+
+            // То же самое проверяем для слива в гос
+            if (gosPrice.toLowerCase().includes('coin') || gosPrice.toLowerCase().includes('ic')) {
+                gosPrice = gosPrice;
+            } else {
+                gosPrice = gosPrice + ' $';
+            }
+            // ---------------------------------
+
+            const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
+
+            const card = document.createElement('div');
+            card.className = 'car-card';
+            
+            // Если машина за коины — сделаем ей красивую неоновую рамку, чтобы выделить
+            if (isPremiumCurrency) {
+                card.style.borderColor = '#9c27b0'; // Фиолетовый премиум-цвет
+            }
+
+            card.innerHTML = `
+                <div class="car-image">
+                    <img src="${imgUrl}" alt="${name}">
+                    <div class="badge" style="${isPremiumCurrency ? 'background-color: #9c27b0;' : ''}">${carClass}</div>
+                </div>
+                <div class="car-info">
+                    <div class="car-name">${name}</div>
+                    <div class="real-name">${realName}</div>
+                    <div class="dealership">📍 ${dealership}</div>
                     
-                    // Распределяем данные четко по столбцам твоей таблицы:
-                    const name = cells[0] ? cells[0].f || cells[0].v : 'Без названия';       // Столбец A (Название)
-                    const realName = cells[1] ? cells[1].f || cells[1].v : '';               // Столбец B (Название в ИРЛ)
-                    const carClass = cells[2] ? cells[2].f || cells[2].v : 'Транспорт';       // Столбец C (Класс)
-                    const speed = cells[3] ? cells[3].f || cells[3].v : '-';                  // Столбец D (Скорость)
-                    const acceleration = cells[4] ? cells[4].f || cells[4].v : '-';           // Столбец E (Ускорение)
-                    const handling = cells[5] ? cells[5].f || cells[5].v : '-';               // Столбец F (Управляемость)
-                    const slots = cells[6] ? cells[6].f || cells[6].v : '-';                  // Столбец G (Багажник)
-                    const tank = cells[7] ? cells[7].f || cells[7].v : '-';                    // Столбец H (Топливный бак)
-                    const fuelConsumption = cells[8] ? cells[8].f || cells[8].v : '-';         // Столбец I (Расход топлива)
-                    const dealership = cells[9] ? cells[9].f || cells[9].v : 'Неизвестно';     // Столбец J (Автосалон)
-                    const price = cells[10] ? cells[10].f || cells[10].v : '0';                // Столбец K (Цена)
-                    const gosPrice = cells[11] ? cells[11].f || cells[11].v : '0';             // Столбец L (Слив в гос)
+                    <div class="car-specs">
+                        <div class="spec-item">⚡ Скор: ${speed}</div>
+                        <div class="spec-item">🚀 Ускор: ${acceleration}</div>
+                        <div class="spec-item">🕹️ Управл: ${handling}</div>
+                        <div class="spec-item">🎒 Багаж: ${slots} сл.</div>
+                        <div class="spec-item">⛽ Бак: ${tank}</div>
+                        <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
+                    </div>
 
-                    // Ссылка-заглушка для картинок
-                    const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
-
-                    // Генерируем карточку автомобиля
-                    const card = document.createElement('div');
-                    card.className = 'car-card';
-                    card.innerHTML = `
-                        <div class="car-image">
-                            <img src="${imgUrl}" alt="${name}">
-                            <div class="badge">${carClass}</div>
+                    <div class="price-container">
+                        <div class="price-row main-price" style="${isPremiumCurrency ? 'border-left-color: #9c27b0; background: rgba(156, 39, 176, 0.1);' : ''}">
+                            <span class="price-label">Цена в салоне:</span>
+                            <span class="price-value" style="${isPremiumCurrency ? 'color: #e040fb;' : ''}">${price}</span>
                         </div>
-                        <div class="car-info">
-                            <div class="car-name">${name}</div>
-                            <div class="real-name">${realName}</div>
-                            <div class="dealership">📍 ${dealership}</div>
-                            
-                            <div class="car-specs">
-                                <div class="spec-item">⚡ Скор: ${speed}</div>
-                                <div class="spec-item">🚀 Ускор: ${acceleration}</div>
-                                <div class="spec-item">🕹️ Управл: ${handling}</div>
-                                <div class="spec-item">🎒 Багаж: ${slots} сл.</div>
-                                <div class="spec-item">⛽ Бак: ${tank}</div>
-                                <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
-                            </div>
-
-                            <div class="price-container">
-                                <div class="price-row main-price">
-                                    <span class="price-label">Цена в салоне:</span>
-                                    <span class="price-value">${price} $</span>
-                                </div>
-                                <div class="price-row gos-price">
-                                    <span class="price-label">Слив в гос:</span>
-                                    <span class="price-value">${gosPrice} $</span>
-                                </div>
-                            </div>
+                        <div class="price-row gos-price">
+                            <span class="price-label">Слив в гос:</span>
+                            <span class="price-value">${gosPrice}</span>
                         </div>
-                    `;
-                    catalog.appendChild(card);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('loader').innerText = 'Ошибка загрузки данных. Проверьте ID таблицы и её публикацию.';
-            });
-    </script>
-</body>
-</html>
+                    </div>
+                </div>
+            `;
+            catalog.appendChild(card);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById('loader').innerText = 'Ошибка загрузки данных. Убедитесь, что таблица Опубликована в интернете.';
+    });
+
+// Функция для правильного разбора CSV формата
+function parseCSV(text) {
+    let p = '', r = [];
+    let q = false;
+    let row = [''];
+    for (let i=0; i<text.length; i++) {
+        let c = text[i];
+        if (c === '"') {
+            q = !q;
+        } else if (c === ',' && !q) {
+            row.push('');
+        } else if ((c === '\r' || c === '\n') && !q) {
+            if (c === '\r' && text[i+1] === '\n') { i++; }
+            r.push(row);
+            row = [''];
+        } else {
+            row[row.length-1] += c;
+        }
+    }
+    if (row.length > 1 || row[0] !== '') r.push(row);
+    return r;
+}
