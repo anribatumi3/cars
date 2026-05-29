@@ -99,25 +99,18 @@
             box-shadow: 0 0 0 2px rgba(140, 45, 50, 0.2);
         }
 
-        /* Ползунки */
+        /* Контейнер для полей От и До */
         .range-container {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .range-slider {
-            flex-grow: 1;
-            accent-color: #8c2d32;
-            cursor: pointer;
-        }
-
-        .range-value {
-            font-size: 13px;
-            color: #d19a66;
-            font-weight: 600;
-            min-width: 110px;
-            text-align: right;
+        /* Убираем стрелочки внутри полей ввода числового типа */
+        .range-container input::-webkit-outer-spin-button,
+        .range-container input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         #loader {
@@ -321,8 +314,8 @@
 </head>
 <body>
 
-<div class="header-main">
-        <img class="header-logo" src="https://raw.githubusercontent.com/anribatumi3/cars/main/logo.png" style="display: block; max-width: 150px; height: auto;">
+    <div class="header-main">
+        <img class="header-logo" src="logo.png" alt="InterPlay RP">
         <h1>INTERPLAY <span>RP</span> — КАТАЛОГ</h1>
     </div>
     
@@ -370,18 +363,18 @@
 
         <div class="filters-grid">
             <div class="filter-item">
-                <label>Максимальная скорость</label>
+                <label>Максимальная скорость (км/ч)</label>
                 <div class="range-container">
-                    <input type="range" id="speedSlider" class="range-slider" min="0" max="500" value="0">
-                    <span id="speedSliderVal" class="range-value">От 0 км/ч</span>
+                    <input type="number" id="speedFrom" class="search-input" placeholder="От">
+                    <input type="number" id="speedTo" class="search-input" placeholder="До">
                 </div>
             </div>
 
             <div class="filter-item">
-                <label>Макс. цена салона ($)</label>
+                <label>Цена салона ($)</label>
                 <div class="range-container">
-                    <input type="range" id="priceSlider" class="range-slider" min="0" max="10000000" value="10000000">
-                    <span id="priceSliderVal" class="range-value">До 10M $</span>
+                    <input type="number" id="priceFrom" class="search-input" placeholder="От">
+                    <input type="number" id="priceTo" class="search-input" placeholder="До">
                 </div>
             </div>
         </div>
@@ -401,13 +394,14 @@
         const sortFilter = document.getElementById('sortFilter');
         const baggageFilter = document.getElementById('baggageFilter');
         const tankFilter = document.getElementById('tankFilter');
-        const speedSlider = document.getElementById('speedSlider');
-        const speedSliderVal = document.getElementById('speedSliderVal');
-        const priceSlider = document.getElementById('priceSlider');
-        const priceSliderVal = document.getElementById('priceSliderVal');
+        
+        // Новые инпуты вместо слайдеров
+        const speedFrom = document.getElementById('speedFrom');
+        const speedTo = document.getElementById('speedTo');
+        const priceFrom = document.getElementById('priceFrom');
+        const priceTo = document.getElementById('priceTo');
 
-        // Безопасный вывод коина (без бесконечного цикла)
-        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin" onerror="this.onerror=null; this.src='https://anribatumi3.github.io/coin.png';">`;
+        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin">`;
 
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
@@ -434,7 +428,6 @@
                 return res.text();
             })
             .then(csvText => {
-                // Если вместо CSV вернулась страница авторизации Google, значит таблица закрыта
                 if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login') || csvText.includes('google-signin')) {
                     throw new Error('Доступ ограничен (CORS / Авторизация)');
                 }
@@ -491,7 +484,8 @@
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
                     const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
-                    const imgUrl = `https://via.placeholder.com/260x140/13161c/ffffff?text=${encodeURIComponent(name)}`;
+                    // Ссылка для красивых заглушек названий вместо битых картинок
+                    const imgUrl = `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
@@ -550,14 +544,6 @@
                 console.error(err);
                 document.getElementById('loader').innerHTML = `
                     <div class="error-hint">Ошибка загрузки базы данных транспорта.</div>
-                    <div style="color: #cbd3e0; font-size: 14px; margin-top: 15px; line-height: 1.6; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; background: #1e222b; padding: 20px; border-radius: 8px; border: 1px solid #8c2d32;">
-                        <span style="color: #ff5252; font-weight: bold;">Причина:</span> Браузер заблокировал запрос (CORS), так как Google Таблица закрыта от внешнего мира.<br><br>
-                        <strong>Как исправить (Обязательно):</strong><br>
-                        1. Открой свою Google Таблицу.<br>
-                        2. В меню выбери: <strong style="color: #8c2d32;">Файл -> Поделиться -> Опубликовать в интернете</strong>.<br>
-                        3. Выбери <strong style="color: #d19a66;">Лист1</strong> и формат <strong style="color: #d19a66;">Значения, разделенные запятыми (.csv)</strong>.<br>
-                        4. Нажми кнопку <strong>Опубликовать</strong> и обнови этот сайт.
-                    </div>
                 `;
             });
 
@@ -571,28 +557,11 @@
             Array.from(tanks).sort((a,b)=>a-b).forEach(t => {
                 tankFilter.innerHTML += `<option value="${t}">${t} л</option>`;
             });
-
-            speedSlider.max = maxSpeed;
-            speedSlider.value = 0;
-            speedSliderVal.innerText = `От 0 км/ч`;
-
-            priceSlider.max = maxPrice;
-            priceSlider.value = maxPrice;
-            priceSliderVal.innerText = `До ${maxPrice.toLocaleString('ru-RU')} $`;
         }
 
-        [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter].forEach(el => {
+        // Вешаем событие изменения на все фильтры, включая новые инпуты
+        [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter, speedFrom, speedTo, priceFrom, priceTo].forEach(el => {
             el.addEventListener('input', renderCatalog);
-        });
-
-        speedSlider.addEventListener('input', (e) => {
-            speedSliderVal.innerText = `От ${e.target.value} км/ч`;
-            renderCatalog();
-        });
-
-        priceSlider.addEventListener('input', (e) => {
-            priceSliderVal.innerText = `До ${parseInt(e.target.value).toLocaleString('ru-RU')} $`;
-            renderCatalog();
         });
 
         function renderCatalog() {
@@ -600,8 +569,13 @@
             const selectedDealer = dealerFilter.value;
             const selectedBaggage = baggageFilter.value;
             const selectedTank = tankFilter.value;
-            const minSpeed = parseInt(speedSlider.value);
-            const maxPrice = parseInt(priceSlider.value);
+            
+            // Считываем значения из табличек "От" и "До"
+            const minSpeed = parseInt(speedFrom.value) || 0;
+            const maxSpeed = parseInt(speedTo.value) || 999999;
+            const minPrice = parseInt(priceFrom.value) || 0;
+            const maxPrice = parseInt(priceTo.value) || 999999999;
+            
             const sortType = sortFilter.value;
 
             allCars.forEach(car => {
@@ -609,8 +583,10 @@
                 const matchesDealer = selectedDealer === 'all' || car.dealer === selectedDealer;
                 const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
                 const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
-                const matchesSpeed = car.speed >= minSpeed;
-                const matchesPrice = car.isPremium || car.price === 0 || car.price <= maxPrice;
+                
+                // Проверка диапазонов скорости и цены
+                const matchesSpeed = car.speed >= minSpeed && car.speed <= maxSpeed;
+                const matchesPrice = car.isPremium || car.price === 0 || (car.price >= minPrice && car.price <= maxPrice);
 
                 if (matchesSearch && matchesDealer && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
                     car.element.classList.remove('hidden');
