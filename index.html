@@ -21,7 +21,7 @@
             letter-spacing: 2px;
         }
 
-        /* Стиль для блока поиска */
+        /* Поисковая строка */
         .search-container {
             max-width: 500px;
             margin: 0 auto 30px auto;
@@ -56,6 +56,7 @@
             margin-top: 50px;
         }
 
+        /* Сетка каталога */
         .catalog-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -70,7 +71,7 @@
             overflow: hidden;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #222538;
+            border: 2px solid #222538;
             display: flex;
             flex-direction: column;
         }
@@ -122,7 +123,7 @@
         }
 
         .car-name {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             margin: 0 0 2px 0;
         }
@@ -130,16 +131,17 @@
         .real-name {
             color: #72768d;
             font-size: 14px;
-            margin: 0 0 4px 0;
+            margin: 0 0 6px 0;
         }
 
         .dealership {
-            font-size: 12px;
+            font-size: 13px;
             color: #ff9800;
             margin-bottom: 15px;
             font-weight: 600;
         }
 
+        /* Технические характеристики */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -158,6 +160,7 @@
             gap: 6px;
         }
 
+        /* Контейнер цен */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -169,7 +172,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 6px;
         }
 
@@ -186,16 +189,17 @@
         .price-label {
             font-size: 12px;
             color: #a3a7c2;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
         .price-value {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
         }
 
         .main-price .price-value {
             color: #ffffff;
-            font-size: 17px;
         }
 
         .gos-price .price-value {
@@ -215,6 +219,7 @@
     <div class="catalog-container" id="catalog"></div>
 
     <script>
+        // Твой ID таблицы из скриншота URL
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
 
@@ -222,7 +227,7 @@
 
         fetch(url)
             .then(res => {
-                if (!res.ok) throw new Error('Сетевая ошибка доступа к таблице');
+                if (!res.ok) throw new Error('Ошибка сети');
                 return res.text();
             })
             .then(csvText => {
@@ -231,42 +236,49 @@
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
+                // Читаем строки со 2-й (индекс 1)
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
                     if (!cells || cells.length < 11 || !cells[0]) continue; 
 
-                    const name = cells[0].trim();              
-                    const realName = cells[1].trim();          
-                    const carClass = cells[2].trim();          
-                    const speed = cells[3].trim();             
-                    const acceleration = cells[4].trim();      
-                    const handling = cells[5].trim();          
-                    const slots = cells[6].trim();             
-                    const tank = cells[7].trim();              
-                    const fuelConsumption = cells[8].trim();   
-                    const dealership = cells[9].trim();        
-                    let price = cells[10].trim();              
-                    let gosPrice = cells[11] ? cells[11].trim() : '0'; 
+                    const name = cells[0].trim();              // Столбец A (Название)
+                    const realName = cells[1].trim();          // Столбец B (Название в ИРЛ)
+                    const carClass = cells[2].trim();          // Столбец C (Класс)
+                    const speed = cells[3].trim();             // Столбец D (Скорость)
+                    const acceleration = cells[4].trim();      // Столбец E (Ускорение)
+                    const handling = cells[5].trim();          // Столбец F (Управляемость)
+                    const slots = cells[6].trim();             // Столбец G (Багажник)
+                    const tank = cells[7].trim();              // Столбец H (Топливный бак)
+                    const fuelConsumption = cells[8].trim();   // Столбец I (Расход топлива)
+                    const dealership = cells[9].trim();        // Столбец J (Автосалон)
+                    let price = cells[10].trim();              // Столбец K (Цена)
+                    let gosPrice = cells[11] ? cells[11].trim() : '0'; // Столбец L (Слив в гос)
 
                     if (price === '' || price === '0') price = 'Не продается';
 
-                    // Улучшенная логика проверки IC coin / коинов
+                    // --- ЖЕСТКАЯ ПРОВЕРКА НА КЛИЕНТСКИЕ COINS / ДОНАТ ВАЛЮТУ ---
                     let isPremiumCurrency = false;
-                    if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic') || price.toLowerCase().includes('кои')) {
+                    const cleanPriceLower = price.toLowerCase();
+                    
+                    if (cleanPriceLower.includes('coin') || cleanPriceLower.includes('ic') || cleanPriceLower.includes('кои') || cleanPriceLower.includes('mc')) {
                         isPremiumCurrency = true;
+                        // Оставляем исходный текст из ячейки таблицы, например "18 500(IC coin)"
                     } else if (price !== 'Не продается') {
                         price = price + ' $';
                     }
 
-                    if (!gosPrice.toLowerCase().includes('coin') && !gosPrice.toLowerCase().includes('ic') && !gosPrice.toLowerCase().includes('кои') && gosPrice !== '0' && gosPrice !== '') {
+                    const cleanGosLower = gosPrice.toLowerCase();
+                    if (!cleanGosLower.includes('coin') && !cleanGosLower.includes('ic') && !cleanGosLower.includes('кои') && gosPrice !== '0' && gosPrice !== '') {
                         gosPrice = gosPrice + ' $';
                     }
 
+                    // Генерация картинок-заглушек (в будущем заменишь на свои ссылки)
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
 
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     
+                    // Если за коины — перекрашиваем рамку в премиальный фиолетовый неон
                     if (isPremiumCurrency) {
                         card.style.borderColor = '#9c27b0'; 
                     }
@@ -278,7 +290,7 @@
                         </div>
                         <div class="car-info">
                             <div class="car-name">${name}</div>
-                            <div class="real-name">${realName}</div>
+                            <div class="real-name">${realName ? realName : '—'}</div>
                             <div class="dealership">📍 ${dealership}</div>
                             
                             <div class="car-specs">
@@ -304,6 +316,7 @@
                     `;
                     catalog.appendChild(card);
 
+                    // Добавляем в список для фильтрации поисковика
                     allCars.push({
                         element: card,
                         name: name.toLowerCase(),
@@ -313,10 +326,10 @@
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerText = 'Ошибка доступа. Пожалуйста, откройте доступ к Google Таблице («Все, у кого есть ссылка»).';
+                document.getElementById('loader').innerText = 'Ошибка загрузки данных. Убедитесь, что доступ к таблице открыт («Все, у кого есть ссылка»).';
             });
 
-        // Логика работы поиска
+        // Контроллер обработки поиска
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.trim().toLowerCase();
@@ -329,7 +342,7 @@
             });
         });
 
-        // Сверхнадежный парсер CSV, который полностью игнорирует кавычки от Google
+        // Мощный парсер CSV, учитывающий текстовое экранирование ячеек
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
