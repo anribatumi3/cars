@@ -16,7 +16,7 @@
         h1 {
             text-align: center;
             color: #e51b24;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -222,7 +222,7 @@
 
         fetch(url)
             .then(res => {
-                if (!res.ok) throw new Error('Сетевая ошибка');
+                if (!res.ok) throw new Error('Сетевая ошибка доступа к таблице');
                 return res.text();
             })
             .then(csvText => {
@@ -231,35 +231,34 @@
                 const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
-                // Идем строго по индексам столбцов: А=0, B=1, C=2 и т.д.
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
                     if (!cells || cells.length < 11 || !cells[0]) continue; 
 
-                    const name = cells[0].trim();              // Столбец A (Название)
-                    const realName = cells[1].trim();          // Столбец B (ИРЛ)
-                    const carClass = cells[2].trim();          // Столбец C (Класс)
-                    const speed = cells[3].trim();             // Столбец D (Скорость)
-                    const acceleration = cells[4].trim();      // Столбец E (Ускорение)
-                    const handling = cells[5].trim();          // Столбец F (Управляемость)
-                    const slots = cells[6].trim();             // Столбец G (Багажник)
-                    const tank = cells[7].trim();              // Столбец H (Бак)
-                    const fuelConsumption = cells[8].trim();   // Столбец I (Расход)
-                    const dealership = cells[9].trim();        // Столбец J (Автосалон)
-                    let price = cells[10].trim();              // Столбец K (Цена)
-                    let gosPrice = cells[11] ? cells[11].trim() : '0'; // Столбец L (Гос)
+                    const name = cells[0].trim();              
+                    const realName = cells[1].trim();          
+                    const carClass = cells[2].trim();          
+                    const speed = cells[3].trim();             
+                    const acceleration = cells[4].trim();      
+                    const handling = cells[5].trim();          
+                    const slots = cells[6].trim();             
+                    const tank = cells[7].trim();              
+                    const fuelConsumption = cells[8].trim();   
+                    const dealership = cells[9].trim();        
+                    let price = cells[10].trim();              
+                    let gosPrice = cells[11] ? cells[11].trim() : '0'; 
 
                     if (price === '' || price === '0') price = 'Не продается';
 
-                    // Логика валюты
+                    // Улучшенная логика проверки IC coin / коинов
                     let isPremiumCurrency = false;
-                    if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic')) {
+                    if (price.toLowerCase().includes('coin') || price.toLowerCase().includes('ic') || price.toLowerCase().includes('кои')) {
                         isPremiumCurrency = true;
                     } else if (price !== 'Не продается') {
                         price = price + ' $';
                     }
 
-                    if (!gosPrice.toLowerCase().includes('coin') && !gosPrice.toLowerCase().includes('ic') && gosPrice !== '0' && gosPrice !== '') {
+                    if (!gosPrice.toLowerCase().includes('coin') && !gosPrice.toLowerCase().includes('ic') && !gosPrice.toLowerCase().includes('кои') && gosPrice !== '0' && gosPrice !== '') {
                         gosPrice = gosPrice + ' $';
                     }
 
@@ -314,10 +313,10 @@
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerText = 'Ошибка загрузки данных.';
+                document.getElementById('loader').innerText = 'Ошибка доступа. Пожалуйста, откройте доступ к Google Таблице («Все, у кого есть ссылка»).';
             });
 
-        // Работа поисковика
+        // Логика работы поиска
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.trim().toLowerCase();
@@ -330,7 +329,7 @@
             });
         });
 
-        // Сверхнадежный парсер CSV строк
+        // Сверхнадежный парсер CSV, который полностью игнорирует кавычки от Google
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
