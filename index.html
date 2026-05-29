@@ -13,7 +13,7 @@
             padding: 20px;
         }
 
-        /* Шапка в стиле официального сайта */
+        /* Шапка каталога */
         .header-main {
             display: flex;
             flex-direction: column;
@@ -24,7 +24,7 @@
         }
 
         .header-logo {
-            width: 140px;
+            width: 150px;
             height: auto;
             margin-bottom: 15px;
             object-fit: contain;
@@ -166,13 +166,13 @@
             border-color: #434b59;
         }
 
-        /* Премиум рамка для донат-транспорта */
+        /* Премиум рамка для транспорта за коины */
         .car-card.premium-card {
-            border-color: rgba(209, 154, 102, 0.3);
+            border-color: rgba(242, 142, 83, 0.3);
         }
         .car-card.premium-card:hover {
-            border-color: #d19a66;
-            box-shadow: 0 10px 22px rgba(209, 154, 102, 0.15);
+            border-color: #f28e53;
+            box-shadow: 0 10px 22px rgba(242, 142, 83, 0.15);
         }
 
         .car-image {
@@ -245,7 +245,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Технические блоки */
+        /* Технические характеристики */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -265,7 +265,7 @@
             gap: 6px;
         }
 
-        /* Блок цен */
+        /* Цены */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -290,9 +290,9 @@
         }
 
         .premium-card .price-row.main-price {
-            background: rgba(209, 154, 102, 0.06);
-            border-left: 3px solid #d19a66;
-            border-color: rgba(209, 154, 102, 0.2) rgba(209, 154, 102, 0.2) rgba(209, 154, 102, 0.2) #d19a66;
+            background: rgba(242, 142, 83, 0.06);
+            border-left: 3px solid #f28e53;
+            border-color: rgba(242, 142, 83, 0.2) rgba(242, 142, 83, 0.2) rgba(242, 142, 83, 0.2) #f28e53;
         }
 
         .price-label {
@@ -310,11 +310,7 @@
             gap: 6px;
         }
 
-        .premium-card .main-price .price-value {
-            color: #d19a66;
-        }
-
-        /* Оригинальная иконка коина */
+        /* Оригинальная иконка IC коина */
         .coin-img {
             width: 18px;
             height: 18px;
@@ -326,7 +322,7 @@
 <body>
 
     <div class="header-main">
-        <img class="header-logo" src="logo.png" alt="InterPlay RP" onerror="this.style.display='none'">
+        <img class="header-logo" src="https://anribatumi3.github.io/cars/logo.png" alt="InterPlay RP">
         <h1>InterPlay<span> RP</span> — Каталог</h1>
     </div>
     
@@ -410,8 +406,8 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
-        // Путь к оригинальной иконке коина в корне репозитория
-        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin">`;
+        // Ссылка на оригинальную иконку коина прямо из GitHub
+        const COIN_IMG_HTML = `<img src="https://anribatumi3.github.io/cars/coin.png" class="coin-img" alt="Coin">`;
 
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
