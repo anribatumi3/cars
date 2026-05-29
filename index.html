@@ -6,98 +6,127 @@
     <title>Автосалон InterPlay — Каталог</title>
     <style>
         body {
-            background-color: #0b0c16;
+            background-color: #171a21;
             color: #ffffff;
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
         }
 
-        h1 {
+        /* Шапка в стиле официального сайта */
+        .header-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 35px;
+            padding-top: 10px;
+        }
+
+        .header-logo {
+            width: 75px;
+            height: 75px;
+            margin-bottom: 12px;
+        }
+
+        .header-main h1 {
             text-align: center;
-            color: #e51b24;
-            margin-bottom: 25px;
+            color: #ffffff;
+            margin: 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 28px;
+            letter-spacing: 1.5px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        
+        .header-main h1 span {
+            color: #8c2d32;
         }
 
         /* Панель фильтров */
         .filters-panel {
-            background-color: #141622;
-            border: 2px solid #222538;
-            border-radius: 14px;
-            padding: 20px;
+            background-color: #1e222b;
+            border: 1px solid #2b313e;
+            border-radius: 12px;
+            padding: 22px;
             max-width: 1360px;
             margin: 0 auto 30px auto;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
         }
 
         .filters-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filters-grid:last-child {
+            margin-bottom: 0;
         }
 
         .filter-item {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .filter-item label {
-            font-size: 12px;
-            color: #a3a7c2;
+            font-size: 11px;
+            color: #838b99;
             text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
         }
 
+        /* Поля ввода и селекты */
         .filter-select, .search-input {
             width: 100%;
-            padding: 12px 15px;
-            background-color: #1c1e2f;
-            border: 1px solid #2d314d;
-            border-radius: 8px;
+            padding: 11px 14px;
+            background-color: #15181e;
+            border: 1px solid #2b313e;
+            border-radius: 6px;
             color: #ffffff;
             font-size: 14px;
             outline: none;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .filter-select:focus, .search-input:focus {
-            border-color: #e51b24;
+            border-color: #8c2d32;
+            box-shadow: 0 0 0 2px rgba(140, 45, 50, 0.2);
         }
 
+        /* Ползунки */
         .range-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .range-slider {
             flex-grow: 1;
-            accent-color: #e51b24;
+            accent-color: #8c2d32;
             cursor: pointer;
         }
 
         .range-value {
             font-size: 13px;
-            color: #ff9800;
-            font-weight: bold;
-            min-width: 100px;
+            color: #d19a66;
+            font-weight: 600;
+            min-width: 110px;
             text-align: right;
         }
 
         #loader {
             text-align: center;
             font-size: 18px;
-            color: #72768d;
+            color: #626975;
             margin-top: 50px;
         }
 
+        /* Сетка каталога */
         .catalog-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -106,14 +135,14 @@
             margin: 0 auto;
         }
 
-        /* Карточки */
+        /* Карточки автомобилей */
         .car-card {
-            background-color: #141622;
-            border-radius: 14px;
+            background-color: #1e222b;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
-            border: 2px solid #222538;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #2b313e;
             display: flex;
             flex-direction: column;
         }
@@ -123,27 +152,29 @@
         }
 
         .car-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(229, 27, 36, 0.25);
-            border-color: #e51b24;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+            border-color: #434b59;
         }
 
+        /* Премиум рамка для донат-транспорта */
         .car-card.premium-card {
-            border-color: #9c27b0;
+            border-color: rgba(209, 154, 102, 0.3);
         }
         .car-card.premium-card:hover {
-            box-shadow: 0 12px 24px rgba(156, 39, 176, 0.35);
-            border-color: #e040fb;
+            border-color: #d19a66;
+            box-shadow: 0 10px 22px rgba(209, 154, 102, 0.15);
         }
 
         .car-image {
             width: 100%;
             height: 180px;
-            background-color: #0f101a;
+            background-color: #13161c;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            border-bottom: 1px solid #2b313e;
         }
 
         .car-image img {
@@ -152,21 +183,19 @@
             object-fit: contain;
         }
 
+        /* Название класса машины */
         .badge {
             position: absolute;
             top: 12px;
             right: 12px;
-            background-color: #e51b24;
-            color: white;
-            padding: 5px 12px;
+            background-color: #2b313e;
+            color: #cbd3e0;
+            padding: 4px 10px;
             font-size: 11px;
-            font-weight: bold;
-            border-radius: 20px;
+            font-weight: 600;
+            border-radius: 4px;
             text-transform: uppercase;
-        }
-
-        .premium-card .badge {
-            background-color: #9c27b0;
+            border: 1px solid #3f4756;
         }
 
         .car-info {
@@ -178,41 +207,47 @@
 
         .car-name {
             font-size: 22px;
-            font-weight: bold;
-            margin: 0 0 3px 0;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            color: #ffffff;
         }
 
         .real-name-label {
             font-size: 11px;
-            color: #72768d;
+            color: #626975;
             margin: 0;
             text-transform: uppercase;
+            font-weight: 600;
         }
 
         .real-name {
-            color: #ffffff;
+            color: #98a2b3;
             font-size: 14px;
             font-weight: 500;
-            margin: 0 0 8px 0;
+            margin: 0 0 12px 0;
         }
 
         .dealership {
             font-size: 13px;
-            color: #ff9800;
+            color: #8c2d32;
             margin-bottom: 15px;
-            font-weight: 600;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        /* Технические блоки */
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             font-size: 13px;
-            color: #a3a7c2;
+            color: #98a2b3;
             margin-bottom: 20px;
-            background: #1c1e2f;
+            background: #15181e;
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 6px;
+            border: 1px solid #2b313e;
         }
 
         .spec-item {
@@ -221,6 +256,7 @@
             gap: 6px;
         }
 
+        /* Блок цен */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -233,56 +269,62 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 14px;
-            border-radius: 8px;
+            border-radius: 6px;
+            border: 1px solid #2b313e;
+            background: #15181e;
         }
 
         .price-row.main-price {
-            background: rgba(229, 27, 36, 0.1);
-            border-left: 4px solid #e51b24;
+            background: rgba(140, 45, 50, 0.08);
+            border-left: 3px solid #8c2d32;
+            border-color: rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) #8c2d32;
         }
 
         .premium-card .price-row.main-price {
-            background: rgba(156, 39, 176, 0.15);
-            border-left: 4px solid #9c27b0;
-        }
-
-        .price-row.gos-price {
-            background: rgba(114, 118, 141, 0.1);
-            border-left: 4px solid #56596e;
+            background: rgba(209, 154, 102, 0.06);
+            border-left: 3px solid #d19a66;
+            border-color: rgba(209, 154, 102, 0.2) rgba(209, 154, 102, 0.2) rgba(209, 154, 102, 0.2) #d19a66;
         }
 
         .price-label {
             font-size: 11px;
-            color: #a3a7c2;
+            color: #838b99;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 700;
         }
 
-        /* Обертка для цены с коином */
         .price-value {
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 5px;
         }
 
-        /* Стиль логотипа коина в цене */
-        .coin-icon {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            vertical-align: middle;
+        .premium-card .main-price .price-value {
+            color: #d19a66;
         }
 
-        .premium-card .main-price .price-value {
-            color: #e040fb;
+        /* SVG иконка коина */
+        .coin-svg {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
 
-    <h1>Автосалон InterPlay — Каталог</h1>
+    <div class="header-main">
+        <svg class="header-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 18.5L25.5 39.5L20.5 44.5L4.5 28.5V18.5Z" fill="#3B6E9C"/>
+            <path d="M25.5 39.5L52.5 12.5H59.5L51.5 20.5L30.5 41.5L25.5 39.5Z" fill="#3B6E9C"/>
+            <path d="M59.5 18.5L38.5 39.5L43.5 44.5L59.5 28.5V18.5Z" fill="#DE6B53"/>
+            <path d="M38.5 39.5L11.5 12.5H4.5L12.5 20.5L33.5 41.5L38.5 39.5Z" fill="#DE6B53"/>
+            <path d="M25.5 39.5L32.5 46.5L38.5 39.5L34.5 35.5L32.5 37.5L30.5 35.5L25.5 39.5Z" fill="#C93B6D"/>
+        </svg>
+        <h1>InterPlay<span> RP</span> — Каталог</h1>
+    </div>
     
     <div class="filters-panel">
         <div class="filters-grid">
@@ -364,6 +406,20 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
+        // Векторная иконка коина InterPlay (SVG)
+        const COIN_SVG_HTML = `
+            <svg class="coin-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="url(#coinGrad)" stroke-width="2.5" fill="none"/>
+                <path d="M9 8H15M12 8V16M10 16H14" stroke="url(#coinGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f28e53"/>
+                        <stop offset="100%" stop-color="#e04a2b"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        `;
+
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
             if (!str || str === '0' || str.toLowerCase() === 'не продается') return 0;
@@ -372,14 +428,12 @@
             return parseInt(str.replace(/[^0-9]/g, '')) || 0;
         }
 
-        // Функция-помощник для генерации верстки цены с поддержкой иконок коинов
         function formatPriceHTML(priceStr, cleanNum) {
             const lower = priceStr.toLowerCase();
             if (lower === 'не продается') return `<span>Не продается</span>`;
             
-            // Если в цене обнаружено упоминание коинов
             if (lower.includes('coin') || lower.includes('ic') || lower.includes('кои') || lower.includes('mc')) {
-                return `<img src="coin.png" class="coin-icon" alt="Coin"> <span>${cleanNum.toLocaleString('ru-RU')}</span>`;
+                return `${COIN_SVG_HTML} <span style="color: #f28e53;">${cleanNum.toLocaleString('ru-RU')}</span>`;
             }
             
             return `<span>${cleanNum.toLocaleString('ru-RU')} $</span>`;
@@ -439,17 +493,15 @@
                     }
 
                     let numGosPrice = cleanPrice(gosPriceStr);
-                    let isGosPremium = gosPriceStr.toLowerCase().includes('coin') || gosPriceStr.toLowerCase().includes('ic') || gosPriceStr.toLowerCase().includes('кои') || gosPriceStr.toLowerCase().includes('mc');
 
                     if (dealership) dealerships.add(dealership);
                     if (rawSlots) baggageCaps.add(numSlots);
                     if (rawTank) tankCaps.add(numTank);
 
-                    // Генерация HTML-структуры для цен
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
                     const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
-                    const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
+                    const imgUrl = `https://via.placeholder.com/260x140/13161c/ffffff?text=${encodeURIComponent(name)}`;
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
