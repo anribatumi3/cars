@@ -57,7 +57,7 @@
 
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 16px;
         }
@@ -334,6 +334,15 @@
             </div>
 
             <div class="filter-item">
+                <label>Тип топлива</label>
+                <select id="fuelFilter" class="filter-select">
+                    <option value="all">Любое топливо</option>
+                    <option value="Бензин">Бензин</option>
+                    <option value="Электро">Электро</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
                 <label>Сортировка</label>
                 <select id="sortFilter" class="filter-select">
                     <option value="none">Без сортировки</option>
@@ -391,6 +400,7 @@
 
         const searchInput = document.getElementById('searchInput');
         const dealerFilter = document.getElementById('dealerFilter');
+        const fuelFilter = document.getElementById('fuelFilter');
         const sortFilter = document.getElementById('sortFilter');
         const baggageFilter = document.getElementById('baggageFilter');
         const tankFilter = document.getElementById('tankFilter');
@@ -457,8 +467,11 @@
                     let priceStr = cells[10].trim();              
                     let gosPriceStr = cells[11] ? cells[11].trim() : '0'; 
                     
-                    // Читаем ссылку из 13-й колонки (индекс 12)
+                    // Читаем ссылку из 13-й колонки (M)
                     const customImgUrl = cells[12] ? cells[12].trim() : '';
+                    
+                    // Читаем тип топлива из 14-й колонки (N)
+                    const fuelType = cells[13] ? cells[13].trim() : '—';
 
                     if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
@@ -486,9 +499,11 @@
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
                     const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
-                    // Если в таблице есть ссылка — подставляем её. Если пусто — оставляем серый квадрат
                     const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     
+                    // Определяем подходящую иконку для типа топлива
+                    const fuelIcon = fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽';
+
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
@@ -509,8 +524,9 @@
                                 <div class="spec-item">🚀 Ускор: ${acceleration}</div>
                                 <div class="spec-item">🕹️ Управл: ${handling}</div>
                                 <div class="spec-item">🎒 Багаж: ${rawSlots}</div>
-                                <div class="spec-item">⛽ Бак: ${rawTank}</div>
+                                <div class="spec-item">${fuelIcon} Бак: ${rawTank}</div>
                                 <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
+                                <div class="spec-item" style="grid-column: span 2; border-top: 1px solid #2b313e; padding-top: 6px; margin-top: 2px;">🔋 Тип: ${fuelType}</div>
                             </div>
 
                             <div class="price-container">
@@ -531,6 +547,7 @@
                         name: name.toLowerCase(),
                         realName: realName.toLowerCase(),
                         dealer: dealership,
+                        fuel: fuelType,
                         speed: numSpeed,
                         baggage: numSlots,
                         tank: numTank,
@@ -562,13 +579,14 @@
             });
         }
 
-        [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter, speedFrom, speedTo, priceFrom, priceTo].forEach(el => {
+        [searchInput, dealerFilter, fuelFilter, sortFilter, baggageFilter, tankFilter, speedFrom, speedTo, priceFrom, priceTo].forEach(el => {
             el.addEventListener('input', renderCatalog);
         });
 
         function renderCatalog() {
             const query = searchInput.value.trim().toLowerCase();
             const selectedDealer = dealerFilter.value;
+            const selectedFuel = fuelFilter.value;
             const selectedBaggage = baggageFilter.value;
             const selectedTank = tankFilter.value;
             
@@ -582,13 +600,14 @@
             allCars.forEach(car => {
                 const matchesSearch = car.name.includes(query) || car.realName.includes(query);
                 const matchesDealer = selectedDealer === 'all' || car.dealer === selectedDealer;
+                const matchesFuel = selectedFuel === 'all' || car.fuel === selectedFuel;
                 const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
                 const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
                 
                 const matchesSpeed = car.speed >= minSpeed && car.speed <= maxSpeed;
                 const matchesPrice = car.isPremium || car.price === 0 || (car.price >= minPrice && car.price <= maxPrice);
 
-                if (matchesSearch && matchesDealer && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
+                if (matchesSearch && matchesDealer && matchesFuel && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
                     car.element.classList.remove('hidden');
                 } else {
                     car.element.classList.add('hidden');
