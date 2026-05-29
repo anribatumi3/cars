@@ -22,7 +22,7 @@
             font-size: 28px;
         }
 
-        /* Панель фильтров в стиле Fletcher Wiki */
+        /* Панель фильтров */
         .filters-panel {
             background-color: #141622;
             border: 2px solid #222538;
@@ -54,7 +54,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Стилизация селектов и инпутов */
         .filter-select, .search-input {
             width: 100%;
             padding: 12px 15px;
@@ -72,7 +71,6 @@
             border-color: #e51b24;
         }
 
-        /* Стилизация ползунков (Range) */
         .range-container {
             display: flex;
             align-items: center;
@@ -100,7 +98,6 @@
             margin-top: 50px;
         }
 
-        /* Сетка каталога */
         .catalog-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -261,9 +258,21 @@
             font-weight: bold;
         }
 
+        /* Обертка для цены с коином */
         .price-value {
             font-size: 16px;
             font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Стиль логотипа коина в цене */
+        .coin-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            vertical-align: middle;
         }
 
         .premium-card .main-price .price-value {
@@ -345,7 +354,6 @@
 
         let allCars = [];
 
-        // Элементы управления
         const searchInput = document.getElementById('searchInput');
         const dealerFilter = document.getElementById('dealerFilter');
         const sortFilter = document.getElementById('sortFilter');
@@ -356,20 +364,25 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
-        // Умная функция для очистки цен от копеек (,00) и конвертации в чистое число
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
             if (!str || str === '0' || str.toLowerCase() === 'не продается') return 0;
+            if (str.includes(',')) str = str.split(',')[0];
+            if (str.includes('.')) str = str.split('.')[0];
+            return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+        }
+
+        // Функция-помощник для генерации верстки цены с поддержкой иконок коинов
+        function formatPriceHTML(priceStr, cleanNum) {
+            const lower = priceStr.toLowerCase();
+            if (lower === 'не продается') return `<span>Не продается</span>`;
             
-            // Если есть копейки через запятую или точку (например ,00 или .00), отрезаем их
-            if (str.includes(',')) {
-                str = str.split(',')[0];
-            } else if (str.includes('.')) {
-                str = str.split('.')[0];
+            // Если в цене обнаружено упоминание коинов
+            if (lower.includes('coin') || lower.includes('ic') || lower.includes('кои') || lower.includes('mc')) {
+                return `<img src="coin.png" class="coin-icon" alt="Coin"> <span>${cleanNum.toLocaleString('ru-RU')}</span>`;
             }
             
-            // Убираем всё, кроме цифр
-            return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+            return `<span>${cleanNum.toLocaleString('ru-RU')} $</span>`;
         }
 
         fetch(url)
@@ -383,7 +396,6 @@
                 }
 
                 const rows = parseCSV(csvText);
-                const catalog = document.getElementById('catalog');
                 document.getElementById('loader').style.display = 'none';
 
                 const dealerships = new Set();
@@ -411,34 +423,31 @@
 
                     if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
-                    // Преобразование характеристик в числа
                     const numSpeed = parseInt(rawSpeed.replace(/[^0-9]/g, '')) || 0;
                     const numSlots = parseInt(rawSlots.replace(/[^0-9]/g, '')) || 0;
                     const numTank = parseInt(rawTank.replace(/[^0-9]/g, '')) || 0;
 
                     if (numSpeed > maxTableSpeed) maxTableSpeed = numSpeed;
 
-                    // Безопасный парсинг цен с отсечением копеек
                     let isPremiumCurrency = false;
-                    let numPrice = 0;
-                    const checkPrice = priceStr.toLowerCase();
+                    let numPrice = cleanPrice(priceStr);
                     
-                    if (checkPrice.includes('coin') || checkPrice.includes('ic') || checkPrice.includes('кои') || checkPrice.includes('mc')) {
+                    if (priceStr.toLowerCase().includes('coin') || priceStr.toLowerCase().includes('ic') || priceStr.toLowerCase().includes('кои') || priceStr.toLowerCase().includes('mc')) {
                         isPremiumCurrency = true;
                     } else if (priceStr !== 'Не продается') {
-                        numPrice = cleanPrice(priceStr);
                         if (numPrice > maxTablePrice) maxTablePrice = numPrice;
-                        priceStr = numPrice.toLocaleString('ru-RU') + ' $';
                     }
 
                     let numGosPrice = cleanPrice(gosPriceStr);
-                    if (!gosPriceStr.toLowerCase().includes('coin') && !gosPriceStr.toLowerCase().includes('ic') && numGosPrice > 0) {
-                        gosPriceStr = numGosPrice.toLocaleString('ru-RU') + ' $';
-                    }
+                    let isGosPremium = gosPriceStr.toLowerCase().includes('coin') || gosPriceStr.toLowerCase().includes('ic') || gosPriceStr.toLowerCase().includes('кои') || gosPriceStr.toLowerCase().includes('mc');
 
                     if (dealership) dealerships.add(dealership);
                     if (rawSlots) baggageCaps.add(numSlots);
                     if (rawTank) tankCaps.add(numTank);
+
+                    // Генерация HTML-структуры для цен
+                    const priceHTML = formatPriceHTML(priceStr, numPrice);
+                    const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
                     const card = document.createElement('div');
@@ -468,11 +477,11 @@
                             <div class="price-container">
                                 <div class="price-row main-price">
                                     <span class="price-label">Цена в салоне:</span>
-                                    <span class="price-value">${priceStr}</span>
+                                    <span class="price-value">${priceHTML}</span>
                                 </div>
                                 <div class="price-row gos-price">
                                     <span class="price-label">Слив в гос:</span>
-                                    <span class="price-value">${gosPriceStr}</span>
+                                    <span class="price-value">${gosPriceHTML}</span>
                                 </div>
                             </div>
                         </div>
