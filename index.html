@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автосалон InterPlay</title>
+    <style>
+        /* Общие стили в темных тонах сервера */
+        body {
+            background-color: #0b0c16;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e51b24; /* Стилизация под лаунчер/сервер */
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Сетка для карточек (Grid) */
+        .catalog-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Стиль самой карточки (как на фото 2) */
+        .car-card {
+            background-color: #141622;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #222538;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(229, 27, 36, 0.2);
+            border-color: #e51b24;
+        }
+
+        /* Контейнер для фото */
+        .car-image {
+            width: 100%;
+            height: 180px;
+            background-color: #0f101a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .car-image img {
+            max-width: 90%;
+            max-height: 85%;
+            object-fit: contain;
+        }
+
+        /* Плашка "Новинка" или "Класс" */
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: #e51b24;
+            color: white;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* Информационная часть */
+        .car-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .car-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+        }
+
+        .real-name {
+            color: #72768d;
+            font-size: 14px;
+            margin: 0 0 15px 0;
+        }
+
+        /* Характеристики (Скорость, Бак) */
+        .car-specs {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #a3a7c2;
+            margin-bottom: 20px;
+            background: #1c1e2f;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Кнопки и Цены */
+        .price-container {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(229, 27, 36, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #e51b24;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #a3a7c2;
+        }
+
+        .price-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .btn-more {
+            background-color: #222538;
+            color: white;
+            border: none;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-more:hover {
+            background-color: #313552;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Автосалон InterPlay — Каталог</h1>
+
+    <div class="catalog-container">
+
+        <div class="car-card">
+            <div class="car-image">
+                <img src="https://via.placeholder.com/260x140/0f101a/ffffff?text=Mercedes+GLS" alt="Benefactor 63 GLS">
+                <div class="badge">Внедорожник</div>
+            </div>
+            <div class="car-info">
+                <div class="car-name">Benefactor 63 GLS</div>
+                <div class="real-name">Mercedes 63 GLS</div>
+                
+                <div class="car-specs">
+                    <div class="spec-item">⚡ 217 км/ч</div>
+                    <div class="spec-item">⛽ 100 л</div>
+                    <div class="spec-item">🎒 25 слот</div>
+                </div>
+
+                <div class="price-container">
+                    <div class="price-row">
+                        <span class="price-label">Цена в салоне:</span>
+                        <span class="price-value">2 060 000 $</span>
+                    </div>
+                    <button class="btn-more">Подробнее</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="car-card">
+            <div class="car-image">
+                <img src="https://via.placeholder.com/260x140/0f101a/ffffff?text=AMG+GT" alt="Benefactor AMG GT">
+                <div class="badge" style="background-color: #ff9800;">Спортивный</div>
+            </div>
+            <div class="car-info">
+                <div class="car-name">Benefactor AMG GT</div>
+                <div class="real-name">Mercedes AMG GT</div>
+                
+                <div class="car-specs">
+                    <div class="spec-item">⚡ 235 км/ч</div>
+                    <div class="spec-item">⛽ 60 л</div>
+                    <div class="spec-item">🎒 8 слот</div>
+                </div>
+
+                <div class="price-container">
+                    <div class="price-row">
+                        <span class="price-label">Цена в салоне:</span>
+                        <span class="price-value">7 340 000 $</span>
+                    </div>
+                    <button class="btn-more">Подробнее</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
