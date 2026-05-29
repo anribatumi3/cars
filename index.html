@@ -57,7 +57,7 @@
             margin-top: 50px;
         }
 
-        /* Контейнер каталога */
+        /* Сетка каталога */
         .catalog-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -66,7 +66,7 @@
             margin: 0 auto;
         }
 
-        /* Карточка в стиле Fletcher Wiki */
+        /* Карточка Fletcher Wiki */
         .car-card {
             background-color: #141622;
             border-radius: 14px;
@@ -89,7 +89,7 @@
             border-color: #e51b24;
         }
 
-        /* Премиум карточка (за коины) */
+        /* Фиолетовый неон для машин за донат/коины */
         .car-card.premium-card {
             border-color: #9c27b0;
         }
@@ -255,17 +255,25 @@
     <div class="catalog-container" id="catalog"></div>
 
     <script>
+        // Твой ID таблицы из скриншота URL
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
-        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/pub?output=csv`;
+        
+        // Альтернативный, более стабильный адрес экспорта в CSV напрямую из листов
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
         let allCars = [];
 
         fetch(url)
             .then(res => {
-                if (!res.ok) throw new Error('Сетевой сбой при чтении');
+                if (!res.ok) throw new Error('Ошибка сети при чтении');
                 return res.text();
             })
             .then(csvText => {
+                // Если Google прислал HTML страницу входа вместо таблицы, значит доступ всё еще закрыт
+                if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login')) {
+                    throw new Error('Ограничение доступа');
+                }
+
                 const rows = parseCSV(csvText);
                 
                 const catalog = document.getElementById('catalog');
@@ -290,7 +298,7 @@
 
                     if (price === '' || price === '0') price = 'Не продается';
 
-                    // Определение валюты (Коины / Доллары)
+                    // Логика валюты (поддержка IC coin / коинов)
                     let isPremiumCurrency = false;
                     const checkPrice = price.toLowerCase();
                     
@@ -305,7 +313,7 @@
                         gosPrice = gosPrice + ' $';
                     }
 
-                    // Временная заглушка под фото машин
+                    // Картинка-заглушка
                     const imgUrl = `https://via.placeholder.com/260x140/0f101a/ffffff?text=${encodeURIComponent(name)}`;
 
                     const card = document.createElement('div');
@@ -357,10 +365,18 @@
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerHTML = 'Ошибка загрузки данных.<br><small style="color:#ef5350;">Выполните Шаг 1: Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (CSV)</small>';
+                document.getElementById('loader').innerHTML = `
+                    <div style="color:#ef5350; line-height: 1.6;">
+                        Ошибка загрузки данных.<br>
+                        <span style="color: #a3a7c2; font-size: 15px;">
+                            Убедитесь, что в Настройках доступа таблицы выставлено <b>«Все, у кого есть ссылка» (Читатель)</b>.<br>
+                            Также нажмите: <b>Файл -> Поделиться -> Опубликовать в интернете</b>.
+                        </span>
+                    </div>
+                `;
             });
 
-        // Живой поиск
+        // Поиск на лету
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.trim().toLowerCase();
@@ -373,7 +389,7 @@
             });
         });
 
-        // Парсер CSV
+        // Парсер CSV ячеек
         function parseCSV(text) {
             let lines = text.split(/\r\n|\n/);
             let result = [];
