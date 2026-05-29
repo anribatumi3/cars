@@ -395,7 +395,6 @@
         const baggageFilter = document.getElementById('baggageFilter');
         const tankFilter = document.getElementById('tankFilter');
         
-        // Новые инпуты вместо слайдеров
         const speedFrom = document.getElementById('speedFrom');
         const speedTo = document.getElementById('speedTo');
         const priceFrom = document.getElementById('priceFrom');
@@ -457,6 +456,9 @@
                     const dealership = cells[9].trim();        
                     let priceStr = cells[10].trim();              
                     let gosPriceStr = cells[11] ? cells[11].trim() : '0'; 
+                    
+                    // Читаем ссылку из 13-й колонки (индекс 12)
+                    const customImgUrl = cells[12] ? cells[12].trim() : '';
 
                     if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
@@ -484,8 +486,9 @@
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
                     const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
-                    // Ссылка для красивых заглушек названий вместо битых картинок
-                    const imgUrl = `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
+                    // Если в таблице есть ссылка — подставляем её. Если пусто — оставляем серый квадрат
+                    const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
+                    
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
@@ -559,7 +562,6 @@
             });
         }
 
-        // Вешаем событие изменения на все фильтры, включая новые инпуты
         [searchInput, dealerFilter, sortFilter, baggageFilter, tankFilter, speedFrom, speedTo, priceFrom, priceTo].forEach(el => {
             el.addEventListener('input', renderCatalog);
         });
@@ -570,7 +572,6 @@
             const selectedBaggage = baggageFilter.value;
             const selectedTank = tankFilter.value;
             
-            // Считываем значения из табличек "От" и "До"
             const minSpeed = parseInt(speedFrom.value) || 0;
             const maxSpeed = parseInt(speedTo.value) || 999999;
             const minPrice = parseInt(priceFrom.value) || 0;
@@ -584,7 +585,6 @@
                 const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
                 const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
                 
-                // Проверка диапазонов скорости и цены
                 const matchesSpeed = car.speed >= minSpeed && car.speed <= maxSpeed;
                 const matchesPrice = car.isPremium || car.price === 0 || (car.price >= minPrice && car.price <= maxPrice);
 
