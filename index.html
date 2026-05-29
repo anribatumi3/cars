@@ -322,7 +322,7 @@
 <body>
 
     <div class="header-main">
-        <img class="header-logo" src="logo.png" alt="InterPlay RP" onerror="this.src='https://anribatumi3.github.io/logo.png'">
+        <img class="header-logo" src="logo.png" alt="InterPlay RP" onerror="this.onerror=null; this.src='https://anribatumi3.github.io/logo.png';">
         <h1>InterPlay<span> RP</span> — Каталог</h1>
     </div>
     
@@ -406,8 +406,8 @@
         const priceSlider = document.getElementById('priceSlider');
         const priceSliderVal = document.getElementById('priceSliderVal');
 
-        // Умный вывод коина (ищет локально, если не находит — берёт из корня гитхаба)
-        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin" onerror="this.src='https://anribatumi3.github.io/coin.png'">`;
+        // Безопасный вывод коина (без бесконечного цикла)
+        const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin" onerror="this.onerror=null; this.src='https://anribatumi3.github.io/coin.png';">`;
 
         function cleanPrice(priceRaw) {
             let str = priceRaw.trim();
@@ -434,7 +434,8 @@
                 return res.text();
             })
             .then(csvText => {
-                if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login')) {
+                // Если вместо CSV вернулась страница авторизации Google, значит таблица закрыта
+                if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login') || csvText.includes('google-signin')) {
                     throw new Error('Доступ ограничен (CORS / Авторизация)');
                 }
 
@@ -548,10 +549,14 @@
             .catch(err => {
                 console.error(err);
                 document.getElementById('loader').innerHTML = `
-                    <div class="error-hint">Ошибка загрузки данных.</div>
-                    <div style="color: #626975; font-size: 14px; margin-top: 15px; line-height: 1.6;">
-                        Выполните в таблице:<br>
-                        <strong>Файл -> Поделиться -> Опубликовать в интернете -> Лист1 (формат CSV)</strong>
+                    <div class="error-hint">Ошибка загрузки базы данных транспорта.</div>
+                    <div style="color: #cbd3e0; font-size: 14px; margin-top: 15px; line-height: 1.6; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; background: #1e222b; padding: 20px; border-radius: 8px; border: 1px solid #8c2d32;">
+                        <span style="color: #ff5252; font-weight: bold;">Причина:</span> Браузер заблокировал запрос (CORS), так как Google Таблица закрыта от внешнего мира.<br><br>
+                        <strong>Как исправить (Обязательно):</strong><br>
+                        1. Открой свою Google Таблицу.<br>
+                        2. В меню выбери: <strong style="color: #8c2d32;">Файл -> Поделиться -> Опубликовать в интернете</strong>.<br>
+                        3. Выбери <strong style="color: #d19a66;">Лист1</strong> и формат <strong style="color: #d19a66;">Значения, разделенные запятыми (.csv)</strong>.<br>
+                        4. Нажми кнопку <strong>Опубликовать</strong> и обнови этот сайт.
                     </div>
                 `;
             });
