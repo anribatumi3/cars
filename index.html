@@ -596,66 +596,56 @@
             .details-left { border-right: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
             .details-right { padding: 20px; max-height: none; overflow-y: visible; }
         }
-        /* ====================================================
-   КОМПАКТНЫЙ СТИЛЬ ДЛЯ МАКЕТА ТЮНИНГА (БЕЗ СКРОЛЛА)
+      /* ====================================================
+   ИСПРАВЛЕНИЕ МАСШТАБА ДЛЯ ПРАВОГО ОКНА МОДИФИКАЦИЙ
    ==================================================== */
 
-/* Уменьшаем отступы и размеры шрифтов в карточках характеристик */
-.info-card, .tuning-group, .fixed-section-title {
-    padding: 8px 12px !important;
-    margin-bottom: 8px !important;
+/* Сжимаем и настраиваем правый контейнер характеристик и тюнинга */
+.details-right {
+    padding: 10px 14px !important;
+    max-height: 85vh !important; /* Ограничиваем высоту, чтобы не скроллить весь экран */
+    overflow-y: auto !important; /* Появится аккуратный внутренний скролл, если что-то не влезет */
 }
 
-/* Делаем заголовки секций компактнее */
-.info-card h3, h3 {
-    font-size: 13px !important;
-    margin-top: 2px !important;
-    margin-bottom: 6px !important;
-}
-
-/* Сжимаем сетку характеристик, чтобы она не растягивалась по высоте */
-.specs-grid, .fixed-buttons-grid {
-    gap: 6px !important;
-}
-
-/* Делаем сами плашки характеристик и кнопки ниже, уменьшая внутренний padding */
-.spec-item, .fixed-toggle-btn {
-    padding: 4px 8px !important;
+/* Делаем заголовки категорий («ОСВЕЩЕНИЕ АВТОМОБИЛЯ» и др.) компактнее */
+.details-right h3, 
+.details-right div[style*="font-weight: bold"] {
+    margin-top: 8px !important;
+    margin-bottom: 4px !important;
     font-size: 12px !important;
 }
 
-/* Уменьшаем высоту превью автомобиля */
-.car-preview-box img {
-    max-height: 140px !important;
-    margin: 4px 0 !important;
+/* Находим контейнеры с кнопками внутри правой панели и выстраиваем их в 2 КОЛОНКИ */
+.details-right button {
+    display: inline-flex !important;
+    width: calc(50% - 4px) !important; /* Каждая кнопка занимает ровно половину строки */
+    margin: 2px !important;
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
 }
 
-/* Самое главное: если экран компьютера достаточно широкий, 
-   мы автоматически делим контент на две аккуратные колонки */
-@media (min-width: 900px) {
-    /* Находим контейнер, в котором лежат блоки "ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ" 
-       и "ВНЕШНЯЯ ДОРАБОТКА КУЗОВА" (и основные модули) */
-    .modal-content, .car-detail-container {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important; /* Ровно пополам */
-        gap: 16px !important;
-        max-width: 1100px !important;
-        max-height: 90vh !important; /* Ограничиваем по высоте экрана */
-        overflow-y: auto !important; /* Если что-то не влезает, аккуратно скроллим внутри */
-        padding: 15px !important;
-    }
-    
-    /* Делаем так, чтобы заголовок машины или фото (если они идут первыми) 
-       красиво растягивались на всю ширину сверху */
-    .car-preview-box {
-        grid-column: span 2 !important;
-    }
-    
-    /* Блок с итоговой ценой прижимаем, чтобы он был хорошо виден */
-    .total-price-panel {
-        grid-column: span 2 !important;
-        margin-top: 10px !important;
-    }
+/* Если у тебя блоки с кнопками обернуты в flex/grid-контейнеры */
+.details-right .fixed-buttons-grid,
+.details-right div[style*="display: flex"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Сетка из 2-х колонок */
+    gap: 6px !important;
+    width: 100% !important;
+}
+
+/* Делаем плашки технических характеристик (Цена, Вместимость) чуть плотнее */
+.spec-item, .details-right div[style*="background"] {
+    padding: 4px 8px !important;
+}
+.spec-label {
+    font-size: 10px !important;
+}
+.spec-value {
+    font-size: 12px !important;
+}
 }
     </style>
 </head>
