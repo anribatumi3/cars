@@ -1,4 +1,4 @@
-/* Базовые стили страницы */
+ /* Базовое оформление страницы */
 body {
     background-color: #15161a; /* Глубокий темный фон */
     color: #e2e8f0;
@@ -12,42 +12,41 @@ body {
     box-sizing: border-box;
 }
 
-/* Контейнер для списка всех категорий */
+/* Ограничивающий контейнер-столбец */
 .menu-container {
     width: 100%;
-    max-width: 500px; /* Идеальный размер для аккуратного мобильного вида */
+    max-width: 500px; /* Идеально для отображения на смартфонах */
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Пространство между плитками */
+    gap: 12px;
 }
 
-/* Стилизация самих плиток-ссылок */
+/* Стили плиток меню */
 .menu-card {
-    background-color: #202124; /* Цвет фона плитки */
+    background-color: #202124; /* Цвет плитки */
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 16px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-decoration: none; /* Убирает подчеркивание текста ссылки */
+    text-decoration: none;
     color: inherit;
     transition: background-color 0.2s ease, transform 0.1s ease;
     cursor: pointer;
 }
 
-/* Эффект легкого подсвечивания при наведении курсора */
+/* Эффект наведения мыши */
 .menu-card:hover {
     background-color: #28292d;
     transform: translateY(-1px);
 }
 
-/* Эффект при клике */
 .menu-card:active {
     transform: translateY(0);
 }
 
-/* Контентный блок (Заголовок + Описание) */
+/* Текстовая группа внутри карточки */
 .card-content {
     display: flex;
     flex-direction: column;
@@ -61,14 +60,14 @@ body {
     letter-spacing: 0.3px;
 }
 
-/* Короткое серое описание */
+/* Серое описание */
 .card-desc {
     font-size: 13px;
     color: #8a8d93;
     line-height: 1.4;
 }
 
-/* Иконка аккуратной стрелочки в рамочке справа */
+/* Рамочка со стрелочкой справа */
 .card-arrow {
     font-size: 14px;
     color: #6c7078;
@@ -80,13 +79,14 @@ body {
     justify-content: center;
     align-items: center;
     transition: color 0.2s, border-color 0.2s, background-color 0.2s;
-    flex-shrink: 0; /* Не дает стрелочке сжиматься */
+    flex-shrink: 0;
     margin-left: 15px;
 }
 
-/* Изменение стрелочки при наведении на всю плитку */
+/* Эффект стрелочки при наведении */
 .menu-card:hover .card-arrow {
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.03);
 }
+   
