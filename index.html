@@ -1049,7 +1049,6 @@
                     if (rawTank) tankCaps.add(numTank);
 
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
-    // Создаем правильную строку цены с долларом в конце:
     const cleanMainPrice = numPrice ? `${numPrice.toLocaleString('ru-RU')} $` : '0 $';
                     const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     
