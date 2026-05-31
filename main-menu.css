@@ -89,4 +89,36 @@ body {
     border-color: rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.03);
 }
+```css
+/* Стили для фирменной шапки InteRPlay Wiki */
+.header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* Расстояние между буквами и логотипом */
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 15px;
+    margin-bottom: 25px; /* Отступ до первой кнопки меню */
+    text-align: center;
+    width: 100%;
+    letter-spacing: 0.5px;
+}
+
+/* Стили для круглого логотипа */
+.header-logo {
+    width: 36px;  /* Аккуратный размер под высоту шрифта */
+    height: 36px;
+    border-radius: 50%; /* Делаем картинку идеально круглой */
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая аккуратная рамка */
+}
+
+/* Корректируем body, чтобы заголовок и меню выстроились друг под другом */
+body {
+    flex-direction: column;
+    align-items: center;
+}
+
    
