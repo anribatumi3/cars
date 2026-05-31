@@ -1149,11 +1149,15 @@
             document.getElementById('info-dealer').innerText = car.dealer;
             document.getElementById('info-salon-price').innerHTML = car.priceHTML;
             document.getElementById('info-gov-price').innerText = `$ ${car.gosPrice.toLocaleString('ru-RU')}`;
-            document.getElementById('info-capacity').innerText = `${cleanCapacity} слотов`;
+            document.getElementById('info-capacity').innerText = `${cleanCapacity || '0'} слотов`;
             document.getElementById('info-fuel').innerText = car.fuel || '-';
             const isCarElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
             const cleanSpeed = String(car.rawSpeed || 0).replace(/[^0-9.]/g, '');
-    const cleanCapacity = String(car.baggage || 0).replace(/[^0-9.]/g, '');
+    const rawBaggage = car.baggage || '0';
+    const cleanCapacity = String(rawBaggage)
+        .replace(/(слотов|слота|слот|slots|slot)/gi, '') // Стираем текст, если он прилетел из таблицы
+        .replace(/[^0-9.]/g, '')                         // Стираем любые другие лишние символы
+        .trim();
     const cleanTank = String(car.tank || 0).replace(/[^0-9.]/g, '');
     const cleanFuelValue = String(car.fuelConsumption || 0).replace(/[^0-9.]/g, '');
     const cleanHandling = String(car.handling || 0).replace(/[^0-9.]/g, ''); // Оставляем ТОЛЬКО цифру управления
