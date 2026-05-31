@@ -1071,12 +1071,15 @@
                                 <div class="spec-item">⚡ Скор: ${rawSpeed}</div>
                                 <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
                                 <div class="spec-item">
-                ${fuelType.toLowerCase() === 'электро' ? '🔌 Бак: ' + rawTank + ' кВт' : '⛽ Бак: ' + rawTank + ' л'}
+                ${fuelType.toLowerCase() === 'электро' 
+                    ? `🔌 Бак: ${String(rawTank).replace(/(л|квт|квтч|ч)/gi, '').trim()} кВт` 
+                    : `⛽ Бак: ${rawTank} л`
+                }
             </div>
                                 <div class="spec-item">🔋 Тип: ${fuelType}</div>
                                 <div class="spec-item">📉 Расход: ${
                 fuelType.toLowerCase() === 'электро' 
-                ? `${fuelConsumption.replace(/(л|mah|квтч|ч)/gi, '').trim()} кВтч/1 км` 
+                ? `${fuelConsumption.replace(/(л|mah|квтч|квт|ч)/gi, '').trim()} кВт/1 км` 
                 : `${fuelConsumption.replace(/л/gi, '').trim()} л/1 км`
             }</div>
                                 <div class="spec-item">⚙️ Управл: ${handling}</div>
@@ -1148,15 +1151,16 @@
             document.getElementById('info-gov-price').innerText = `$ ${car.gosPrice.toLocaleString('ru-RU')}`;
             document.getElementById('info-capacity').innerText = `${car.baggage || 0} слотов`;
             document.getElementById('info-fuel').innerText = car.fuel || '-';
-            const isElectro = car.fuel && car.fuel.toLowerCase() === 'электро';
-            document.getElementById('info-tank').innerText = isElectro ? `${car.tank || 0} кВт` : `${car.tank || 0} л`;
+            const isCarElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
+            const cleanTank = String(car.tank || 0).replace(/(л|квт|квтч|ч)/gi, '').trim();
+    document.getElementById('info-tank').innerText = isCarElectro ? `${cleanTank} кВт` : `${car.tank || 0} л`;
             document.getElementById('info-speed').innerText = `${car.rawSpeed || 0} км/ч`;
             document.getElementById('info-seats').innerText = car.seats || '0';
             // Проверяем расход (ищем в car.fuelConsumption или в car.consumption, если опечатались)
     const rawFuelConsumption = car.fuelConsumption || car.consumption;
     if (car.fuelConsumption) {
         const cleanFuel = String(car.fuelConsumption).replace(/(л|mah|квтч|квт|ч)/gi, '').trim();
-        document.getElementById('info-fuelConsumption').innerText = isElectro ? `${cleanFuel} кВт/1 км` : `${cleanFuel} л/1 км`;
+        document.getElementById('info-fuelConsumption').innerText = isCarElectro ? `${cleanFuel} кВт/1 км` : `${cleanFuel} л/1 км`;
     } else {
         document.getElementById('info-fuelConsumption').innerText = '-';
     }
