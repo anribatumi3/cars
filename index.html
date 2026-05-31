@@ -1072,7 +1072,11 @@
                                 <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
                                 <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
                                 <div class="spec-item">🔋 Тип: ${fuelType}</div>
-                                <div class="spec-item">📉 Расход: ${fuelConsumption.replace(/л/gi, '').trim()} л/1 км</div>
+                                <div class="spec-item">📉 Расход: ${
+                fuelType.toLowerCase() === 'электро' 
+                ? `${fuelConsumption.replace(/(л|mah|квтч|ч)/gi, '').trim()} кВтч/1 км` 
+                : `${fuelConsumption.replace(/л/gi, '').trim()} л/1 км`
+            }</div>
                                 <div class="spec-item">⚙️ Управл: ${handling}</div>
                             </div>
 
@@ -1142,7 +1146,8 @@
             document.getElementById('info-tank').innerText = `${car.tank} л`;
             document.getElementById('info-speed').innerText = `${car.rawSpeed} км/ч`;
             document.getElementById('info-seats').innerText = car.seats;
-            document.getElementById('info-fuelConsumption').innerText = `${fuelConsumption} л/1 км`;
+            const cleanFuel = fuelConsumption.replace(/(л|mah|квтч|ч)/gi, '').trim();
+document.getElementById('info-fuelConsumption').innerText = fuelType.toLowerCase() === 'электро' ? `${cleanFuel} кВтч/1 км` : `${cleanFuel} л/1 км`;
             document.getElementById('info-handling').innerText = handling; 
 
             // Сброс графических полосок уровней
