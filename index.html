@@ -1148,8 +1148,11 @@
             
             // 1. Сначала объявляем и рассчитываем все очищенные переменные
     const isElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
-    const cleanSpeed = String(car.rawSpeed || 0).replace(/[^0-9.]/g, '');
-    const cleanBaggage = String(car.baggage || 0).replace(/(слотов|слота|слот|slots|slot)/gi, '').replace(/[^0-9.]/g, '').trim();
+    const cleanSpeed = String(car.rawSpeed || car.speed || 0).replace(/[^0-9.]/g, '');
+    const cleanBaggage = String(car.baggage || car.slots || car.rawSlots || 0)
+        .replace(/(слотов|слота|слот|slots|slot)/gi, '')
+        .replace(/[^0-9.]/g, '')
+        .trim();
     const cleanTank = String(car.tank || 0).replace(/[^0-9.]/g, '');
     const cleanFuelValue = String(car.fuelConsumption || 0).replace(/(л|mah|квтч|квт|ч)/gi, '').replace(/[^0-9.]/g, '').trim();
     const cleanHandling = String(car.handling || 0).replace(/[^0-9.]/g, '');
