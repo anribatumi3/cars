@@ -859,8 +859,8 @@
                     <h3>Технические характеристики</h3>
                     <div class="info-grid">
                         <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer"></strong></div>
-                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">$0</strong></div>
-                        <div class="info-item"><span>🏛️ Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
+                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">0 $</strong></div>
+                        <div class="info-item"><span>🏛️ Слив в гос:</span> <strong id="info-gov-price">0 $</strong></div>
                         <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0</strong></div>
                         <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel"></strong></div>
                         <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0</strong></div>
@@ -1159,8 +1159,8 @@
 
     // 2. Теперь последовательно выводим их в HTML-элементы
     document.getElementById('info-dealer').innerText = car.dealer || '-';
-    document.getElementById('info-salon-price').innerHTML = car.priceHTML || '$0';
-    document.getElementById('info-gov-price').innerText = car.gosPrice ? `$ ${car.gosPrice.toLocaleString('ru-RU')}` : '$0';
+    document.getElementById('info-salon-price').innerHTML = car.priceHTML ? `${car.priceHTML.replace('$', '')} $` : '0 $';
+    document.getElementById('info-gov-price').innerText = car.gosPrice ? `${car.gosPrice.toLocaleString('ru-RU')} $` : '0 $';
     
     // Вывод вместимости, скорости, мест и управления
     document.getElementById('info-capacity').innerText = cleanBaggage ? `${cleanBaggage} слотов` : '0 слотов';
