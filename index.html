@@ -1163,9 +1163,9 @@
     document.getElementById('info-gov-price').innerText = car.gosPrice ? `$ ${car.gosPrice.toLocaleString('ru-RU')}` : '$0';
     
     // Вывод вместимости, скорости, мест и управления
-    document.getElementById('info-capacity').innerText = cleanBaggage || '0';
+    document.getElementById('info-capacity').innerText = cleanBaggage ? `${cleanBaggage} слотов` : '0 слотов';
     document.getElementById('info-fuel').innerText = car.fuel || '-';
-    document.getElementById('info-speed').innerText = cleanSpeed || '0';
+    document.getElementById('info-speed').innerText = cleanSpeed ? `${cleanSpeed} км/ч` : '0 км/ч';
     document.getElementById('info-seats').innerText = car.seats || '0';
     document.getElementById('info-handling').innerText = cleanHandling || '0';
 
