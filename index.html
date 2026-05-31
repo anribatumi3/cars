@@ -641,6 +641,52 @@
     margin-bottom: 4px !important;
     font-size: 11px !important;
 }
+        /* Стили для выпадающих секций тюнинга */
+.tuning-accordion-section {
+    border-bottom: 1px solid #232429;
+    margin-bottom: 8px;
+}
+
+/* Стилизируем заголовок как кнопку */
+.fixed-section-title {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px 4px !important;
+    margin: 0 !important;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.fixed-section-title:hover {
+    color: #fff !important;
+}
+
+/* Кастомная стрелочка справа */
+.fixed-section-title::after {
+    content: '▼';
+    font-size: 9px;
+    color: #7a7c85;
+    transition: transform 0.2s ease;
+}
+
+/* Когда секция активна — поворачиваем стрелочку */
+.fixed-section-title.active::after {
+    transform: rotate(180deg);
+    color: #da3b3b;
+}
+
+/* По умолчанию скрываем сетку с кнопками */
+.fixed-buttons-grid {
+    display: none !important; /* Скрыто по умолчанию */
+    padding-bottom: 10px;
+}
+
+/* Класс, который будет показывать сетку при клике */
+.fixed-buttons-grid.show {
+    display: grid !important;
+}
 }
     </style>
 </head>
@@ -848,59 +894,68 @@
                 </div>
 
                 <div class="fixed-tuning-block">
-                    <h3>Внешняя доработка кузова</h3>
-                    
-                    <div class="fixed-section-title">Лакокрасочные работы</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="paint_main" onclick="toggleFixedOption(this)">Основной цвет <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="paint_sub" onclick="toggleFixedOption(this)">Дополнительный цвет <span class="f-price">$0</span></button>
-                    </div>
+    <h3 style="margin-bottom: 12px;">Внешняя доработка кузова</h3>
 
-                    <div class="fixed-section-title">Освещение автомобиля</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="xenon_white" onclick="toggleFixedOption(this)">Ксенон (Белый) <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="xenon_blue" onclick="toggleFixedOption(this)">Ксенон (Синий) <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="xenon_other" onclick="toggleFixedOption(this)">Ксенон (Цветной) <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="neon" onclick="toggleFixedOption(this)">Подсветка (Неон) <span class="f-price">$0</span></button>
-                    </div>
-
-                    <div class="fixed-section-title">Колесная база и резина</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="wheels" onclick="toggleFixedOption(this)">Кастомные диски <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="custom_tires" onclick="toggleFixedOption(this)">Модифицированные шины <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="tire_smoke" onclick="toggleFixedOption(this)">Дым из-под колес <span class="f-price">$0</span></button>
-                    </div>
-
-                    <div class="fixed-section-title">Тонирование стекол</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="tint_light" onclick="toggleFixedOption(this)">Светлая тонировка <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="tint_dark" onclick="toggleFixedOption(this)">Темная тонировка <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="tint_limo" onclick="toggleFixedOption(this)">Лимузин <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="tint_black" onclick="toggleFixedOption(this)">Глухая (Чёрная) <span class="f-price">$0</span></button>
-                    </div>
-
-                    <div class="fixed-section-title">Регистрационные знаки</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="plate_exempt" onclick="toggleFixedOption(this)">Гос. номер SA Exempt <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="plate_custom" onclick="toggleFixedOption(this)">Номер (Черный/Синий) <span class="f-price">$0</span></button>
-                    </div>
-
-                    <div class="fixed-section-title">Элементы обвеса</div>
-                    <div class="fixed-buttons-grid">
-                        <button class="fixed-toggle-btn" data-type="f_bumper" onclick="toggleFixedOption(this)">Передний бампер <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="grille" onclick="toggleFixedOption(this)">Решетка радиатора <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="trunk" onclick="toggleFixedOption(this)">Крышка багажника <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="hood" onclick="toggleFixedOption(this)">Капот кузова <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="roof" onclick="toggleFixedOption(this)">Модификация крыши <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="skirts" onclick="toggleFixedOption(this)">Боковые пороги <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="rollcage" onclick="toggleFixedOption(this)">Каркас безопасности <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="exterior_1" onclick="toggleFixedOption(this)">Элемент экстерьера #1 <span class="f-price">$0</span></button>
-                        <button class="fixed-toggle-btn" data-type="exterior_2" onclick="toggleFixedOption(this)">Элемент экстерьера #2 <span class="f-price">$0</span></button>
-                    </div>
-                </div>
-            </div>
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Лакокрасочные работы</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="paint_main" onclick="toggleFixedOption(this)">Основной цвет <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="paint_sub" onclick="toggleFixedOption(this)">Дополнительный цвет <span class="f-price">$0</span></button>
         </div>
     </div>
+
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Освещение автомобиля</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="xenon_white" onclick="toggleFixedOption(this)">Ксенон (Белый) <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="xenon_blue" onclick="toggleFixedOption(this)">Ксенон (Синий) <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="xenon_other" onclick="toggleFixedOption(this)">Ксенон (Цветной) <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="neon" onclick="toggleFixedOption(this)">Подсветка (Неон) <span class="f-price">$0</span></button>
+        </div>
+    </div>
+
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Колесная база и резина</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="wheels" onclick="toggleFixedOption(this)">Кастомные диски <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="custom_tires" onclick="toggleFixedOption(this)">Модифицированные шины <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="tire_smoke" onclick="toggleFixedOption(this)">Дым из-под колес <span class="f-price">$0</span></button>
+        </div>
+    </div>
+
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Тонирование стекол</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="tint_light" onclick="toggleFixedOption(this)">Светлая тонировка <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="tint_dark" onclick="toggleFixedOption(this)">Темная тонировка <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="tint_limo" onclick="toggleFixedOption(this)">Лимузин <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="tint_black" onclick="toggleFixedOption(this)">Глухая (Чёрная) <span class="f-price">$0</span></button>
+        </div>
+    </div>
+
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Регистрационные знаки</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="plate_exempt" onclick="toggleFixedOption(this)">Гос. номер SA Exempt <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="plate_custom" onclick="toggleFixedOption(this)">Номер (Черный/Синий) <span class="f-price">$0</span></button>
+        </div>
+    </div>
+
+    <div class="tuning-accordion-section">
+        <div class="fixed-section-title" onclick="toggleAccordion(this)">Элементы обвеса</div>
+        <div class="fixed-buttons-grid">
+            <button class="fixed-toggle-btn" data-type="f_bumper" onclick="toggleFixedOption(this)">Передний бампер <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="grille" onclick="toggleFixedOption(this)">Решетка радиатора <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="trunk" onclick="toggleFixedOption(this)">Крышка багажника <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="hood" onclick="toggleFixedOption(this)">Капот кузова <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="roof" onclick="toggleFixedOption(this)">Модификация крыши <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="skirts" onclick="toggleFixedOption(this)">Боковые пороги <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="rollcage" onclick="toggleFixedOption(this)">Каркас безопасности <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="exterior_1" onclick="toggleFixedOption(this)">Элемент экстерьера #1 <span class="f-price">$0</span></button>
+            <button class="fixed-toggle-btn" data-type="exterior_2" onclick="toggleFixedOption(this)">Элемент экстерьера #2 <span class="f-price">$0</span></button>
+        </div>
+    </div>
+</div>
 
     <script>
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
@@ -1213,6 +1268,18 @@ function toggleFixedOption(button) {
             button.classList.add('selected');
         }
     }
+    // Функция для раскрытия и закрытия секций тюнинга
+function toggleAccordion(titleElement) {
+    // Переключаем стрелочку у заголовка
+    titleElement.classList.toggle('active');
+    
+    // Находим блок с кнопками, который идет сразу за заголовком
+    const grid = titleElement.nextElementSibling;
+    if (grid) {
+        // Показываем или скрываем его
+        grid.classList.toggle('show');
+    }
+}
     
     calculateTuningPrices();
 }
