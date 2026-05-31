@@ -1094,22 +1094,25 @@
                         </div>
                     `;
 
-                    const car = {
+                    const carObject = {
+            element: card,
             name: name,
-            realName: realName,
+            realName: realName || '-',
             carClass: carClass,
+            dealer: dealership,
             fuel: fuelType,
+            speed: numSpeed,
             rawSpeed: rawSpeed,
-            rawSlots: rawSlots,
-            rawTank: rawTank,
-            // ДОБАВЛЯЕМ СЮДА:
-            fuelConsumption: fuelConsumption,
-            handling: handling,
-            // ----------------
+            baggage: numSlots,
+            tank: numTank,
+            price: numPrice,
+            priceHTML: priceHTML,
+            gosPrice: numGosPrice,
+            seats: seatsCount,
             imgUrl: imgUrl,
-            priceStr: priceStr,
-            gosPriceStr: gosPriceStr,
-            dealership: dealership
+            // Добавляем наши новые свойства сюда:
+            fuelConsumption: fuelConsumption,
+            handling: handling
         };
 
                     card.addEventListener('click', () => openCarPage(carObject));
