@@ -1008,9 +1008,19 @@
                 </div>
             </div>
 
-            <div class="details-right">
-                <div class="fixed-tuning-block">
-    <h3 style="margin-bottom: 12px;">Внешняя доработка кузова</h3>
+           <div class="info-block">
+    <h3 style="margin-top: 0; margin-bottom: 15px;">Технические характеристики</h3>
+    <div class="info-grid">
+        <div class="info-item"><span>🏢 Автосалон:</span> <strong id="info-dealer">—</strong></div>
+        <div class="info-item"><span>👥 Мест:</span> <strong id="info-seats">—</strong></div>
+        <div class="info-item"><span>📦 Вместимость:</span> <strong id="info-trunk">—</strong></div>
+        <div class="info-item"><span>⛽ Топливо:</span> <strong id="info-fuel">—</strong></div>
+        <div class="info-item"><span>🔋 Бак:</span> <strong id="info-tank">—</strong></div>
+        <div class="info-item"><span>📉 Расход:</span> <strong id="info-consumption">—</strong></div>
+        <div class="info-item"><span>⚡ Скорость:</span> <strong id="info-speed">—</strong></div>
+        <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-drive">—</strong></div>
+    </div>
+</div>
 
     <div class="tuning-accordion-section">
         <div class="fixed-section-title" onclick="toggleAccordion(this)">Лакокрасочные работы</div>
@@ -1196,66 +1206,23 @@
         if (isPremiumCurrency) card.classList.add('premium-card');
 
         // ИСПРАВЛЕНО: ccard заменено на card + вернули твой родной красивый стиль
-        card.innerHTML = `
-            <div class="car-image">
-                <img src="${imgUrl}" alt="${name}">
-                <div class="badge">${carClass}</div>
+card.innerHTML = `
+    <div class="car-image">
+        <img src="${imgUrl}" alt="${name}">
+        <div class="badge">${carClass}</div>
+    </div>
+    <div class="car-info">
+        <div class="car-name">${name}</div>
+        <p class="real-name-label">Реальное название</p>
+        <div class="real-name">${realName ? realName : '-'}</div>
+        <div class="price-container">
+            <div class="price-row main-price">
+                <span class="price-label">ЦЕНА:</span>
+                <span class="price-value">${priceHTML}</span>
             </div>
-            <div class="car-info">
-                <div class="car-name">${name}</div>
-                <p class="real-name-label">Реальное название</p>
-                <div class="real-name">${realName ? realName : '-'}</div>
-                
-                <div class="car-details">
-                    <div>🏢 Автосалон: <strong>${dealership ? dealership : '-'}</strong></div>
-                    <div>👥 Мест: <strong>${seatsCount ? seatsCount : '2'}</strong></div>
-                    <div>📦 Вместимость: <strong>${rawSlots} кг</strong></div>
-                    <div>⛽ Топливо: <strong>${fuelType}</strong></div>
-                    <div>🔋 Бак: <strong>${rawTank} л</strong></div>
-                    <div>📉 Расход: <strong>${fuelConsumption ? fuelConsumption : '-'}</strong></div>
-                    <div>⚡ Скорость: <strong>${rawSpeed} км/ч</strong></div>
-                    <div>⚙️ Управление: <strong>${handling ? handling : '-'}</strong></div>
-                </div>
-
-                <div class="price-container">
-                    <div class="price-row main-price">
-                        <span class="price-label">ЦЕНА В САЛОНЕ:</span>
-                        <span class="price-value">${priceHTML}</span>
-                    </div>
-                    <div class="price-row scrap-price" style="margin-top: 6px;">
-                        <span class="price-label">СЛИВ В ГОС:</span>
-                        <span class="price-value" style="color: #e0e0e0; font-weight: bold;">${govPriceHTML ? govPriceHTML : '-'}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        card.onclick = () => showCarDetails(car);
-        carGrid.appendChild(card);
-                
-                <div class="car-details">
-                    <div>🏢 Автосалон: <strong>${dealership ? dealership : '-'}</strong></div>
-                    <div>👥 Мест: <strong>${seatsCount ? seatsCount : '2'}</strong></div>
-                    <div>📦 Вместимость: <strong>${rawSlots} кг</strong></div>
-                    <div>⛽ Топливо: <strong>${fuelType}</strong></div>
-                    <div>⛽ Бак: <strong>${rawTank} л</strong></div>
-                    <div>📉 Расход: <strong>${fuelConsumption ? fuelConsumption : '-'}</strong></div>
-                    <div>⚡ Скорость: <strong>${rawSpeed} км/ч</strong></div>
-                    <div>⚙️ Управление: <strong>${handling ? handling : '-'}</strong></div>
-                </div>
-
-                <div class="price-container">
-                    <div class="price-row main-price">
-                        <span class="price-label">ЦЕНА В САЛОНЕ:</span>
-                        <span class="price-value">${priceHTML}</span>
-                    </div>
-                    <div class="price-row scrap-price" style="margin-top: 8px;">
-                        <span class="price-label">СЛИВ В ГОС:</span>
-                        <span class="price-value" style="color: #e0e0e0; font-weight: bold;">${govPriceHTML ? govPriceHTML : '-'}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+        </div>
+    </div>
+`;
 
                     const carObject = {
                         element: card,
@@ -1364,8 +1331,7 @@
 function toggleFixedOption(button) {
     const type = button.getAttribute('data-type');
     
-    // Группы взаимоисключающих опций (где можно выбрать только ОДИН вариант)
-    // Обрати внимание: 'neon' теперь убран из группы lighting
+    // Группы взаимоисключающих опций
     const groups = {
         lighting: ['xenon_white', 'xenon_blue', 'xenon_other'],
         tint: ['tint_light', 'tint_dark', 'tint_limo', 'tint_black'],
@@ -1374,7 +1340,6 @@ function toggleFixedOption(button) {
 
     let currentGroupKey = null;
     
-    // Проверяем, относится ли кнопка к какой-то группе
     for (let key in groups) {
         if (groups[key].includes(type)) {
             currentGroupKey = key;
@@ -1383,24 +1348,19 @@ function toggleFixedOption(button) {
     }
 
     if (currentGroupKey) {
-        // Если кнопка уже была выбрана — просто снимаем её выбор
         if (selectedTuning.fixed[type]) {
             delete selectedTuning.fixed[type];
             button.classList.remove('selected');
         } else {
-            // Если выбрали новый вариант — сначала полностью очищаем всю группу
             groups[currentGroupKey].forEach(itemType => {
                 delete selectedTuning.fixed[itemType];
                 const btn = document.querySelector(`.fixed-toggle-btn[data-type="${itemType}"]`);
                 if (btn) btn.classList.remove('selected');
             });
-            
-            // Включаем только то, на что кликнули
             selectedTuning.fixed[type] = true;
             button.classList.add('selected');
         }
     } else {
-        // Для обычных деталей (бамперы, капоты, колеса, а теперь и НЕОН) — оставляем независимый клик
         if (selectedTuning.fixed[type]) {
             delete selectedTuning.fixed[type];
             button.classList.remove('selected');
@@ -1409,6 +1369,9 @@ function toggleFixedOption(button) {
             button.classList.add('selected');
         }
     }
+    
+    calculateTuningPrices();
+}
     // Функция для раскрытия и закрытия секций тюнинга
 function toggleAccordion(titleElement) {
     // Переключаем стрелочку у заголовка
