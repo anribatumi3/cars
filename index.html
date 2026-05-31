@@ -867,7 +867,7 @@
                         <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
                         <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
                         <div class="info-item"><span>📉 Расход:</span> <strong id="info-fuelConsumption">0 /1 км</strong></div>
-                        <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-handling">—</strong></div>
+                        <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-handling">0</strong></div>
                     </div>
                 </div>
 
@@ -1072,7 +1072,7 @@
                                 <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
                                 <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
                                 <div class="spec-item">🔋 Тип: ${fuelType}</div>
-                                <div class="spec-item">📉 Расход: ${fuelConsumption} л/1 км</div>
+                                <div class="spec-item">📉 Расход: ${fuelConsumption.replace(/л/gi, '').trim()} л/1 км</div>
                                 <div class="spec-item">⚙️ Управл: ${handling}</div>
                             </div>
 
@@ -1142,6 +1142,8 @@
             document.getElementById('info-tank').innerText = `${car.tank} л`;
             document.getElementById('info-speed').innerText = `${car.rawSpeed} км/ч`;
             document.getElementById('info-seats').innerText = car.seats;
+            document.getElementById('info-fuelConsumption').innerText = `${fuelConsumption} л/1 км`;
+            document.getElementById('info-handling').innerText = handling; 
 
             // Сброс графических полосок уровней
             ['engine', 'turbo', 'suspension', 'transmission', 'brakes'].forEach(type => updateLevelBars(type, 0));
