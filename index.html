@@ -1346,7 +1346,7 @@ function toggleAccordion(titleElement) {
                 dealerFilter.innerHTML += `<option value="${d}">${d}</option>`;
             });
             Array.from(baggage).sort((a,b)=>a-b).forEach(b => {
-                baggageFilter.innerHTML += `<option value="${b}">${b} кг</option>`;
+                baggageFilter.innerHTML += `<option value="${b}">${b} слотов</option>`;
             });
             Array.from(tanks).sort((a,b)=>a-b).forEach(t => {
                 tankFilter.innerHTML += `<option value="${t}">${t} л</option>`;
