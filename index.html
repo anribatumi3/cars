@@ -752,6 +752,25 @@
 .tuning-accordion-section .fixed-buttons-grid.show {
     display: grid !important;
 }
+       /* Создаем изолированную сетку только для технических характеристик */
+.specs-wrapper-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 колонки */
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 15px !important; /* Отступ до начала тюнинга */
+}
+
+/* На всякий случай фиксируем, чтобы плашки характеристик не ломались */
+.spec-item {
+    display: flex !important;
+    flex-direction: column !important;
+    background: #1f2026 !important;
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+}
 }
     </style>
 </head>
@@ -945,18 +964,46 @@
 
             <div class="details-right">
                 <div class="info-block">
-                    <h3>Технические характеристики</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer">—</strong></div>
-                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">—</strong></div>
-                        <div class="info-item"><span>📉 Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
-                        <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0 кг</strong></div>
-                        <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel">—</strong></div>
-                        <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0 л</strong></div>
-                        <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
-                        <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
-                    </div>
-                </div>
+                    <h3 style="margin-top: 0; margin-bottom: 10px;">Технические характеристики</h3>
+
+<div class="specs-wrapper-grid">
+    <div class="spec-item">
+        <span class="spec-label">🏢 Автосалон</span>
+        <span class="spec-value" id="spec-carShowroom">—</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">👥 Кол-во мест</span>
+        <span class="spec-value" id="spec-seats">0</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">💵 Гос. цена</span>
+        <span class="spec-value" id="spec-gosPrice">$0</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">🏛️ Слив в гос</span>
+        <span class="spec-value" id="spec-scrapPrice">$0</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">📦 Вместимость</span>
+        <span class="spec-value" id="spec-trunkPrice">0 кг</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">⛽ Топливо</span>
+        <span class="spec-value" id="spec-fuelType">—</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">📉 Расход</span>
+        <span class="spec-value" id="spec-fuelConsumption">0 л / 100 км</span>
+    </div>
+    <div class="spec-item">
+        <span class="spec-label">⚡ Скорость</span>
+        <span class="spec-value" id="spec-maxSpeed">0 км/ч</span>
+    </div>
+    <div class="spec-item" style="grid-column: span 2 !important;">
+        <span class="spec-label">⚙️ Управление</span>
+        <span class="spec-value" id="spec-driveType">—</span>
+    </div>
+</div>
 
                 <div class="fixed-tuning-block">
     <h3 style="margin-bottom: 12px;">Внешняя доработка кузова</h3>
@@ -1149,26 +1196,59 @@
                             <img src="${imgUrl}" alt="${name}">
                             <div class="badge">${carClass}</div>
                         </div>
-                        <div class="car-info">
-                            <div class="car-name">${name}</div>
-                            <p class="real-name-label">Реальное название</p>
-                            <div class="real-name">${realName ? realName : '—'}</div>
-                            <div class="dealership">📍 ${dealership}</div>
-                            
-                            <div class="car-specs">
-                                <div class="spec-item">⚡ Скор: ${rawSpeed}</div>
-                                <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
-                                <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
-                                <div class="spec-item">🔋 Тип: ${fuelType}</div>
-                            </div>
+                       <div class="car-info">
+    <div class="car-name">${name}</div>
+    <p class="real-name-label">Реальное название</p>
+    <div class="real-name">${realName ? realName : '-'}</div>
+    
+    <!-- Переносим автосалон в секцию характеристик в новом стиле -->
+    <div class="specs-wrapper-grid">
+        <div class="spec-item">
+            <span class="spec-label">🏢 Автосалон</span>
+            <span class="spec-value">${dealership ? dealership : '-'}</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">👥 Мест</span>
+            <span class="spec-value">${rawSeats ? rawSeats : '2'}</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">📦 Багаж</span>
+            <span class="spec-value">${rawSlots} кг</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">⛽ Топливо</span>
+            <span class="spec-value">${fuelType}</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак</span>
+            <span class="spec-value">${rawTank} л</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">📉 Расход</span>
+            <span class="spec-value">${rawConsumption ? rawConsumption + ' л' : '-'}</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">⚡ Скорость</span>
+            <span class="spec-value">${rawSpeed} км/ч</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">⚙️ Управл.</span>
+            <span class="spec-value">${rawDrive ? rawDrive : '-'}</span>
+        </div>
+    </div>
 
-                            <div class="price-container">
-                                <div class="price-row main-price">
-                                    <span class="price-label">Цена салона:</span>
-                                    <span class="price-value">${priceHTML}</span>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Блок с ценами (Цена салона и Слив в гос) -->
+    <div class="price-container">
+        <div class="price-row main-price">
+            <span class="price-label">ЦЕНА В САЛОНЕ:</span>
+            <span class="price-value">${priceHTML}</span>
+        </div>
+        <div class="price-row scrap-price" style="margin-top: 6px;">
+            <span class="price-label">СЛИВ В ГОС:</span>
+            <span class="price-value" style="color: #e0e0e0; font-weight: bold;">${govPriceHTML ? govPriceHTML : '-'}</span>
+        </div>
+    </div>
+</div>
                     `;
 
                     const carObject = {
