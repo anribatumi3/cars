@@ -3,17 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автосалон InterPlay — Каталог</title>
+    <title>Автосалон InterPlay — Каталог и Тюнинг</title>
     <style>
+        /* Основные переменные стиля InterPlay */
+        :root {
+            --bg-dark: #121316;
+            --bg-card: #1e222b;
+            --bg-input: #15181e;
+            --bg-block: #1a1b1f;
+            --accent-red: #8c2d32;
+            --accent-red-hover: #da3c3c;
+            --text-main: #ffffff;
+            --text-muted: #838b99;
+            --text-green: #2ecc71;
+            --border-color: #2b313e;
+        }
+
         body {
-            background-color: #171a21;
-            color: #ffffff;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
 
-        /* Шапка каталога */
+        /* Блокировка прокрутки каталога при открытой странице авто */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* ШАПКА КАТАЛОГА */
         .header-main {
             display: flex;
             flex-direction: column;
@@ -41,13 +61,13 @@
         }
         
         .header-main h1 span {
-            color: #8c2d32;
+            color: var(--accent-red);
         }
 
-        /* Панель фильтров */
+        /* ПАНЕЛЬ ФИЛЬТРОВ */
         .filters-panel {
-            background-color: #1e222b;
-            border: 1px solid #2b313e;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 22px;
             max-width: 1360px;
@@ -74,18 +94,17 @@
 
         .filter-item label {
             font-size: 11px;
-            color: #838b99;
+            color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.8px;
         }
 
-        /* Поля ввода и селекты */
         .filter-select, .search-input {
             width: 100%;
             padding: 11px 14px;
-            background-color: #15181e;
-            border: 1px solid #2b313e;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             color: #ffffff;
             font-size: 14px;
@@ -95,18 +114,16 @@
         }
 
         .filter-select:focus, .search-input:focus {
-            border-color: #8c2d32;
+            border-color: var(--accent-red);
             box-shadow: 0 0 0 2px rgba(140, 45, 50, 0.2);
         }
 
-        /* Контейнер для полей От и До */
         .range-container {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        /* Убираем стрелочки внутри полей ввода числового типа */
         .range-container input::-webkit-outer-spin-button,
         .range-container input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -116,19 +133,17 @@
         #loader {
             text-align: center;
             font-size: 16px;
-            color: #626975;
+            color: var(--text-muted);
             margin-top: 50px;
-            line-height: 1.6;
         }
 
         .error-hint {
-            color: #8c2d32;
+            color: var(--accent-red);
             font-weight: 600;
             margin-top: 10px;
-            font-size: 14px;
         }
 
-        /* Сетка каталога */
+        /* СЕТКА КАТАЛОГА */
         .catalog-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -137,16 +152,17 @@
             margin: 0 auto;
         }
 
-        /* Карточки автомобилей */
+        /* КАРТОЧКИ АВТОМОБИЛЕЙ */
         .car-card {
-            background-color: #1e222b;
+            background-color: var(--bg-card);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid #2b313e;
+            border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         .car-card.hidden {
@@ -156,10 +172,9 @@
         .car-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
-            border-color: #434b59;
+            border-color: var(--accent-red);
         }
 
-        /* Премиум рамка для транспорта за коины */
         .car-card.premium-card {
             border-color: rgba(242, 142, 83, 0.3);
         }
@@ -176,7 +191,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            border-bottom: 1px solid #2b313e;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .car-image img {
@@ -185,12 +200,11 @@
             object-fit: contain;
         }
 
-        /* Название класса машины */
         .badge {
             position: absolute;
             top: 12px;
             right: 12px;
-            background-color: #2b313e;
+            background-color: var(--border-color);
             color: #cbd3e0;
             padding: 4px 10px;
             font-size: 11px;
@@ -231,14 +245,17 @@
 
         .dealership {
             font-size: 13px;
-            color: #8c2d32;
+            color: var(--accent-red);
             margin-bottom: 15px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        /* Технические характеристики */
+        .premium-card .dealership {
+            color: #f28e53;
+        }
+
         .car-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -246,10 +263,10 @@
             font-size: 13px;
             color: #98a2b3;
             margin-bottom: 20px;
-            background: #15181e;
+            background: var(--bg-input);
             padding: 12px;
             border-radius: 6px;
-            border: 1px solid #2b313e;
+            border: 1px solid var(--border-color);
         }
 
         .spec-item {
@@ -258,7 +275,6 @@
             gap: 6px;
         }
 
-        /* Цены */
         .price-container {
             margin-top: auto;
             display: flex;
@@ -272,14 +288,14 @@
             align-items: center;
             padding: 10px 14px;
             border-radius: 6px;
-            border: 1px solid #2b313e;
-            background: #15181e;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
         }
 
         .price-row.main-price {
             background: rgba(140, 45, 50, 0.08);
-            border-left: 3px solid #8c2d32;
-            border-color: rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) #8c2d32;
+            border-left: 3px solid var(--accent-red);
+            border-color: rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) rgba(140, 45, 50, 0.25) var(--accent-red);
         }
 
         .premium-card .price-row.main-price {
@@ -290,7 +306,7 @@
 
         .price-label {
             font-size: 11px;
-            color: #838b99;
+            color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
         }
@@ -303,12 +319,282 @@
             gap: 6px;
         }
 
-        /* Иконка IC коина */
         .coin-img {
             width: 18px;
             height: 18px;
             object-fit: contain;
             vertical-align: middle;
+        }
+
+
+        /* ==========================================================================
+           ПЕРСОНАЛЬНАЯ СТРАНИЦА МАШИНЫ С КОМПАКТНЫМ ТЮНИНГОМ
+           ========================================================================== */
+        .page-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 13, 17, 0.96);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .page-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .car-details-container {
+            background: var(--bg-block);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--accent-red);
+            width: 100%;
+            max-width: 1150px;
+            max-height: 90vh;
+            border-radius: 12px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            animation: slideUp 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-page-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .close-page-btn:hover {
+            color: #ffffff;
+            border-color: var(--accent-red-hover);
+            background: var(--accent-red-hover);
+        }
+
+        /* Левая колонка деталей */
+        .details-left {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .car-header h2 { margin: 0; font-size: 26px; font-weight: 800; }
+        .car-header .real-name { color: var(--text-muted); font-size: 13px; margin: 4px 0 0 0; }
+        
+        .car-image-block {
+            background: #13161c;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            text-align: center;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .car-image-block img { max-height: 95%; max-width: 95%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+
+        /* Раздел тюнинга */
+        .tuning-section {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tuning-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+        .tuning-header-row h3 { margin: 0; font-size: 15px; color: #ff4d4d; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .markup-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+        .markup-input-wrap input {
+            width: 65px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            outline: none;
+        }
+        .markup-input-wrap input:focus { border-color: var(--accent-red-hover); }
+
+        .tuning-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .tuning-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-info { display: flex; flex-direction: column; gap: 2px; width: 140px; }
+        .card-title { font-size: 13px; font-weight: 600; }
+        .card-price { font-size: 12px; color: var(--text-green); font-weight: bold; }
+
+        .level-controls { display: flex; align-items: center; gap: 8px; }
+        .lvl-btn {
+            background: #2d3037;
+            border: none;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lvl-btn:hover { background: #414552; }
+
+        .level-bars { display: flex; gap: 4px; }
+        .level-bars .bar {
+            width: 14px;
+            height: 6px;
+            background: #3a3f47;
+            border-radius: 1px;
+        }
+        .level-bars .bar.active { background: #da3c3c; box-shadow: 0 0 5px #da3c3c; }
+        .lvl-status { font-size: 12px; color: var(--text-muted); width: 70px; text-align: right; font-weight: 600; }
+
+        /* Итоговый блок стоимости */
+        .total-price-block {
+            margin-top: 15px;
+            background: rgba(26, 188, 156, 0.05);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .total-price-block span { font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .total-price-block #total-sum { color: var(--text-green); font-size: 20px; }
+
+        /* Правая колонка деталей */
+        .details-right {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .info-block { background: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .info-block h3 { margin: 0 0 12px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; }
+        .info-item { display: flex; justify-content: space-between; background: var(--bg-input); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .info-item span { color: var(--text-muted); }
+
+        /* Стили кликабельных кнопок фиксированного стайлинга */
+        .fixed-tuning-block {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .fixed-tuning-block h3 { margin: 0 0 5px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+        .fixed-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #ff4d4d;
+            margin: 14px 0 6px 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .fixed-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+        .fixed-toggle-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .fixed-toggle-btn .f-price {
+            font-size: 11px;
+            color: var(--text-green);
+            margin-top: 3px;
+            font-weight: bold;
+        }
+        .fixed-toggle-btn:hover { background: #222731; border-color: #41495a; }
+
+        /* Активное (выделенное) состояние кнопки */
+        .fixed-toggle-btn.selected {
+            background: rgba(140, 45, 50, 0.15);
+            border-color: var(--accent-red-hover);
+            box-shadow: inset 0 0 6px rgba(140, 45, 50, 0.3);
+        }
+
+        /* Адаптивность для экранов поменьше */
+        @media (max-width: 850px) {
+            .car-details-container { grid-template-columns: 1fr; max-height: 95vh; }
+            .details-left { border-right: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
+            .details-right { padding: 20px; max-height: none; overflow-y: visible; }
         }
     </style>
 </head>
@@ -392,11 +678,214 @@
     <div id="loader">Загрузка базы данных машин...</div>
     <div class="catalog-container" id="catalog"></div>
 
+
+    <div class="page-overlay" id="pageOverlay">
+        <div class="car-details-container">
+            <button class="close-page-btn" id="closePageBtn">&times;</button>
+            
+            <div class="details-left">
+                <div class="car-header">
+                    <h2 id="car-name">McLaren W1</h2>
+                    <p class="real-name">Реальный прототип: <span id="car-real-name">—</span></p>
+                </div>
+                
+                <div class="car-image-block">
+                    <img id="car-img" src="" alt="Car Image">
+                </div>
+
+                <div class="tuning-section">
+                    <div class="tuning-header-row">
+                        <h3>Калькулятор тюнинга LSC</h3>
+                        <div class="markup-input-wrap">
+                            <label>Наценка ЛСК:</label>
+                            <input type="number" id="markup-input" min="0" max="100" value="0"> %
+                        </div>
+                    </div>
+
+                    <div class="tuning-grid">
+                        <div class="tuning-card">
+                            <div class="card-info">
+                                <span class="card-title">⚙️ Двигатель</span>
+                                <span class="card-price" id="price-engine">$0</span>
+                            </div>
+                            <div class="level-controls">
+                                <button class="lvl-btn" onclick="changeLevel('engine', -1)">-</button>
+                                <div class="level-bars" id="bars-engine">
+                                    <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                                </div>
+                                <button class="lvl-btn" onclick="changeLevel('engine', 1)">+</button>
+                            </div>
+                            <div class="lvl-status">Лвл: <span id="status-engine">0</span>/4</div>
+                        </div>
+
+                        <div class="tuning-card">
+                            <div class="card-info">
+                                <span class="card-title">🌀 Турбонаддув</span>
+                                <span class="card-price" id="price-turbo">$0</span>
+                            </div>
+                            <div class="level-controls">
+                                <button class="lvl-btn" onclick="changeLevel('turbo', -1)">-</button>
+                                <div class="level-bars" id="bars-turbo">
+                                    <span class="bar"></span>
+                                </div>
+                                <button class="lvl-btn" onclick="changeLevel('turbo', 1)">+</button>
+                            </div>
+                            <div class="lvl-status">Лвл: <span id="status-turbo">0</span>/1</div>
+                        </div>
+
+                        <div class="tuning-card">
+                            <div class="card-info">
+                                <span class="card-title">🛞 Подвеска</span>
+                                <span class="card-price" id="price-suspension">$0</span>
+                            </div>
+                            <div class="level-controls">
+                                <button class="lvl-btn" onclick="changeLevel('suspension', -1)">-</button>
+                                <div class="level-bars" id="bars-suspension">
+                                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                                </div>
+                                <button class="lvl-btn" onclick="changeLevel('suspension', 1)">+</button>
+                            </div>
+                            <div class="lvl-status">Лвл: <span id="status-suspension">0</span>/3</div>
+                        </div>
+
+                        <div class="tuning-card">
+                            <div class="card-info">
+                                <span class="card-title">🕹️ Трансмиссия (КПП)</span>
+                                <span class="card-price" id="price-transmission">$0</span>
+                            </div>
+                            <div class="level-controls">
+                                <button class="lvl-btn" onclick="changeLevel('transmission', -1)">-</button>
+                                <div class="level-bars" id="bars-transmission">
+                                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                                </div>
+                                <button class="lvl-btn" onclick="changeLevel('transmission', 1)">+</button>
+                            </div>
+                            <div class="lvl-status">Лвл: <span id="status-transmission">0</span>/3</div>
+                        </div>
+
+                        <div class="tuning-card">
+                            <div class="card-info">
+                                <span class="card-title">🛑 Тормозная система</span>
+                                <span class="card-price" id="price-brakes">$0</span>
+                            </div>
+                            <div class="level-controls">
+                                <button class="lvl-btn" onclick="changeLevel('brakes', -1)">-</button>
+                                <div class="level-bars" id="bars-brakes">
+                                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                                </div>
+                                <button class="lvl-btn" onclick="changeLevel('brakes', 1)">+</button>
+                            </div>
+                            <div class="lvl-status">Лвл: <span id="status-brakes">0</span>/3</div>
+                        </div>
+                    </div>
+
+                    <div class="total-price-block">
+                        <span>Стоимость кастомизации:</span>
+                        <span id="total-sum">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-right">
+                <div class="info-block">
+                    <h3>Технические характеристики</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer">—</strong></div>
+                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">—</strong></div>
+                        <div class="info-item"><span>📉 Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
+                        <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0 кг</strong></div>
+                        <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel">—</strong></div>
+                        <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0 л</strong></div>
+                        <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
+                        <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
+                    </div>
+                </div>
+
+                <div class="fixed-tuning-block">
+                    <h3>Внешняя доработка кузова</h3>
+                    
+                    <div class="fixed-section-title">Лакокрасочные работы</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="paint_main" onclick="toggleFixedOption(this)">Основной цвет <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="paint_sub" onclick="toggleFixedOption(this)">Дополнительный цвет <span class="f-price">$0</span></button>
+                    </div>
+
+                    <div class="fixed-section-title">Освещение автомобиля</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="xenon_white" onclick="toggleFixedOption(this)">Ксенон (Белый) <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="xenon_blue" onclick="toggleFixedOption(this)">Ксенон (Синий) <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="xenon_other" onclick="toggleFixedOption(this)">Ксенон (Цветной) <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="neon" onclick="toggleFixedOption(this)">Подсветка (Неон) <span class="f-price">$0</span></button>
+                    </div>
+
+                    <div class="fixed-section-title">Колесная база и резина</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="wheels" onclick="toggleFixedOption(this)">Кастомные диски <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="custom_tires" onclick="toggleFixedOption(this)">Модифицированные шины <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="tire_smoke" onclick="toggleFixedOption(this)">Дым из-под колес <span class="f-price">$0</span></button>
+                    </div>
+
+                    <div class="fixed-section-title">Тонирование стекол</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="tint_light" onclick="toggleFixedOption(this)">Светлая тонировка <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="tint_dark" onclick="toggleFixedOption(this)">Темная тонировка <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="tint_limo" onclick="toggleFixedOption(this)">Лимузин <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="tint_black" onclick="toggleFixedOption(this)">Глухая (Чёрная) <span class="f-price">$0</span></button>
+                    </div>
+
+                    <div class="fixed-section-title">Регистрационные знаки</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="plate_exempt" onclick="toggleFixedOption(this)">Гос. номер SA Exempt <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="plate_custom" onclick="toggleFixedOption(this)">Номер (Черный/Синий) <span class="f-price">$0</span></button>
+                    </div>
+
+                    <div class="fixed-section-title">Элементы обвеса</div>
+                    <div class="fixed-buttons-grid">
+                        <button class="fixed-toggle-btn" data-type="f_bumper" onclick="toggleFixedOption(this)">Передний бампер <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="grille" onclick="toggleFixedOption(this)">Решетка радиатора <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="trunk" onclick="toggleFixedOption(this)">Крышка багажника <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="hood" onclick="toggleFixedOption(this)">Капот кузова <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="roof" onclick="toggleFixedOption(this)">Модификация крыши <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="skirts" onclick="toggleFixedOption(this)">Боковые пороги <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="rollcage" onclick="toggleFixedOption(this)">Каркас безопасности <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="exterior_1" onclick="toggleFixedOption(this)">Элемент экстерьера #1 <span class="f-price">$0</span></button>
+                        <button class="fixed-toggle-btn" data-type="exterior_2" onclick="toggleFixedOption(this)">Элемент экстерьера #2 <span class="f-price">$0</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
         let allCars = [];
+
+        // Конфигурация фиксированных цен (0% наценки)
+        const fixedPricesBase = {
+            paint_main: 1400, paint_sub: 800,
+            xenon_white: 1333, xenon_blue: 2000, xenon_other: 2667,
+            wheels: 6000, custom_tires: 2000, tire_smoke: 10000,
+            tint_light: 1400, tint_dark: 1800, tint_limo: 2000, tint_black: 4000,
+            plate_exempt: 2000, plate_custom: 3000,
+            f_bumper: 4000, grille: 4000, trunk: 4000, rollcage: 3000,
+            neon: 10000, skirts: 2400, hood: 4000, roof: 4000,
+            exterior_1: 3000, exterior_2: 3000
+        };
+
+        // Коэффициенты уровней прокачки (0% наценки)
+        const percentRatesBase = {
+            engine:       [0, 0.03, 0.04, 0.05, 0.06],
+            turbo:        [0, 0.04],
+            suspension:   [0, 0.03, 0.04, 0.05],
+            transmission: [0, 0.03, 0.04, 0.06],
+            brakes:       [0, 0.03, 0.04, 0.06]
+        };
+
+        // Хранилище текущего выбора для калькулятора
+        let selectedTuning = { engine: 0, turbo: 0, suspension: 0, transmission: 0, brakes: 0, fixed: {} };
+        let activeCarData = null;
 
         const searchInput = document.getElementById('searchInput');
         const dealerFilter = document.getElementById('dealerFilter');
@@ -410,6 +899,8 @@
         const priceFrom = document.getElementById('priceFrom');
         const priceTo = document.getElementById('priceTo');
 
+        const pageOverlay = document.getElementById('pageOverlay');
+        const closePageBtn = document.getElementById('closePageBtn');
         const COIN_IMG_HTML = `<img src="coin.png" class="coin-img" alt="Coin">`;
 
         function cleanPrice(priceRaw) {
@@ -423,24 +914,19 @@
         function formatPriceHTML(priceStr, cleanNum) {
             const lower = priceStr.toLowerCase();
             if (lower === 'не продается') return `<span>Не продается</span>`;
-            
             if (lower.includes('coin') || lower.includes('ic') || lower.includes('кои') || lower.includes('mc')) {
                 return `${COIN_IMG_HTML} <span style="color: #f28e53;">${cleanNum.toLocaleString('ru-RU')}</span>`;
             }
-            
             return `<span>${cleanNum.toLocaleString('ru-RU')} $</span>`;
         }
 
+        // Загрузка данных
         fetch(url)
             .then(res => {
                 if (!res.ok) throw new Error('Ошибка сети');
                 return res.text();
             })
             .then(csvText => {
-                if (csvText.includes('<!DOCTYPE html>') || csvText.includes('login') || csvText.includes('google-signin')) {
-                    throw new Error('Доступ ограничен (CORS / Авторизация)');
-                }
-
                 const rows = parseCSV(csvText);
                 document.getElementById('loader').style.display = 'none';
 
@@ -452,7 +938,7 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i];
-                    if (!cells || cells.length < 11 || !cells[0]) continue; 
+                    if (!cells || cells.length < 12 || !cells[0]) continue; 
 
                     const name = cells[0].trim();              
                     const realName = cells[1].trim();          
@@ -467,11 +953,9 @@
                     let priceStr = cells[10].trim();              
                     let gosPriceStr = cells[11] ? cells[11].trim() : '0'; 
                     
-                    // Читаем ссылку из 13-й колонки (M)
                     const customImgUrl = cells[12] ? cells[12].trim() : '';
-                    
-                    // Читаем тип топлива из 14-й колонки (N)
-                    const fuelType = cells[13] ? cells[13].trim() : '—';
+                    const fuelType = cells[13] ? cells[13].trim() : 'Бензин';
+                    const seatsCount = cells[14] ? cells[14].trim() : '—'; // Столбец O — Кол-во мест
 
                     if (priceStr === '' || priceStr === '0') priceStr = 'Не продается';
 
@@ -497,13 +981,9 @@
                     if (rawTank) tankCaps.add(numTank);
 
                     const priceHTML = formatPriceHTML(priceStr, numPrice);
-                    const gosPriceHTML = formatPriceHTML(gosPriceStr, numGosPrice);
 
                     const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     
-                    // Определяем подходящую иконку для типа топлива
-                    const fuelIcon = fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽';
-
                     const card = document.createElement('div');
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
@@ -521,58 +1001,195 @@
                             
                             <div class="car-specs">
                                 <div class="spec-item">⚡ Скор: ${rawSpeed}</div>
-                                <div class="spec-item">🚀 Ускор: ${acceleration}</div>
-                                <div class="spec-item">🕹️ Управл: ${handling}</div>
-                                <div class="spec-item">🎒 Багаж: ${rawSlots}</div>
-                                <div class="spec-item">${fuelIcon} Бак: ${rawTank}</div>
-                                <div class="spec-item">📉 Расход: ${fuelConsumption}</div>
-                                <div class="spec-item" style="grid-column: span 2; border-top: 1px solid #2b313e; padding-top: 6px; margin-top: 2px;">🔋 Тип: ${fuelType}</div>
+                                <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
+                                <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
+                                <div class="spec-item">🔋 Тип: ${fuelType}</div>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-row main-price">
-                                    <span class="price-label">Цена в салоне:</span>
+                                    <span class="price-label">Цена салона:</span>
                                     <span class="price-value">${priceHTML}</span>
-                                </div>
-                                <div class="price-row gos-price">
-                                    <span class="price-label">Слив в гос:</span>
-                                    <span class="price-value">${gosPriceHTML}</span>
                                 </div>
                             </div>
                         </div>
                     `;
 
-                    allCars.push({
+                    const carObject = {
                         element: card,
-                        name: name.toLowerCase(),
-                        realName: realName.toLowerCase(),
+                        name: name,
+                        realName: realName || '—',
+                        carClass: carClass,
                         dealer: dealership,
                         fuel: fuelType,
                         speed: numSpeed,
+                        rawSpeed: rawSpeed,
                         baggage: numSlots,
                         tank: numTank,
                         price: numPrice,
+                        priceHTML: priceHTML,
                         gosPrice: numGosPrice,
-                        isPremium: isPremiumCurrency
-                    });
+                        seats: seatsCount,
+                        imgUrl: imgUrl
+                    };
+
+                    card.addEventListener('click', () => openCarPage(carObject));
+                    allCars.push(carObject);
                 }
 
-                setupFilterOptions(dealerships, baggageCaps, tankCaps, maxTableSpeed, maxTablePrice);
+                setupFilterOptions(dealerships, baggageCaps, tankCaps);
                 renderCatalog();
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('loader').innerHTML = `
-                    <div class="error-hint">Ошибка загрузки базы данных транспорта.</div>
-                `;
+                document.getElementById('loader').innerHTML = `<div class="error-hint">Ошибка загрузки базы данных.</div>`;
             });
 
-        function setupFilterOptions(dealers, baggage, tanks, maxSpeed, maxPrice) {
+        // Функция открытия персональной страницы машины
+        function openCarPage(car) {
+            activeCarData = car;
+            
+            // Очистка калькулятора
+            selectedTuning = { engine: 0, turbo: 0, suspension: 0, transmission: 0, brakes: 0, fixed: {} };
+            document.querySelectorAll('.fixed-toggle-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('markup-input').value = 0;
+
+            // Заполнение данных
+            document.getElementById('car-name').innerText = car.name;
+            document.getElementById('car-real-name').innerText = car.realName;
+            document.getElementById('car-img').src = car.imgUrl;
+            
+            document.getElementById('info-dealer').innerText = car.dealer;
+            document.getElementById('info-salon-price').innerHTML = car.priceHTML;
+            document.getElementById('info-gov-price').innerText = `$ ${car.gosPrice.toLocaleString('ru-RU')}`;
+            document.getElementById('info-capacity').innerText = `${car.baggage} кг`;
+            document.getElementById('info-fuel').innerText = car.fuel;
+            document.getElementById('info-tank').innerText = `${car.tank} л`;
+            document.getElementById('info-speed').innerText = `${car.rawSpeed} км/ч`;
+            document.getElementById('info-seats').innerText = car.seats;
+
+            // Сброс графических полосок уровней
+            ['engine', 'turbo', 'suspension', 'transmission', 'brakes'].forEach(type => updateLevelBars(type, 0));
+
+            // Показ окна
+            pageOverlay.classList.add('active');
+            document.body.classList.add('modal-open');
+
+            calculateTuningPrices();
+        }
+
+        // Закрытие страницы машины
+        closePageBtn.addEventListener('click', closeCarPage);
+        pageOverlay.addEventListener('click', (e) => {
+            if (e.target === pageOverlay) closeCarPage();
+        });
+
+        function closeCarPage() {
+            pageOverlay.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Логика управления уровнями калькулятора
+        function changeLevel(type, direction) {
+            const maxLvl = percentRatesBase[type].length - 1;
+            let currentLvl = selectedTuning[type];
+            
+            currentLvl += direction;
+            if (currentLvl < 0) currentLvl = 0;
+            if (currentLvl > maxLvl) currentLvl = maxLvl;
+            
+            selectedTuning[type] = currentLvl;
+            
+            updateLevelBars(type, currentLvl);
+            calculateTuningPrices();
+        }
+
+        function updateLevelBars(type, level) {
+            const statusEl = document.getElementById(`status-${type}`);
+            if (statusEl) statusEl.innerText = level;
+            
+            const container = document.getElementById(`bars-${type}`);
+            if (container) {
+                const bars = container.querySelectorAll('.bar');
+                bars.forEach((bar, index) => {
+                    if (index < level) bar.classList.add('active');
+                    else bar.classList.remove('active');
+                });
+            }
+        }
+
+        // Логика переключения фиксированных кнопок
+        function toggleFixedOption(button) {
+            const type = button.getAttribute('data-type');
+            
+            if (selectedTuning.fixed[type]) {
+                delete selectedTuning.fixed[type];
+                button.classList.remove('selected');
+            } else {
+                selectedTuning.fixed[type] = true;
+                button.classList.add('selected');
+            }
+            calculateTuningPrices();
+        }
+
+        // Пересчет формул
+        function calculateTuningPrices() {
+            if (!activeCarData) return;
+
+            const markupPercent = parseFloat(document.getElementById('markup-input').value) || 0;
+            const k = 1 + (markupPercent / 100);
+            
+            // База тюнинга = Слив в гос * 2 (столбец L * 2)
+            const baseTuningCost = activeCarData.gosPrice * 2; 
+            
+            let totalSum = 0;
+
+            // 1. Считаем процентные модули (Двигатель, турбо и т.д.)
+            for (let key in percentRatesBase) {
+                const currentLvl = selectedTuning[key];
+                const rate = percentRatesBase[key][currentLvl];
+                let price = Math.round(baseTuningCost * rate * k);
+                
+                const priceEl = document.getElementById(`price-${key}`);
+                if (priceEl) priceEl.innerText = price > 0 ? `$ ${price.toLocaleString('ru-RU')}` : "$0";
+                totalSum += price;
+            }
+
+            // 2. Считаем и обновляем ценники на кнопках визуального тюнинга
+            document.querySelectorAll('.fixed-toggle-btn').forEach(button => {
+                const type = button.getAttribute('data-type');
+                const basePrice = fixedPricesBase[type];
+                const finalFixedPrice = Math.round(basePrice * k);
+                
+                const fPriceEl = button.querySelector('.f-price');
+                if (fPriceEl) fPriceEl.innerText = `$ ${finalFixedPrice.toLocaleString('ru-RU')}`;
+                
+                if (selectedTuning.fixed[type]) {
+                    totalSum += finalFixedPrice;
+                }
+            });
+
+            // Вывод итоговой цены
+            document.getElementById('total-sum').innerText = `$ ${totalSum.toLocaleString('ru-RU')}`;
+        }
+
+        // Отслеживание ручного ввода наценки
+        document.getElementById('markup-input').addEventListener('input', () => {
+            let el = document.getElementById('markup-input');
+            let val = parseInt(el.value);
+            if (val < 0) el.value = 0;
+            if (val > 100) el.value = 100;
+            calculateTuningPrices();
+        });
+
+
+        // ОСТАЛЬНАЯ СИСТЕМНАЯ ЛОГИКА ФИЛЬТРОВ И СОРТИРОВКИ КАТАЛОГА
+        function setupFilterOptions(dealers, baggage, tanks) {
             Array.from(dealers).sort().forEach(d => {
                 dealerFilter.innerHTML += `<option value="${d}">${d}</option>`;
             });
             Array.from(baggage).sort((a,b)=>a-b).forEach(b => {
-                baggageFilter.innerHTML += `<option value="${b}">${b} кг / слот</option>`;
+                baggageFilter.innerHTML += `<option value="${b}">${b} кг</option>`;
             });
             Array.from(tanks).sort((a,b)=>a-b).forEach(t => {
                 tankFilter.innerHTML += `<option value="${t}">${t} л</option>`;
@@ -598,14 +1215,14 @@
             const sortType = sortFilter.value;
 
             allCars.forEach(car => {
-                const matchesSearch = car.name.includes(query) || car.realName.includes(query);
+                const matchesSearch = car.name.toLowerCase().includes(query) || car.realName.toLowerCase().includes(query);
                 const matchesDealer = selectedDealer === 'all' || car.dealer === selectedDealer;
                 const matchesFuel = selectedFuel === 'all' || car.fuel === selectedFuel;
                 const matchesBaggage = selectedBaggage === 'all' || car.baggage === parseInt(selectedBaggage);
                 const matchesTank = selectedTank === 'all' || car.tank === parseInt(selectedTank);
                 
                 const matchesSpeed = car.speed >= minSpeed && car.speed <= maxSpeed;
-                const matchesPrice = car.isPremium || car.price === 0 || (car.price >= minPrice && car.price <= maxPrice);
+                const matchesPrice = car.price === 0 || (car.price >= minPrice && car.price <= maxPrice);
 
                 if (matchesSearch && matchesDealer && matchesFuel && matchesBaggage && matchesTank && matchesSpeed && matchesPrice) {
                     car.element.classList.remove('hidden');
@@ -615,20 +1232,10 @@
             });
 
             let sortedCars = [...allCars];
-
-            if (sortType === 'alpha-asc') {
-                sortedCars.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (sortType === 'alpha-desc') {
-                sortedCars.sort((a, b) => b.name.localeCompare(a.name));
-            } else if (sortType === 'price-asc') {
-                sortedCars.sort((a, b) => a.price - b.price);
-            } else if (sortType === 'price-desc') {
-                sortedCars.sort((a, b) => b.price - a.price);
-            } else if (sortType === 'gos-asc') {
-                sortedCars.sort((a, b) => a.gosPrice - b.gosPrice);
-            } else if (sortType === 'gos-desc') {
-                sortedCars.sort((a, b) => b.gosPrice - a.gosPrice);
-            }
+            if (sortType === 'alpha-asc') sortedCars.sort((a, b) => a.name.localeCompare(b.name));
+            else if (sortType === 'alpha-desc') sortedCars.sort((a, b) => b.name.localeCompare(a.name));
+            else if (sortType === 'price-asc') sortedCars.sort((a, b) => a.price - b.price);
+            else if (sortType === 'price-desc') sortedCars.sort((a, b) => b.price - a.price);
 
             const catalog = document.getElementById('catalog');
             sortedCars.forEach(car => catalog.appendChild(car.element));
