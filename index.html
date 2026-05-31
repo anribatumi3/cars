@@ -1068,19 +1068,19 @@
                             <div class="dealership">📍 ${dealership}</div>
                             
                             <div class="car-specs">
-            <div class="spec-item">⚡ Скор: ${String(rawSpeed).replace(/[^\d]/g, '')} км/ч</div>
-            <div class="spec-item">🎒 Багаж: ${String(rawSlots).replace(/[^\d]/g, '')} слотов</div>
+            <div class="spec-item">⚡ Скор: ${String(rawSpeed).replace(/[^0-9.]/g, '')} км/ч</div>
+            <div class="spec-item">🎒 Багаж: ${String(rawSlots).replace(/[^0-9.]/g, '')} слотов</div>
                                 <div class="spec-item">
                 ${fuelType.toLowerCase().includes('электро') 
-                    ? `🔌 Бак: ${String(rawTank).replace(/(л|квт|квтч|ч|mah|\s)/gi, '').trim()} кВт` 
-                    : `⛽ Бак: ${String(rawTank).replace(/(л|квт|квтч|ч|mah|\s)/gi, '').trim()} л`
+                    ? `🔌 Бак: ${String(rawTank).replace(/[^0-9.]/g, '')} кВт` 
+                    : `⛽ Бак: ${String(rawTank).replace(/[^0-9.]/g, '')} л`
                 }
             </div>
                                 <div class="spec-item">🔋 Тип: ${fuelType}</div>
                                 <div class="spec-item">📉 Расход: ${
                 fuelType.toLowerCase().includes('электро') 
-                ? `${String(fuelConsumption).replace(/(л|mah|квтч|квт|ч|\s)/gi, '').trim()} кВт/1 км` 
-                : `${String(fuelConsumption).replace(/(л|mah|квтч|квт|ч|\s)/gi, '').trim()} л/1 км`
+                ? `${String(fuelConsumption).replace(/[^0-9.]/g, '')} кВт/1 км` 
+                : `${String(fuelConsumption).replace(/[^0-9.]/g, '')} л/1 км`
             }</div>
                                 <div class="spec-item">⚙️ Управл: ${handling}</div>
                             </div>
@@ -1152,12 +1152,11 @@
             document.getElementById('info-capacity').innerText = `${cleanSlots} слотов`;
             document.getElementById('info-fuel').innerText = car.fuel || '-';
             const isCarElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
-            const cleanTank = String(car.tank || 0).replace(/(л|квт|квтч|ч)/gi, '').trim();
-            const cleanSpeed = String(car.rawSpeed || 0).replace(/[^\d.]/g, '');
-    const cleanSlots = String(car.baggage || 0).replace(/[^\d.]/g, '');
-    const cleanTank = String(car.tank || 0).replace(/(л|квт|квтч|ч|mah|\s)/gi, '').trim();
-    const cleanFuelValue = String(car.fuelConsumption || 0).replace(/(л|mah|квтч|квт|ч|\s)/gi, '').trim();
-    const cleanHandling = String(car.handling || 0).replace(/(км\/ч|л|mah|\s)/gi, '').trim(); // Вырезаем км/ч из управления
+            const cleanSpeed = String(car.rawSpeed || 0).replace(/[^0-9.]/g, '');
+    const cleanSlots = String(car.baggage || 0).replace(/[^0-9.]/g, '');
+    const cleanTank = String(car.tank || 0).replace(/[^0-9.]/g, '');
+    const cleanFuelValue = String(car.fuelConsumption || 0).replace(/[^0-9.]/g, '');
+    const cleanHandling = String(car.handling || 0).replace(/[^0-9.]/g, ''); // Оставляем ТОЛЬКО цифру управления
     document.getElementById('info-tank').innerText = isCarElectro ? `${cleanTank} кВт` : `${cleanTank} л`;
             document.getElementById('info-speed').innerText = `${cleanSpeed} км/ч`;
             document.getElementById('info-seats').innerText = car.seats || '0';
