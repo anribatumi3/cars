@@ -4,7 +4,7 @@ body {
     color: #e2e8f0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
-    padding: 15px 10px; /* Оптимальные отступы для мобильных */
+    padding: 20px 15px;
     display: flex;
     flex-direction: column; /* Элементы идут строго сверху вниз */
     align-items: center;     /* Центрируем шапку и сетку меню */
@@ -33,17 +33,17 @@ body {
 .header-logo {
     width: 35px;         /* Компактный размер под высоту текста */
     height: 35px;
-    object-fit: contain; /* Картинка сохраняет свои пропорции без искажений */
-    /* border-radius УБРАН, логотип теперь оригинальной формы */
+    object-fit: contain; /* Сохраняет пропорции логотипа без круга */
 }
 
-/* --- СЕТКА ДЛЯ КАРТОЧЕК (СТРОГО 2 КОЛОНКИ НА ТЕЛЕФОНЕ) --- */
+/* --- СЕТКА ДЛЯ КАРТОЧЕК (Умная адаптивность) --- */
 .menu-container {
     width: 100%;
-    max-width: 600px;         /* Ограничиваем общую ширину для аккуратности */
+    max-width: 800px;    /* Максимальная ширина меню для ПК */
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Жестко 2 колонки одинаковой ширины */
-    gap: 8px;                /* Небольшой компактный зазор между плитками */
+    /* ПО УМОЛЧАНИЮ (ДЛЯ ПК И ПЛАНШЕТОВ): Строго 2 колонки одинаковой ширины */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px;           /* Оптимальный зазор между плитками */
 }
 
 /* Стилизация плиток-ссылок */
@@ -51,7 +51,7 @@ body {
     background-color: #202124;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 12px 10px;       /* Компактные отступы, чтобы всё умещалось в 2 колонки */
+    padding: 16px 20px;   /* Комфортные оригинальные отступы */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -73,47 +73,50 @@ body {
 .card-content {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-width: 0; /* Предотвращает раздувание текста за пределы сетки */
+    gap: 4px;
 }
 
 .card-title {
-    font-size: 14px;     /* Слегка уменьшили для двух колонок */
+    font-size: 16px;
     font-weight: 600;
-    white-space: nowrap; /* Чтобы названия не переносились некрасиво */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    letter-spacing: 0.3px;
 }
 
 .card-desc {
-    font-size: 11px;     /* Аккуратное маленькое описание */
+    font-size: 13px;
     color: #8a8d93;
-    line-height: 1.2;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Ограничение описания строго в 2 строки */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    line-height: 1.4;
 }
 
 /* Маленькая стрелочка справа */
 .card-arrow {
-    font-size: 11px;
+    font-size: 14px;
     color: #6c7078;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: color 0.2s, border-color 0.2s;
-    flex-shrink: 0;      /* Не дает стрелочке сжиматься в узких местах */
-    margin-left: 6px;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+    flex-shrink: 0;      /* Защита от сжатия */
+    margin-left: 15px;
 }
 
 .menu-card:hover .card-arrow {
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.03);
 }
 
+/* --- АДАПТИВНОСТЬ: МОБИЛЬНЫЕ ТЕЛЕФОНЫ --- */
+@media (max-width: 768px) {
+    .menu-container {
+        /* На смартфонах переключаем сетку в 1 ровную колонку */
+        grid-template-columns: 1fr; 
+        max-width: 500px; /* Сужаем контейнер для красивого вида на телефоне */
+        gap: 10px;
+    }
+}
 
