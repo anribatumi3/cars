@@ -257,23 +257,21 @@
         }
 
         .car-specs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 13px;
-            color: #98a2b3;
-            margin-bottom: 20px;
-            background: var(--bg-input);
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
+           display: grid;
+           grid-template-columns: 1fr 1fr; /* Ровно 2 колонки */
+           gap: 6px 12px;                  /* Отступы: 6px между строками, 12px между колонками */
+           background: rgba(255, 255, 255, 0.03); 
+           padding: 10px;
+           border-radius: 6px;
+           margin-bottom: 12px;
         }
 
         .spec-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+}
 
         .price-container {
             margin-top: auto;
@@ -861,13 +859,15 @@
                     <h3>Технические характеристики</h3>
                     <div class="info-grid">
                         <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer">—</strong></div>
-                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">—</strong></div>
-                        <div class="info-item"><span>📉 Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
+                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">$0</strong></div>
+                        <div class="info-item"><span>🏛️ Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
                         <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0 кг</strong></div>
                         <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel">—</strong></div>
                         <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0 л</strong></div>
                         <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
                         <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
+                        <div class="info-item"><span>📉 Расход:</span> <strong id="info-fuelConsumption">0 л/1 км</strong></div>
+                        <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-handling">—</strong></div>
                     </div>
                 </div>
 
@@ -1072,6 +1072,8 @@
                                 <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
                                 <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
                                 <div class="spec-item">🔋 Тип: ${fuelType}</div>
+                                <div class="spec-item">📉 Расход: ${FuelConsumption} л/1 км</div>
+                                <div class="spec-item">⚙️ Управл: ${Handling}</div>
                             </div>
 
                             <div class="price-container">
@@ -1079,6 +1081,11 @@
                                     <span class="price-label">Цена салона:</span>
                                     <span class="price-value">${priceHTML}</span>
                                 </div>
+                                
+                                <div class="price-row gov-price" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px;">
+                <span class="price-label" style="opacity: 0.5; font-size: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Слив в гос:</span>
+                <span class="price-value" style="font-size: 15px; font-weight: bold; color: #b0b3be;">$ ${parseInt(gosPriceStr).toLocaleString('ru-RU')}</span>
+                                  </div>
                             </div>
                         </div>
                     `;
