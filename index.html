@@ -786,6 +786,37 @@
     color: #7a7c85 !important;
     font-weight: 600 !important;
 }
+        /* Прячем подробные характеристики внутри СЕТКИ СЛЕВА, чтобы карточки были маленькими и аккуратными */
+.car-grid .car-card .car-details,
+.car-grid .car-card .scrap-price {
+    display: none !important;
+}
+
+/* А внутри ПРАВОЙ ПАНЕЛИ — мы их показываем во всей красе! */
+#car-details-card .car-details {
+    display: block !important;
+    margin-top: 10px !important;
+    font-size: 13px !important;
+    color: #e0e0e0 !important;
+    line-height: 1.6 !important;
+    text-align: left !important;
+}
+
+#car-details-card .car-details div {
+    margin-bottom: 4px !important;
+}
+
+#car-details-card .car-details strong {
+    color: #fff !important;
+}
+
+/* Показываем слив в гос только в правом окне */
+#car-details-card .scrap-price {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 8px !important;
+}
 }
     </style>
 </head>
@@ -1160,10 +1191,11 @@
 
                     const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     
-                    const card = document.createElement('div');
+                   const card = document.createElement('div');
         card.className = 'car-card';
         if (isPremiumCurrency) card.classList.add('premium-card');
 
+        // ИСПРАВЛЕНО: ccard заменено на card + вернули твой родной красивый стиль
         card.innerHTML = `
             <div class="car-image">
                 <img src="${imgUrl}" alt="${name}">
@@ -1173,6 +1205,33 @@
                 <div class="car-name">${name}</div>
                 <p class="real-name-label">Реальное название</p>
                 <div class="real-name">${realName ? realName : '-'}</div>
+                
+                <div class="car-details">
+                    <div>🏢 Автосалон: <strong>${dealership ? dealership : '-'}</strong></div>
+                    <div>👥 Мест: <strong>${seatsCount ? seatsCount : '2'}</strong></div>
+                    <div>📦 Вместимость: <strong>${rawSlots} кг</strong></div>
+                    <div>⛽ Топливо: <strong>${fuelType}</strong></div>
+                    <div>🔋 Бак: <strong>${rawTank} л</strong></div>
+                    <div>📉 Расход: <strong>${fuelConsumption ? fuelConsumption : '-'}</strong></div>
+                    <div>⚡ Скорость: <strong>${rawSpeed} км/ч</strong></div>
+                    <div>⚙️ Управление: <strong>${handling ? handling : '-'}</strong></div>
+                </div>
+
+                <div class="price-container">
+                    <div class="price-row main-price">
+                        <span class="price-label">ЦЕНА В САЛОНЕ:</span>
+                        <span class="price-value">${priceHTML}</span>
+                    </div>
+                    <div class="price-row scrap-price" style="margin-top: 6px;">
+                        <span class="price-label">СЛИВ В ГОС:</span>
+                        <span class="price-value" style="color: #e0e0e0; font-weight: bold;">${govPriceHTML ? govPriceHTML : '-'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        card.onclick = () => showCarDetails(car);
+        carGrid.appendChild(card);
                 
                 <div class="car-details">
                     <div>🏢 Автосалон: <strong>${dealership ? dealership : '-'}</strong></div>
