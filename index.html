@@ -1094,23 +1094,23 @@
                         </div>
                     `;
 
-                    const carObject = {
-                        element: card,
-                        name: name,
-                        realName: realName || '—',
-                        carClass: carClass,
-                        dealer: dealership,
-                        fuel: fuelType,
-                        speed: numSpeed,
-                        rawSpeed: rawSpeed,
-                        baggage: numSlots,
-                        tank: numTank,
-                        price: numPrice,
-                        priceHTML: priceHTML,
-                        gosPrice: numGosPrice,
-                        seats: seatsCount,
-                        imgUrl: imgUrl
-                    };
+                    const car = {
+            name: name,
+            realName: realName,
+            carClass: carClass,
+            fuel: fuelType,
+            rawSpeed: rawSpeed,
+            rawSlots: rawSlots,
+            rawTank: rawTank,
+            // ДОБАВЛЯЕМ СЮДА:
+            fuelConsumption: fuelConsumption,
+            handling: handling,
+            // ----------------
+            imgUrl: imgUrl,
+            priceStr: priceStr,
+            gosPriceStr: gosPriceStr,
+            dealership: dealership
+        };
 
                     card.addEventListener('click', () => openCarPage(carObject));
                     allCars.push(carObject);
@@ -1146,18 +1146,20 @@
             document.getElementById('info-tank').innerText = `${car.tank} л`;
             document.getElementById('info-speed').innerText = `${car.rawSpeed} км/ч`;
             document.getElementById('info-seats').innerText = car.seats;
-            // Проверяем наличие расхода в объекте машины перед обработкой
-    if (car.fuelConsumption) {
-        const cleanFuel = car.fuelConsumption.replace(/(л|mah|квтч|ч)/gi, '').trim();
+            // Проверяем расход (ищем в car.fuelConsumption или в car.consumption, если опечатались)
+    const rawFuelConsumption = car.fuelConsumption || car.consumption;
+    if (rawFuelConsumption) {
+        const cleanFuel = String(rawFuelConsumption).replace(/(л|mah|квтч|ч)/gi, '').trim();
         const isElectro = car.fuel && car.fuel.toLowerCase() === 'электро';
         document.getElementById('info-fuelConsumption').innerText = isElectro ? `${cleanFuel} кВтч/1 км` : `${cleanFuel} л/1 км`;
     } else {
         document.getElementById('info-fuelConsumption').innerText = '-';
     }
 
-    // Выводим управление
-    if (typeof car.handling !== 'undefined') {
-        document.getElementById('info-handling').innerText = car.handling;
+    // Проверяем управление
+    const rawHandling = car.handling;
+    if (typeof rawHandling !== 'undefined' && rawHandling !== null) {
+        document.getElementById('info-handling').innerText = rawHandling;
     } else {
         document.getElementById('info-handling').innerText = '-';
     }
