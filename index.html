@@ -1123,8 +1123,9 @@ function toggleFixedOption(button) {
     const type = button.getAttribute('data-type');
     
     // Группы взаимоисключающих опций (где можно выбрать только ОДИН вариант)
+    // Обрати внимание: 'neon' теперь убран из группы lighting
     const groups = {
-        lighting: ['xenon_white', 'xenon_blue', 'xenon_other', 'neon'],
+        lighting: ['xenon_white', 'xenon_blue', 'xenon_other'],
         tint: ['tint_light', 'tint_dark', 'tint_limo', 'tint_black'],
         plates: ['plate_exempt', 'plate_custom']
     };
@@ -1157,7 +1158,7 @@ function toggleFixedOption(button) {
             button.classList.add('selected');
         }
     } else {
-        // Для обычных деталей (бамперы, капоты, колеса) — оставляем стандартный независимый клик
+        // Для обычных деталей (бамперы, капоты, колеса, а теперь и НЕОН) — оставляем независимый клик
         if (selectedTuning.fixed[type]) {
             delete selectedTuning.fixed[type];
             button.classList.remove('selected');
