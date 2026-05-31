@@ -1118,61 +1118,98 @@
             }
         }
 
-        // Логика переключения фиксированных кнопок
-        function toggleFixedOption(button) {
-            const type = button.getAttribute('data-type');
-            
-            if (selectedTuning.fixed[type]) {
-                delete selectedTuning.fixed[type];
-                button.classList.remove('selected');
-            } else {
-                selectedTuning.fixed[type] = true;
-                button.classList.add('selected');
-            }
-            calculateTuningPrices();
+       // Логика переключения фиксированных кнопок
+function toggleFixedOption(button) {
+    const type = button.getAttribute('data-type');
+    
+    // Группы взаимоисключающих опций (где можно выбрать только ОДИН вариант)
+    const groups = {
+        lighting: ['xenon_white', 'xenon_blue', 'xenon_other', 'neon'],
+        tint: ['tint_light', 'tint_dark', 'tint_limo', 'tint_black'],
+        plates: ['plate_exempt', 'plate_custom']
+    };
+
+    let currentGroupKey = null;
+    
+    // Проверяем, относится ли кнопка к какой-то группе
+    for (let key in groups) {
+        if (groups[key].includes(type)) {
+            currentGroupKey = key;
+            break;
         }
+    }
 
-        // Пересчет формул
-        function calculateTuningPrices() {
-            if (!activeCarData) return;
-
-            const markupPercent = parseFloat(document.getElementById('markup-input').value) || 0;
-            const k = 1 + (markupPercent / 100);
-            
-            // База тюнинга = Слив в гос * 2 (столбец L * 2)
-            const baseTuningCost = activeCarData.gosPrice * 2; 
-            
-            let totalSum = 0;
-
-            // 1. Считаем процентные модули (Двигатель, турбо и т.д.)
-            for (let key in percentRatesBase) {
-                const currentLvl = selectedTuning[key];
-                const rate = percentRatesBase[key][currentLvl];
-                let price = Math.round(baseTuningCost * rate * k);
-                
-                const priceEl = document.getElementById(`price-${key}`);
-                if (priceEl) priceEl.innerText = price > 0 ? `$ ${price.toLocaleString('ru-RU')}` : "$0";
-                totalSum += price;
-            }
-
-            // 2. Считаем и обновляем ценники на кнопках визуального тюнинга
-            document.querySelectorAll('.fixed-toggle-btn').forEach(button => {
-                const type = button.getAttribute('data-type');
-                const basePrice = fixedPricesBase[type];
-                const finalFixedPrice = Math.round(basePrice * k);
-                
-                const fPriceEl = button.querySelector('.f-price');
-                if (fPriceEl) fPriceEl.innerText = `$ ${finalFixedPrice.toLocaleString('ru-RU')}`;
-                
-                if (selectedTuning.fixed[type]) {
-                    totalSum += finalFixedPrice;
-                }
+    if (currentGroupKey) {
+        // Если кнопка уже была выбрана — просто снимаем её выбор
+        if (selectedTuning.fixed[type]) {
+            delete selectedTuning.fixed[type];
+            button.classList.remove('selected');
+        } else {
+            // Если выбрали новый вариант — сначала полностью очищаем всю группу
+            groups[currentGroupKey].forEach(itemType => {
+                delete selectedTuning.fixed[itemType];
+                const btn = document.querySelector(`.fixed-toggle-btn[data-type="${itemType}"]`);
+                if (btn) btn.classList.remove('selected');
             });
-
-            // Вывод итоговой цены
-            document.getElementById('total-sum').innerText = `$ ${totalSum.toLocaleString('ru-RU')}`;
+            
+            // Включаем только то, на что кликнули
+            selectedTuning.fixed[type] = true;
+            button.classList.add('selected');
         }
+    } else {
+        // Для обычных деталей (бамперы, капоты, колеса) — оставляем стандартный независимый клик
+        if (selectedTuning.fixed[type]) {
+            delete selectedTuning.fixed[type];
+            button.classList.remove('selected');
+        } else {
+            selectedTuning.fixed[type] = true;
+            button.classList.add('selected');
+        }
+    }
+    
+    calculateTuningPrices();
+}
 
+// Пересчет формул
+function calculateTuningPrices() {
+    if (!activeCarData) return;
+
+    const markupPercent = parseFloat(document.getElementById('markup-input').value) || 0;
+    const k = 1 + (markupPercent / 100);
+    
+    // База тюнинга = Слив в гос * 2 (столбец L * 2)
+    const baseTuningCost = activeCarData.gosPrice * 2; 
+    
+    let totalSum = 0;
+
+    // 1. Считаем процентные модули (Двигатель, турбо и т.д.)
+    for (let key in percentRatesBase) {
+        const currentLvl = selectedTuning[key];
+        const rate = percentRatesBase[key][currentLvl];
+        let price = Math.round(baseTuningCost * rate * k);
+        
+        const priceEl = document.getElementById(`price-${key}`);
+        if (priceEl) priceEl.innerText = price > 0 ? `$ ${price.toLocaleString('ru-RU')}` : "$0";
+        totalSum += price;
+    }
+
+    // 2. Считаем и обновляем ценники на кнопках визуального тюнинга
+    document.querySelectorAll('.fixed-toggle-btn').forEach(button => {
+        const type = button.getAttribute('data-type');
+        const basePrice = fixedPricesBase[type];
+        const finalFixedPrice = Math.round(basePrice * k);
+        
+        const fPriceEl = button.querySelector('.f-price');
+        if (fPriceEl) fPriceEl.innerText = `$ ${finalFixedPrice.toLocaleString('ru-RU')}`;
+        
+        if (selectedTuning.fixed[type]) {
+            totalSum += finalFixedPrice;
+        }
+    });
+
+    // Вывод итоговой цены
+    document.getElementById('total-sum').innerText = `$ ${totalSum.toLocaleString('ru-RU')}`;
+}
         // Отслеживание ручного ввода наценки
         document.getElementById('markup-input').addEventListener('input', () => {
             let el = document.getElementById('markup-input');
