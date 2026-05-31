@@ -4,9 +4,9 @@ body {
     color: #e2e8f0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 15px 10px; /* Оптимальные отступы для мобильных */
     display: flex;
-    flex-direction: column; /* Элементы выстраиваются строго сверху вниз */
+    flex-direction: column; /* Элементы идут строго сверху вниз */
     align-items: center;     /* Центрируем шапку и сетку меню */
     min-height: 100vh;
     box-sizing: border-box;
@@ -17,34 +17,33 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;          /* Зазор между словами и картинкой */
+    gap: 10px;          /* Зазор между словами и логотипом */
     margin-top: 10px;
-    margin-bottom: 30px; /* Отступ от шапки до карточек */
+    margin-bottom: 25px; /* Отступ от шапки до карточек */
     width: 100%;
 }
 
 .header-text {
-    font-size: 22px;     /* Не слишком большой, аккуратный шрифт */
+    font-size: 22px;     /* Аккуратный размер шрифта */
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.5px;
 }
 
 .header-logo {
-    width: 32px;         /* Компактный размер под высоту текста */
-    height: 32px;
-    border-radius: 50%;  /* Делаем идеально круглым, если картинка квадратная */
-    object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 35px;         /* Компактный размер под высоту текста */
+    height: 35px;
+    object-fit: contain; /* Картинка сохраняет свои пропорции без искажений */
+    /* border-radius УБРАН, логотип теперь оригинальной формы */
 }
 
-/* --- СЕТКА ДЛЯ КАРТОЧЕК (2 КОЛОНКИ) --- */
+/* --- СЕТКА ДЛЯ КАРТОЧЕК (СТРОГО 2 КОЛОНКИ НА ТЕЛЕФОНЕ) --- */
 .menu-container {
     width: 100%;
-    max-width: 800px;         /* Немного расширили общую ширину для двух колонок */
+    max-width: 600px;         /* Ограничиваем общую ширину для аккуратности */
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Ровно 2 колонки одинаковой ширины */
-    gap: 12px;                /* Расстояние между плитками */
+    grid-template-columns: repeat(2, 1fr); /* Жестко 2 колонки одинаковой ширины */
+    gap: 8px;                /* Небольшой компактный зазор между плитками */
 }
 
 /* Стилизация плиток-ссылок */
@@ -52,7 +51,7 @@ body {
     background-color: #202124;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 14px 16px;       /* Чуть уменьшили внутренние отступы под 2 колонки */
+    padding: 12px 10px;       /* Компактные отступы, чтобы всё умещалось в 2 колонки */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -74,34 +73,42 @@ body {
 .card-content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+    min-width: 0; /* Предотвращает раздувание текста за пределы сетки */
 }
 
 .card-title {
-    font-size: 15px;
+    font-size: 14px;     /* Слегка уменьшили для двух колонок */
     font-weight: 600;
+    white-space: nowrap; /* Чтобы названия не переносились некрасиво */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card-desc {
-    font-size: 12px;
+    font-size: 11px;     /* Аккуратное маленькое описание */
     color: #8a8d93;
-    line-height: 1.3;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ограничение описания строго в 2 строки */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* Маленькая стрелочка справа */
 .card-arrow {
-    font-size: 12px;
+    font-size: 11px;
     color: #6c7078;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: color 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-    margin-left: 10px;
+    flex-shrink: 0;      /* Не дает стрелочке сжиматься в узких местах */
+    margin-left: 6px;
 }
 
 .menu-card:hover .card-arrow {
@@ -109,10 +116,4 @@ body {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* --- АДАПТИВНОСТЬ ДЛЯ СОВСЕМ УЗКИХ ЭКРАНОВ --- */
-@media (max-width: 480px) {
-    .menu-container {
-        grid-template-columns: 1fr; /* На очень маленьких телефонах карточки встанут в 1 колонку, чтобы текст не сжимался */
-    }
-}
-    
+
