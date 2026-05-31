@@ -555,12 +555,11 @@
             font-weight: 700;
             letter-spacing: 0.5px;
         }
- .fixed-buttons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Пример */
-    gap: 5px !important; /* Именно это значение (gap) отвечает за расстояние между кнопками */
-    margin-bottom: 5px !important;
-}
+        .fixed-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
         .fixed-toggle-btn {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
