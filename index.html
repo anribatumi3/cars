@@ -752,24 +752,39 @@
 .tuning-accordion-section .fixed-buttons-grid.show {
     display: grid !important;
 }
-       /* Создаем изолированную сетку только для технических характеристик */
-.specs-wrapper-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 колонки */
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    margin-bottom: 15px !important; /* Отступ до начала тюнинга */
+        /* Твой родной красивый стиль для параметров */
+.car-details {
+    margin-top: 10px !important;
+    font-size: 13px !important;
+    color: #e0e0e0 !important;
+    line-height: 1.6 !important;
 }
 
-/* На всякий случай фиксируем, чтобы плашки характеристик не ломались */
-.spec-item {
+.car-details div {
+    margin-bottom: 4px !important;
+}
+
+.car-details strong {
+    color: #fff !important;
+}
+
+/* Настройка блока цен, чтобы "Слив в гос" не улетал и был четко виден */
+.price-container {
+    margin-top: 15px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.price-row {
     display: flex !important;
-    flex-direction: column !important;
-    background: #1f2026 !important;
-    padding: 6px 10px !important;
-    border-radius: 6px !important;
-    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.price-label {
+    font-size: 11px !important;
+    color: #7a7c85 !important;
+    font-weight: 600 !important;
 }
 }
     </style>
@@ -1149,7 +1164,6 @@
         card.className = 'car-card';
         if (isPremiumCurrency) card.classList.add('premium-card');
 
-        // ТУТ БЫЛА ОПЕЧАТКА: исправлено ccard на card
         card.innerHTML = `
             <div class="car-image">
                 <img src="${imgUrl}" alt="${name}">
@@ -1160,45 +1174,25 @@
                 <p class="real-name-label">Реальное название</p>
                 <div class="real-name">${realName ? realName : '-'}</div>
                 
-                <div class="specs-wrapper-grid">
-                    <div class="spec-item">
-                        <span class="spec-label">🏢 Автосалон</span>
-                        <span class="spec-value">${dealership ? dealership : '-'}</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">👥 Мест</span>
-                        <span class="spec-value">${seatsCount ? seatsCount : '2'}</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">📦 Багаж</span>
-                        <span class="spec-value">${rawSlots} кг</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">⛽ Топливо</span>
-                        <span class="spec-value">${fuelType}</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">${fuelType.toLowerCase() === 'электро' ? '🔌 Бак' : '⛽ Бак'}</span>
-                        <span class="spec-value">${rawTank} л</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">📉 Расход</span>
-                        <span class="spec-value">${fuelConsumption ? fuelConsumption : '-'}</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">⚡ Скорость</span>
-                        <span class="spec-value">${rawSpeed} км/ч</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">⚙️ Управл.</span>
-                        <span class="spec-value">${handling ? handling : '-'}</span>
-                    </div>
+                <div class="car-details">
+                    <div>🏢 Автосалон: <strong>${dealership ? dealership : '-'}</strong></div>
+                    <div>👥 Мест: <strong>${seatsCount ? seatsCount : '2'}</strong></div>
+                    <div>📦 Вместимость: <strong>${rawSlots} кг</strong></div>
+                    <div>⛽ Топливо: <strong>${fuelType}</strong></div>
+                    <div>⛽ Бак: <strong>${rawTank} л</strong></div>
+                    <div>📉 Расход: <strong>${fuelConsumption ? fuelConsumption : '-'}</strong></div>
+                    <div>⚡ Скорость: <strong>${rawSpeed} км/ч</strong></div>
+                    <div>⚙️ Управление: <strong>${handling ? handling : '-'}</strong></div>
                 </div>
 
                 <div class="price-container">
                     <div class="price-row main-price">
                         <span class="price-label">ЦЕНА В САЛОНЕ:</span>
                         <span class="price-value">${priceHTML}</span>
+                    </div>
+                    <div class="price-row scrap-price" style="margin-top: 8px;">
+                        <span class="price-label">СЛИВ В ГОС:</span>
+                        <span class="price-value" style="color: #e0e0e0; font-weight: bold;">${govPriceHTML ? govPriceHTML : '-'}</span>
                     </div>
                 </div>
             </div>
