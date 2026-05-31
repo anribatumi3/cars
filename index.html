@@ -596,6 +596,67 @@
             .details-left { border-right: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
             .details-right { padding: 20px; max-height: none; overflow-y: visible; }
         }
+        /* ====================================================
+   КОМПАКТНЫЙ СТИЛЬ ДЛЯ МАКЕТА ТЮНИНГА (БЕЗ СКРОЛЛА)
+   ==================================================== */
+
+/* Уменьшаем отступы и размеры шрифтов в карточках характеристик */
+.info-card, .tuning-group, .fixed-section-title {
+    padding: 8px 12px !important;
+    margin-bottom: 8px !important;
+}
+
+/* Делаем заголовки секций компактнее */
+.info-card h3, h3 {
+    font-size: 13px !important;
+    margin-top: 2px !important;
+    margin-bottom: 6px !important;
+}
+
+/* Сжимаем сетку характеристик, чтобы она не растягивалась по высоте */
+.specs-grid, .fixed-buttons-grid {
+    gap: 6px !important;
+}
+
+/* Делаем сами плашки характеристик и кнопки ниже, уменьшая внутренний padding */
+.spec-item, .fixed-toggle-btn {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+}
+
+/* Уменьшаем высоту превью автомобиля */
+.car-preview-box img {
+    max-height: 140px !important;
+    margin: 4px 0 !important;
+}
+
+/* Самое главное: если экран компьютера достаточно широкий, 
+   мы автоматически делим контент на две аккуратные колонки */
+@media (min-width: 900px) {
+    /* Находим контейнер, в котором лежат блоки "ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ" 
+       и "ВНЕШНЯЯ ДОРАБОТКА КУЗОВА" (и основные модули) */
+    .modal-content, .car-detail-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* Ровно пополам */
+        gap: 16px !important;
+        max-width: 1100px !important;
+        max-height: 90vh !important; /* Ограничиваем по высоте экрана */
+        overflow-y: auto !important; /* Если что-то не влезает, аккуратно скроллим внутри */
+        padding: 15px !important;
+    }
+    
+    /* Делаем так, чтобы заголовок машины или фото (если они идут первыми) 
+       красиво растягивались на всю ширину сверху */
+    .car-preview-box {
+        grid-column: span 2 !important;
+    }
+    
+    /* Блок с итоговой ценой прижимаем, чтобы он был хорошо виден */
+    .total-price-panel {
+        grid-column: span 2 !important;
+        margin-top: 10px !important;
+    }
+}
     </style>
 </head>
 <body>
