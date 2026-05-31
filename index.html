@@ -596,227 +596,74 @@
             .details-left { border-right: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
             .details-right { padding: 20px; max-height: none; overflow-y: visible; }
         }
-      /* ====================================================
-   ЧИСТАЯ НАСТРОЙКА СЕТКИ ДЛЯ КНОПОК ТЮНИНГА
-   ==================================================== */
-
-/* Ограничиваем высоту правой колонки и добавляем аккуратный внутренний скролл */
-.details-right {
-    max-height: 80vh !important;
-    overflow-y: auto !important;
-    padding-right: 5px !important;
-}
-
-/* Настраиваем сетку кнопок в две колонки */
-.fixed-buttons-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* Делаем сами кнопки внешнего тюнинга компактными */
-.fixed-toggle-btn {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 8px 12px !important;
-    font-size: 12px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    box-sizing: border-box !important;
-    min-height: 38px !important;
-}
-
-/* Корректируем ценник внутри кнопки */
-.fixed-toggle-btn .f-price {
-    font-size: 11px !important;
-    font-weight: bold !important;
-}
-
-/* Уменьшаем отступы у заголовков секций, чтобы сэкономить место */
-.fixed-section-title {
-    margin-top: 10px !important;
-    margin-bottom: 4px !important;
-    font-size: 11px !important;
-}
         /* Стили для выпадающих секций тюнинга */
 .tuning-accordion-section {
     border-bottom: 1px solid #232429;
     margin-bottom: 8px;
 }
 
-/* Стилизируем заголовок как кнопку */
+/* Красивые плашки аккордеона */
 .fixed-section-title {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
+    background: rgba(43, 45, 51, 0.6); /* Темный полупрозрачный фон */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Тонкая аккуратная рамка */
+    border-radius: 6px; /* Закругление углов */
+    padding: 12px 16px;
+    color: #e0e0e0; /* Мягкий белый цвет текста */
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase; /* Все буквы заглавные для строгости */
+    letter-spacing: 0.5px;
     cursor: pointer;
-    padding: 10px 4px !important;
-    margin: 0 !important;
-    user-select: none;
-    transition: color 0.2s ease;
+    display: flex;
+    justify-content: space-between; /* Текст слева, стрелочка справа */
+    align-items: center;
+    margin-bottom: 8px;
+    transition: all 0.2s ease; /* Плавная анимация */
 }
 
+/* Эффект при наведении мышки */
 .fixed-section-title:hover {
-    color: #fff !important;
+    background: rgba(54, 57, 65, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
 }
 
-/* Кастомная стрелочка справа */
+/* Когда секция открыта (активна) */
+.fixed-section-title.active {
+    background: rgba(30, 31, 36, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ff4646; /* Подсвечиваем текст фирменным красным цветом при открытии */
+}
+
+/* Иконка стрелочки справа */
 .fixed-section-title::after {
     content: '▼';
-    font-size: 9px;
-    color: #7a7c85;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
     transition: transform 0.2s ease;
 }
 
-/* Когда секция активна — поворачиваем стрелочку */
+/* Поворачиваем стрелочку, когда меню открыто */
 .fixed-section-title.active::after {
     transform: rotate(180deg);
-    color: #da3b3b;
+    color: #ff4646;
 }
 
-/* По умолчанию скрываем сетку с кнопками */
+/* Контейнер со скрытыми кнопками */
 .fixed-buttons-grid {
-    display: none !important; /* Скрыто по умолчанию */
-    padding-bottom: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 0 4px; /* Убираем внутренние отступы, когда скрыто */
 }
 
-/* Класс, который будет показывать сетку при клике */
+/* Когда добавляется класс .show через JS — плавно раскрываем */
 .fixed-buttons-grid.show {
-    display: grid !important;
-}
-        /* ==========================================
-   КРАСИВЫЕ ВЫПАДАЮЩИЕ ПЛАШКИ (АККОРДЕОНЫ)
-   ========================================== */
-.tuning-accordion-section {
-    border-bottom: 1px solid #232429 !important;
-    margin-bottom: 6px !important;
-}
-
-.fixed-section-title {
-    background: rgba(43, 45, 51, 0.6) !important; /* Полупрозрачный темный фон */
-    border: 1px solid rgba(255, 255, 255, 0.08) !important; /* Тонкая рамка */
-    border-radius: 6px !important;
-    padding: 12px 16px !important;
-    color: #e0e0e0 !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    cursor: pointer !important;
-    display: flex !important;
-    justify-content: space-between !important; /* Текст слева, стрелка справа */
-    align-items: center !important;
-    margin-bottom: 8px !important;
-    transition: all 0.2s ease !important;
-}
-
-.fixed-section-title:hover {
-    background: rgba(54, 57, 65, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
-}
-
-.fixed-section-title.active {
-    background: rgba(30, 31, 36, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    color: #ff4646 !important; /* Красный текст при открытии */
-}
-
-/* Автоматическая стрелочка */
-.fixed-section-title::after {
-    content: '▼' !important;
-    font-size: 10px !important;
-    color: rgba(255, 255, 255, 0.4) !important;
-    transition: transform 0.2s ease !important;
-}
-
-.fixed-section-title.active::after {
-    transform: rotate(180deg) !important; /* Переворот при открытии */
-    color: #ff4646 !important;
-}
-
-/* Прячем кнопки внутри плашки по умолчанию */
-.tuning-accordion-section .fixed-buttons-grid {
-    display: none !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
-    padding: 4px 4px 12px 4px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* Показываем сетку кнопок, когда добавился класс .show */
-.tuning-accordion-section .fixed-buttons-grid.show {
-    display: grid !important;
-}
-        /* Твой родной красивый стиль для параметров */
-.car-details {
-    margin-top: 10px !important;
-    font-size: 13px !important;
-    color: #e0e0e0 !important;
-    line-height: 1.6 !important;
-}
-
-.car-details div {
-    margin-bottom: 4px !important;
-}
-
-.car-details strong {
-    color: #fff !important;
-}
-
-/* Настройка блока цен, чтобы "Слив в гос" не улетал и был четко виден */
-.price-container {
-    margin-top: 15px !important;
-    padding-top: 10px !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-.price-row {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-}
-
-.price-label {
-    font-size: 11px !important;
-    color: #7a7c85 !important;
-    font-weight: 600 !important;
-}
-        /* Прячем подробные характеристики внутри СЕТКИ СЛЕВА, чтобы карточки были маленькими и аккуратными */
-.car-grid .car-card .car-details,
-.car-grid .car-card .scrap-price {
-    display: none !important;
-}
-
-/* А внутри ПРАВОЙ ПАНЕЛИ — мы их показываем во всей красе! */
-#car-details-card .car-details {
-    display: block !important;
-    margin-top: 10px !important;
-    font-size: 13px !important;
-    color: #e0e0e0 !important;
-    line-height: 1.6 !important;
-    text-align: left !important;
-}
-
-#car-details-card .car-details div {
-    margin-bottom: 4px !important;
-}
-
-#car-details-card .car-details strong {
-    color: #fff !important;
-}
-
-/* Показываем слив в гос только в правом окне */
-#car-details-card .scrap-price {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-top: 8px !important;
-}
+    max-height: 500px; /* Достаточная высота для раскрытия */
+    padding: 4px 4px 12px 4px; /* Возвращаем отступы */
 }
     </style>
 </head>
@@ -1008,22 +855,30 @@
                 </div>
             </div>
 
-           <div class="info-block">
-    <h3 style="margin-top: 0; margin-bottom: 15px;">Технические характеристики</h3>
-    <div class="info-grid">
-        <div class="info-item"><span>🏢 Автосалон:</span> <strong id="info-dealer">—</strong></div>
-        <div class="info-item"><span>👥 Мест:</span> <strong id="info-seats">—</strong></div>
-        <div class="info-item"><span>📦 Вместимость:</span> <strong id="info-trunk">—</strong></div>
-        <div class="info-item"><span>⛽ Топливо:</span> <strong id="info-fuel">—</strong></div>
-        <div class="info-item"><span>🔋 Бак:</span> <strong id="info-tank">—</strong></div>
-        <div class="info-item"><span>📉 Расход:</span> <strong id="info-consumption">—</strong></div>
-        <div class="info-item"><span>⚡ Скорость:</span> <strong id="info-speed">—</strong></div>
-        <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-drive">—</strong></div>
-    </div>
-</div>
+            <div class="details-right">
+                <div class="info-block">
+                    <h3>Технические характеристики</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer">—</strong></div>
+                        <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">—</strong></div>
+                        <div class="info-item"><span>📉 Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
+                        <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0 кг</strong></div>
+                        <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel">—</strong></div>
+                        <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0 л</strong></div>
+                        <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
+                        <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
+                    </div>
+                </div>
+
+                <div class="fixed-tuning-block">
+    <h3 style="margin-bottom: 12px;">Внешняя доработка кузова</h3>
 
     <div class="tuning-accordion-section">
-        <div class="fixed-section-title" onclick="toggleAccordion(this)">Лакокрасочные работы</div>
+        <h3>Внешняя доработка кузова</h3>
+
+<h3>Внешняя доработка кузова</h3>
+
+<div class="fixed-section-title" onclick="toggleAccordion(this)">Лакокрасочные работы</div>
 <div class="fixed-buttons-grid">
     <button class="fixed-toggle-btn" data-type="paint_main" onclick="toggleFixedOption(this)">Основной цвет <span class="f-price">$0</span></button>
     <button class="fixed-toggle-btn" data-type="paint_sub" onclick="toggleFixedOption(this)">Дополнительный цвет <span class="f-price">$0</span></button>
@@ -1070,11 +925,10 @@
     <button class="fixed-toggle-btn" data-type="exterior_1" onclick="toggleFixedOption(this)">Элемент экстерьера #1 <span class="f-price">$0</span></button>
     <button class="fixed-toggle-btn" data-type="exterior_2" onclick="toggleFixedOption(this)">Элемент экстерьера #2 <span class="f-price">$0</span></button>
 </div>
-    </div>
-</div>
 
     <script>
-const url = 'https://script.google.com/macros/s/AKfycbz6P_18n4ZdXODJZpIXo7-MGuzDMnxm2h7vmOtxfbwWf-ON03TBtcM5cxlC-8Noqq8M/exec';
+        const SPREADSHEET_ID = '1IFuVKUjeH_ebP5Djnx9egafM5sj58aLMuRLRafjn8kc';
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
         let allCars = [];
 
@@ -1136,57 +990,15 @@ const url = 'https://script.google.com/macros/s/AKfycbz6P_18n4ZdXODJZpIXo7-MGuzD
             return `<span>${cleanNum.toLocaleString('ru-RU')} $</span>`;
         }
 
-// Загрузка данных
-// Вставьте вашу ссылку из Apps Script в кавычки ниже:
-fetch('https://script.google.com/macros/s/AKfycbz6P_18n4ZdXODJZpIXo7-MGuzDMnxm2h7vmOtxfbwWf-ON03TBtcM5cxlC-8Noqq8M/exec')
-    .then(res => {
-        if (!res.ok) throw new Error('Ошибка сети');
-        return res.json(); // Обязательно .json(), так как Apps Script отдает данные в этом формате
-    })
-    .then(data => {
-        // data — это массив массивов (ваша таблица)
-        const rows = data; 
-        document.getElementById('loader').style.display = 'none';
-
-        const dealerships = new Set();
-        const baggageCaps = new Set();
-        const tankCaps = new Set();
-        let maxTableSpeed = 0;
-        let maxTablePrice = 0;
-
-        // Начинаем цикл с i = 1, чтобы пропустить строку с заголовками
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i];
-            if (!cells || cells.length < 12 || !cells[0]) continue; 
-
-            const name = cells[0].trim();           
-            const realName = cells[1] ? cells[1].trim() : '';          
-            const carClass = cells[2] ? cells[2].trim() : '';          
-            const rawSpeed = cells[3] ? cells[3].trim() : '';             
-            const rawSlots = cells[6] ? cells[6].trim() : '';            
-            const rawTank = cells[7] ? cells[7].trim() : '';             
-            const dealership = cells[9] ? cells[9].trim() : '';         
-            let priceStr = cells[10] ? cells[10].trim() : '0';          
-            let gosPriceStr = cells[11] ? cells[11].trim() : '0'; 
-            
-            // ... (остальная логика создания карточек остается как была) ...
-            // ВАЖНО: убедитесь, что переменные берутся из массива cells правильно
-            
-            // Пример создания карточки (оставлен для контекста):
-            const card = document.createElement('div');
-            card.className = 'car-card';
-            // ... (далее ваш код создания карточки) ...
-            
-            allCars.push(carObject);
-        }
-
-        setupFilterOptions(dealerships, baggageCaps, tankCaps);
-        renderCatalog();
-    })
-    .catch(err => {
-        console.error(err);
-        document.getElementById('loader').innerHTML = `<div class="error-hint">Ошибка загрузки: ${err.message}</div>`;
-    });
+        // Загрузка данных
+        fetch(url)
+            .then(res => {
+                if (!res.ok) throw new Error('Ошибка сети');
+                return res.text();
+            })
+            .then(csvText => {
+                const rows = parseCSV(csvText);
+                document.getElementById('loader').style.display = 'none';
 
                 const dealerships = new Set();
                 const baggageCaps = new Set();
@@ -1242,28 +1054,36 @@ fetch('https://script.google.com/macros/s/AKfycbz6P_18n4ZdXODJZpIXo7-MGuzDMnxm2h
 
                     const imgUrl = customImgUrl ? customImgUrl : `https://dummyimage.com/600x400/13161c/ffffff.png&text=${encodeURIComponent(name)}`;
                     
-                   const card = document.createElement('div');
-        card.className = 'car-card';
-        if (isPremiumCurrency) card.classList.add('premium-card');
+                    const card = document.createElement('div');
+                    card.className = 'car-card';
+                    if (isPremiumCurrency) card.classList.add('premium-card');
 
-        // ИСПРАВЛЕНО: ccard заменено на card + вернули твой родной красивый стиль
-card.innerHTML = `
-    <div class="car-image">
-        <img src="${imgUrl}" alt="${name}">
-        <div class="badge">${carClass}</div>
-    </div>
-    <div class="car-info">
-        <div class="car-name">${name}</div>
-        <p class="real-name-label">Реальное название</p>
-        <div class="real-name">${realName ? realName : '-'}</div>
-        <div class="price-container">
-            <div class="price-row main-price">
-                <span class="price-label">ЦЕНА:</span>
-                <span class="price-value">${priceHTML}</span>
-            </div>
-        </div>
-    </div>
-`;
+                    card.innerHTML = `
+                        <div class="car-image">
+                            <img src="${imgUrl}" alt="${name}">
+                            <div class="badge">${carClass}</div>
+                        </div>
+                        <div class="car-info">
+                            <div class="car-name">${name}</div>
+                            <p class="real-name-label">Реальное название</p>
+                            <div class="real-name">${realName ? realName : '—'}</div>
+                            <div class="dealership">📍 ${dealership}</div>
+                            
+                            <div class="car-specs">
+                                <div class="spec-item">⚡ Скор: ${rawSpeed}</div>
+                                <div class="spec-item">🎒 Багаж: ${rawSlots} кг</div>
+                                <div class="spec-item">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак: ${rawTank} л</div>
+                                <div class="spec-item">🔋 Тип: ${fuelType}</div>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-row main-price">
+                                    <span class="price-label">Цена салона:</span>
+                                    <span class="price-value">${priceHTML}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
                     const carObject = {
                         element: card,
@@ -1368,11 +1188,12 @@ card.innerHTML = `
             }
         }
 
-       // Логика переключения фиксированных кнопок
+        // Логика переключения фиксированных кнопок
 function toggleFixedOption(button) {
     const type = button.getAttribute('data-type');
     
-    // Группы взаимоисключающих опций
+    // Группы взаимоисключающих опций (где можно выбрать только ОДИН вариант)
+    // Обрати внимание: 'neon' теперь убран из группы lighting
     const groups = {
         lighting: ['xenon_white', 'xenon_blue', 'xenon_other'],
         tint: ['tint_light', 'tint_dark', 'tint_limo', 'tint_black'],
@@ -1381,6 +1202,7 @@ function toggleFixedOption(button) {
 
     let currentGroupKey = null;
     
+    // Проверяем, относится ли кнопка к какой-то группе
     for (let key in groups) {
         if (groups[key].includes(type)) {
             currentGroupKey = key;
@@ -1389,19 +1211,24 @@ function toggleFixedOption(button) {
     }
 
     if (currentGroupKey) {
+        // Если кнопка уже была выбрана — просто снимаем её выбор
         if (selectedTuning.fixed[type]) {
             delete selectedTuning.fixed[type];
             button.classList.remove('selected');
         } else {
+            // Если выбрали новый вариант — сначала полностью очищаем всю группу
             groups[currentGroupKey].forEach(itemType => {
                 delete selectedTuning.fixed[itemType];
                 const btn = document.querySelector(`.fixed-toggle-btn[data-type="${itemType}"]`);
                 if (btn) btn.classList.remove('selected');
             });
+            
+            // Включаем только то, на что кликнули
             selectedTuning.fixed[type] = true;
             button.classList.add('selected');
         }
     } else {
+        // Для обычных деталей (бамперы, капоты, колеса, а теперь и НЕОН) — оставляем независимый клик
         if (selectedTuning.fixed[type]) {
             delete selectedTuning.fixed[type];
             button.classList.remove('selected');
@@ -1410,21 +1237,6 @@ function toggleFixedOption(button) {
             button.classList.add('selected');
         }
     }
-    
-    calculateTuningPrices();
-}
-    // Функция для раскрытия и закрытия секций тюнинга
-function toggleAccordion(titleElement) {
-    // Переключаем стрелочку у заголовка
-    titleElement.classList.toggle('active');
-    
-    // Находим блок с кнопками, который идет сразу за заголовком
-    const grid = titleElement.nextElementSibling;
-    if (grid) {
-        // Показываем или скрываем его
-        grid.classList.toggle('show');
-    }
-}
     
     calculateTuningPrices();
 }
@@ -1477,6 +1289,14 @@ function calculateTuningPrices() {
             if (val > 100) el.value = 100;
             calculateTuningPrices();
         });
+      // Функция для работы выпадающего меню
+function toggleAccordion(titleElement) {
+    titleElement.classList.toggle('active');
+    const grid = titleElement.nextElementSibling;
+    if (grid) {
+        grid.classList.toggle('show');
+    }
+}
 
 
         // ОСТАЛЬНАЯ СИСТЕМНАЯ ЛОГИКА ФИЛЬТРОВ И СОРТИРОВКИ КАТАЛОГА
@@ -1564,14 +1384,6 @@ function calculateTuningPrices() {
             }
             return result;
         }
-        // Функция для работы выпадающего меню
-function toggleAccordion(titleElement) {
-    titleElement.classList.toggle('active');
-    const grid = titleElement.nextElementSibling;
-    if (grid) {
-        grid.classList.toggle('show');
-    }
-}
     </script>
 </body>
 </html>
