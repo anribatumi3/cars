@@ -100,3 +100,95 @@
 
 </body>
 </html>
+/* Общие настройки страницы */
+body {
+    background-color: #15161a; /* Глубокий темный фон */
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Контейнер для списка меню */
+.menu-container {
+    width: 100%;
+    max-width: 500px; /* Идеальная ширина под мобильный интерфейс */
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Промежуток между плитками */
+}
+
+/* Стилизация карточек-ссылок */
+.menu-card {
+    background-color: #202124; /* Цвет плитки */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none; /* Убираем стандартное подчеркивание ссылок */
+    color: inherit;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    cursor: pointer;
+}
+
+/* Эффект легкого подсвечивания при наведении */
+.menu-card:hover {
+    background-color: #28292d;
+    transform: translateY(-1px);
+}
+
+.menu-card:active {
+    transform: translateY(0);
+}
+
+/* Текстовый блок внутри карточки */
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Заголовки категорий */
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Описания категорий */
+.card-desc {
+    font-size: 13px;
+    color: #8a8d93; /* Приглушенный аккуратный серый цвет */
+    line-height: 1.4;
+}
+
+/* Рамочка со стрелочкой справа */
+.card-arrow {
+    font-size: 14px;
+    color: #6c7078;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+    flex-shrink: 0; /* Чтобы стрелочка не сжималась на узких экранах */
+    margin-left: 15px;
+}
+
+/* Подсветка стрелочки при наведении на плитку */
+.menu-card:hover .card-arrow {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
