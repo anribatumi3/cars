@@ -597,54 +597,49 @@
             .details-right { padding: 20px; max-height: none; overflow-y: visible; }
         }
       /* ====================================================
-   ИСПРАВЛЕНИЕ МАСШТАБА ДЛЯ ПРАВОГО ОКНА МОДИФИКАЦИЙ
+   ЧИСТАЯ НАСТРОЙКА СЕТКИ ДЛЯ КНОПОК ТЮНИНГА
    ==================================================== */
 
-/* Сжимаем и настраиваем правый контейнер характеристик и тюнинга */
+/* Ограничиваем высоту правой колонки и добавляем аккуратный внутренний скролл */
 .details-right {
-    padding: 10px 14px !important;
-    max-height: 85vh !important; /* Ограничиваем высоту, чтобы не скроллить весь экран */
-    overflow-y: auto !important; /* Появится аккуратный внутренний скролл, если что-то не влезет */
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    padding-right: 5px !important;
 }
 
-/* Делаем заголовки категорий («ОСВЕЩЕНИЕ АВТОМОБИЛЯ» и др.) компактнее */
-.details-right h3, 
-.details-right div[style*="font-weight: bold"] {
-    margin-top: 8px !important;
-    margin-bottom: 4px !important;
-    font-size: 12px !important;
-}
-
-/* Находим контейнеры с кнопками внутри правой панели и выстраиваем их в 2 КОЛОНКИ */
-.details-right button {
-    display: inline-flex !important;
-    width: calc(50% - 4px) !important; /* Каждая кнопка занимает ровно половину строки */
-    margin: 2px !important;
-    padding: 6px 10px !important;
-    font-size: 11px !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+/* Настраиваем сетку кнопок в две колонки */
+.fixed-buttons-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
     box-sizing: border-box !important;
 }
 
-/* Если у тебя блоки с кнопками обернуты в flex/grid-контейнеры */
-.details-right .fixed-buttons-grid,
-.details-right div[style*="display: flex"] {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* Сетка из 2-х колонок */
-    gap: 6px !important;
+/* Делаем сами кнопки внешнего тюнинга компактными */
+.fixed-toggle-btn {
     width: 100% !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    min-height: 38px !important;
 }
 
-/* Делаем плашки технических характеристик (Цена, Вместимость) чуть плотнее */
-.spec-item, .details-right div[style*="background"] {
-    padding: 4px 8px !important;
+/* Корректируем ценник внутри кнопки */
+.fixed-toggle-btn .f-price {
+    font-size: 11px !important;
+    font-weight: bold !important;
 }
-.spec-label {
-    font-size: 10px !important;
-}
-.spec-value {
-    font-size: 12px !important;
+
+/* Уменьшаем отступы у заголовков секций, чтобы сэкономить место */
+.fixed-section-title {
+    margin-top: 10px !important;
+    margin-bottom: 4px !important;
+    font-size: 11px !important;
 }
 }
     </style>
