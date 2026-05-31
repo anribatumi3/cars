@@ -858,15 +858,15 @@
                 <div class="info-block">
                     <h3>Технические характеристики</h3>
                     <div class="info-grid">
-                        <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer">—</strong></div>
+                        <div class="info-item"><span>📍 Автосалон:</span> <strong id="info-dealer"></strong></div>
                         <div class="info-item"><span>💵 Цена в салоне:</span> <strong id="info-salon-price">$0</strong></div>
                         <div class="info-item"><span>🏛️ Слив в гос:</span> <strong id="info-gov-price">$0</strong></div>
-                        <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0 слотов</strong></div>
-                        <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel">—</strong></div>
-                        <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0 л</strong></div>
-                        <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0 км/ч</strong></div>
-                        <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats">—</strong></div>
-                        <div class="info-item"><span>📉 Расход:</span> <strong id="info-fuelConsumption">0 /1 км</strong></div>
+                        <div class="info-item"><span>🎒 Вместимость:</span> <strong id="info-capacity">0</strong></div>
+                        <div class="info-item"><span>🔋 Тип топлива:</span> <strong id="info-fuel"></strong></div>
+                        <div class="info-item"><span>🛢️ Объем бака:</span> <strong id="info-tank">0</strong></div>
+                        <div class="info-item"><span>⚡ Макс. скорость:</span> <strong id="info-speed">0</strong></div>
+                        <div class="info-item"><span>👥 Мест в салоне:</span> <strong id="info-seats"></strong></div>
+                        <div class="info-item"><span>📉 Расход:</span> <strong id="info-fuelConsumption">0</strong></div>
                         <div class="info-item"><span>⚙️ Управление:</span> <strong id="info-handling">0</strong></div>
                     </div>
                 </div>
@@ -1146,38 +1146,34 @@
             document.getElementById('car-real-name').innerText = car.realName;
             document.getElementById('car-img').src = car.imgUrl;
             
-            document.getElementById('info-dealer').innerText = car.dealer;
-            document.getElementById('info-salon-price').innerHTML = car.priceHTML;
-            document.getElementById('info-gov-price').innerText = `$ ${car.gosPrice.toLocaleString('ru-RU')}`;
-            document.getElementById('info-capacity').innerText = `${cleanCapacity || '0'} слотов`;
-            document.getElementById('info-fuel').innerText = car.fuel || '-';
-            const isCarElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
-            const cleanSpeed = String(car.rawSpeed || 0).replace(/[^0-9.]/g, '');
-    const rawBaggage = car.baggage || '0';
-    const cleanCapacity = String(rawBaggage)
-        .replace(/(слотов|слота|слот|slots|slot)/gi, '') // Стираем текст, если он прилетел из таблицы
-        .replace(/[^0-9.]/g, '')                         // Стираем любые другие лишние символы
-        .trim();
+            // 1. Сначала объявляем и рассчитываем все очищенные переменные
+    const isElectro = car.fuel && car.fuel.toLowerCase().includes('электро');
+    const cleanSpeed = String(car.rawSpeed || 0).replace(/[^0-9.]/g, '');
+    const cleanBaggage = String(car.baggage || 0).replace(/(слотов|слота|слот|slots|slot)/gi, '').replace(/[^0-9.]/g, '').trim();
     const cleanTank = String(car.tank || 0).replace(/[^0-9.]/g, '');
-    const cleanFuelValue = String(car.fuelConsumption || 0).replace(/[^0-9.]/g, '');
-    const cleanHandling = String(car.handling || 0).replace(/[^0-9.]/g, ''); // Оставляем ТОЛЬКО цифру управления
-    document.getElementById('info-tank').innerText = isCarElectro ? `${cleanTank} кВт` : `${cleanTank} л`;
-            document.getElementById('info-speed').innerText = `${cleanSpeed} км/ч`;
-            document.getElementById('info-seats').innerText = car.seats || '0';
-            // Проверяем расход (ищем в car.fuelConsumption или в car.consumption, если опечатались)
-    const rawFuelConsumption = car.fuelConsumption || car.consumption;
+    const cleanFuelValue = String(car.fuelConsumption || 0).replace(/(л|mah|квтч|квт|ч)/gi, '').replace(/[^0-9.]/g, '').trim();
+    const cleanHandling = String(car.handling || 0).replace(/[^0-9.]/g, '');
+
+    // 2. Теперь последовательно выводим их в HTML-элементы
+    document.getElementById('info-dealer').innerText = car.dealer || '-';
+    document.getElementById('info-salon-price').innerHTML = car.priceHTML || '$0';
+    document.getElementById('info-gov-price').innerText = car.gosPrice ? `$ ${car.gosPrice.toLocaleString('ru-RU')}` : '$0';
+    
+    // Вывод вместимости, скорости, мест и управления
+    document.getElementById('info-capacity').innerText = cleanBaggage || '0';
+    document.getElementById('info-fuel').innerText = car.fuel || '-';
+    document.getElementById('info-speed').innerText = cleanSpeed || '0';
+    document.getElementById('info-seats').innerText = car.seats || '0';
+    document.getElementById('info-handling').innerText = cleanHandling || '0';
+
+    // Умный вывод бака (кВт для электро, л для бензина)
+    document.getElementById('info-tank').innerText = isElectro ? `${cleanTank} кВт` : `${cleanTank} л`;
+
+    // Умный вывод расхода топлива
     if (car.fuelConsumption && car.fuelConsumption !== '-') {
-        document.getElementById('info-fuelConsumption').innerText = isCarElectro ? `${cleanFuelValue} кВт/1 км` : `${cleanFuelValue} л/1 км`;
+        document.getElementById('info-fuelConsumption').innerText = isElectro ? `${cleanFuelValue} кВт/1 км` : `${cleanFuelValue} л/1 км`;
     } else {
         document.getElementById('info-fuelConsumption').innerText = '-';
-    }
-
-    // Проверяем управление
-    const rawHandling = car.handling;
-    if (typeof rawHandling !== 'undefined' && rawHandling !== null) {
-        document.getElementById('info-handling').innerText = rawHandling;
-    } else {
-        document.getElementById('info-handling').innerText = '-';
     }
 
             // Сброс графических полосок уровней
