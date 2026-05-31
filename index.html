@@ -1149,7 +1149,7 @@
                     card.className = 'car-card';
                     if (isPremiumCurrency) card.classList.add('premium-card');
 
-                  card.innerHTML = `
+                  ccard.innerHTML = `
     <div class="car-image">
         <img src="${imgUrl}" alt="${name}">
         <div class="badge">${carClass}</div>
@@ -1174,10 +1174,10 @@
             </div>
             <div class="spec-item">
                 <span class="spec-label">⛽ Топливо</span>
-                <span class="spec-value">${fuelType}</span>
+                <span class="spec-value">${fuel ? fuel : '-'}</span>
             </div>
             <div class="spec-item">
-                <span class="spec-label">${fuelType.toLowerCase() === 'электро' ? '🔌' : '⛽'} Бак</span>
+                <span class="spec-label">${fuel && fuel.toLowerCase() === 'электро' ? '🔌 Бак' : '⛽ Бак'}</span>
                 <span class="spec-value">${rawTank} л</span>
             </div>
             <div class="spec-item">
