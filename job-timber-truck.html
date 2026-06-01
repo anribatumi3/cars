@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InteRPlay Wiki — Лесовоз</title>
     <style>
-        /* Базовые настройки */
         body {
             background-color: #15161a;
             color: #e2e8f0;
@@ -18,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* ОСНОВНОЙ ТРЁХБЛОЧНЫЙ КОНТЕЙНЕР */
         .wiki-layout {
             display: flex;
             width: 100%;
@@ -70,7 +68,6 @@
             gap: 4px;
         }
 
-        /* Главная кнопка категории */
         .sidebar-item {
             display: flex;
             align-items: center;
@@ -91,14 +88,12 @@
             color: #ffffff;
         }
 
-        /* Иконка стрелочки */
         .arrow-icon {
             font-size: 10px;
             transition: transform 0.2s;
             color: #6c7078;
         }
 
-        /* --- ВЫДВИЖНОЕ МЕНЮ РАБОТ / КРАЙМА --- */
         .submenu {
             max-height: 0;
             overflow: hidden;
@@ -106,22 +101,20 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            padding-left: 20px; /* Сдвиг вправо, как на маджестике */
+            padding-left: 20px;
         }
 
-        /* Если подкатегория открыта */
         .dropdown-container.open .submenu {
-            max-height: 500px; /* Даем раскрыться */
+            max-height: 500px;
             margin-top: 4px;
             margin-bottom: 8px;
         }
 
         .dropdown-container.open .arrow-icon {
-            transform: rotate(90deg); /* Разворачиваем стрелку */
+            transform: rotate(90deg);
             color: #ffffff;
         }
 
-        /* Ссылки на конкретные работы внутри подменю */
         .submenu-item {
             padding: 8px 14px;
             font-size: 13.5px;
@@ -136,9 +129,8 @@
             background-color: rgba(255, 255, 255, 0.02);
         }
 
-        /* Подсветка страницы, на которой мы сейчас находимся */
         .submenu-item.current-page {
-            color: #e11d48 !important; /* Выделяем малиновым/розовым цветом, как Почтальон на скриншоте */
+            color: #e11d48 !important;
             font-weight: 600;
         }
 
@@ -315,7 +307,6 @@
             color: #22c55e;
         }
 
-        /* АДАПТИВНОСТЬ */
         @media (max-width: 1024px) {
             .meta-sidebar {
                 display: none;
@@ -343,6 +334,7 @@
 
     <div class="wiki-layout">
 
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-logo">
                 <img src="logo.png" alt="Logo">
@@ -402,6 +394,7 @@
             </div>
         </aside>
 
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
         <main class="content-body">
             <h1>🌲 Работа: Лесовоз</h1>
             <p>Одна из самых перспективных работ на сервере InteRPlay, но уже требует подготовки и аккуратного вождения.</p>
@@ -411,6 +404,7 @@
                 <ul class="info-list">
                     <li>Водительские права категории C</li>
                     <li>Перед трудоустройством необходимо уволиться с предыдущей работы и завершить текущую смену.</li>
+                    <li>Аренда грузовика — 1500$</li>
                 </ul>
             </div>
 
@@ -457,6 +451,7 @@
             <p style="margin-top: 15px; font-weight: 500;">После этого вы сразу сможете начать выполнение заданий и зарабатывать деньги.</p>
         </main>
 
+        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
         <aside class="meta-sidebar">
             <div class="meta-card">
                 <div class="meta-label">Категория</div>
@@ -471,8 +466,8 @@
                 <div class="meta-value">~ 5–10 минут</div>
             </div>
             <div class="meta-card">
-                <div class="meta-label">Аренда грузовика</div>
-                <div class="meta-value" style="color: #ef4444;">1 500$</div>
+                <div class="meta-label">Лицензия</div>
+                <div class="meta-value" style="color: #f43f5e;">Категория C</div>
             </div>
         </aside>
 
@@ -483,13 +478,9 @@
             const el = document.getElementById(id);
             el.classList.toggle('open');
         }
-
-        // Автоматически раскрываем меню работ при загрузке, так как мы на странице работы
         document.addEventListener("DOMContentLoaded", function() {
             const jobsDropdown = document.getElementById('jobs-dropdown');
-            if(jobsDropdown) {
-                jobsDropdown.classList.add('open');
-            }
+            if(jobsDropdown) jobsDropdown.classList.add('open');
         });
     </script>
 </body>
