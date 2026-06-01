@@ -118,5 +118,44 @@ body {
         max-width: 500px; /* Сужаем контейнер для красивого вида на телефоне */
         gap: 10px;
     }
+    /* --- СТИЛИ ДЛЯ ПОИСКОВОЙ СТРОКИ --- */
+.search-container {
+    width: 100%;
+    max-width: 800px; /* Совпадает с максимальной шириной меню на ПК */
+    margin-bottom: 20px; /* Отступ до карточек */
+    box-sizing: border-box;
+}
+
+/* На экранах телефонов сужаем поиск под ширину мобильного меню */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 500px;
+    }
+}
+
+#wiki-search {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 15px;
+    background-color: #202124; /* Такой же темный цвет, как у плиток */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: #e2e8f0;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Эффект легкого свечения при клике в поле поиска */
+#wiki-search:focus {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+    background-color: #242529; /* Слегка подсвечиваем фон */
+}
+
+/* Цвет текста подсказки (placeholder) */
+#wiki-search::placeholder {
+    color: #6c7078;
+}
 }
 
