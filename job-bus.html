@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InteRPlay Wiki — Водитель автобуса</title>
     <style>
-        /* Базовые настройки */
         body {
             background-color: #15161a;
             color: #e2e8f0;
@@ -18,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* ОСНОВНОЙ ТРЁХБЛОЧНЫЙ КОНТЕЙНЕР */
         .wiki-layout {
             display: flex;
             width: 100%;
@@ -70,7 +68,6 @@
             gap: 4px;
         }
 
-        /* Главная кнопка категории */
         .sidebar-item {
             display: flex;
             align-items: center;
@@ -91,14 +88,12 @@
             color: #ffffff;
         }
 
-        /* Иконка стрелочки */
         .arrow-icon {
             font-size: 10px;
             transition: transform 0.2s;
             color: #6c7078;
         }
 
-        /* ВЫДВИЖНОЕ МЕНЮ РАБОТ */
         .submenu {
             max-height: 0;
             overflow: hidden;
@@ -135,7 +130,7 @@
         }
 
         .submenu-item.current-page {
-            color: #e11d48 !important; /* Наш фирменный малиновый маркер */
+            color: #e11d48 !important;
             font-weight: 600;
         }
 
@@ -200,7 +195,6 @@
             color: #6c7078;
         }
 
-        /* Разделитель */
         .stars-divider {
             text-align: center;
             font-size: 20px;
@@ -227,7 +221,6 @@
             gap: 8px;
         }
 
-        /* Внутренние списки тарифов */
         .tariff-list {
             list-style: none;
             padding-left: 0;
@@ -255,7 +248,6 @@
             font-weight: 600;
         }
 
-        /* Контейнер под будущее видео */
         .video-container {
             position: relative;
             width: 100%;
@@ -289,7 +281,6 @@
             font-size: 28px;
         }
 
-        /* Шаги для телефона */
         .steps-list {
             counter-reset: step-counter;
             padding-left: 0;
@@ -323,7 +314,7 @@
             flex-shrink: 0;
         }
 
-        /* --- ПРАВАЯ ПАНЕЛЬ: МЕТА ДАННЫЕ --- */
+        /* --- ПРАВАЯ ПАНЕЛЬ --- */
         .meta-sidebar {
             width: 260px;
             padding: 40px 20px;
@@ -355,10 +346,9 @@
         }
 
         .meta-value.highlight {
-            color: #3b82f6; /* Синий цвет для бонусов */
+            color: #3b82f6;
         }
 
-        /* АДАПТИВНОСТЬ */
         @media (max-width: 1024px) {
             .meta-sidebar {
                 display: none;
@@ -386,7 +376,7 @@
 
     <div class="wiki-layout">
 
-        <!-- 1. ЛЕВАЯ ПАНЕЛЬ С ВЫДВИЖНЫМИ КАТЕГОРИЯМИ -->
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-logo">
                 <img src="logo.png" alt="Logo">
@@ -398,7 +388,6 @@
                 <div class="sidebar-menu">
                     <a href="map.html" class="sidebar-item">🗺️ Карта</a>
                     
-                    <!-- Раскрывающийся блок работ -->
                     <div class="dropdown-container open" id="jobs-dropdown">
                         <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
                             <span>💼 Работы</span>
@@ -427,7 +416,6 @@
                     <a href="items.html" class="sidebar-item">📦 Предметы</a>
                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
-                    <!-- Раскрывающийся блок крайм -->
                     <div class="dropdown-container" id="crime-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
                             <span>🥷 Крайм</span>
@@ -448,7 +436,7 @@
             </div>
         </aside>
 
-        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ -->
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
         <main class="content-body">
             <h1>🚌 Работа: Водитель автобуса</h1>
             <p>Спокойная и стабильная работа на сервере InteRPlay, которая отлично подойдёт тем, кто любит размеренный геймплей и уверенный заработок.</p>
@@ -461,7 +449,6 @@
                 </ul>
             </div>
 
-            <!-- Будущий видеогайд -->
             <div class="video-container">
                 <div class="video-placeholder">
                     <span>🎬</span>
@@ -476,9 +463,9 @@
                 <p style="margin: 0;">Вам выдают автобус, после чего вы выбираете один из доступных маршрутов. Ваша задача — двигаться по маршруту и останавливаться на остановках в правильной последовательности, перевозя пассажиров по городу.</p>
             </div>
 
-            <!-- БЛОК С ТАРИФАМИ И МАРШРУТАМИ -->
             <div class="info-block">
-                <div class="info-block-title">💵 Оплата и маршруты</div>
+                <div class="info-block-title">💵 Оплата за 1 ОСТАНОВКУ</div>
+                <p style="margin: 0 0 15px 0; font-size: 14px; color: #a1a1aa; font-style: italic;">Внимание: Указанная сумма выплачивается за прохождение каждой контрольной точки (остановки) на маршруте!</p>
                 
                 <h3>🏙️ Маршруты в городе</h3>
                 <ul class="tariff-list">
@@ -522,14 +509,14 @@
             <p style="margin-top: 15px; font-weight: 500;">После этого вы сразу сможете начать выполнение заданий и зарабатывать деньги.</p>
         </main>
 
-        <!-- 3. ПРАВАЯ ПАНЕЛЬ: БЫСТРЫЕ ДАННЫЕ -->
+        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
         <aside class="meta-sidebar">
             <div class="meta-card">
                 <div class="meta-label">Категория</div>
                 <div class="meta-value">Работы</div>
             </div>
             <div class="meta-card">
-                <div class="meta-label">Оплата за рейс</div>
+                <div class="meta-label">За 1 Остановку</div>
                 <div class="meta-value" style="color: #22c55e;">40$ – 220$</div>
             </div>
             <div class="meta-card">
@@ -537,8 +524,8 @@
                 <div class="meta-value highlight">+10$ / пасс.</div>
             </div>
             <div class="meta-card">
-                <div class="meta-label">Сложность</div>
-                <div class="meta-value" style="color: #eab308;">Для новичков</div>
+                <div class="meta-label">Лицензия</div>
+                <div class="meta-value" style="color: #f43f5e;">Категория E</div>
             </div>
         </aside>
 
@@ -549,12 +536,9 @@
             const el = document.getElementById(id);
             el.classList.toggle('open');
         }
-
         document.addEventListener("DOMContentLoaded", function() {
             const jobsDropdown = document.getElementById('jobs-dropdown');
-            if(jobsDropdown) {
-                jobsDropdown.classList.add('open');
-            }
+            if(jobsDropdown) jobsDropdown.classList.add('open');
         });
     </script>
 </body>
