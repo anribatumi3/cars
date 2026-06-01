@@ -26,7 +26,7 @@
             margin: 0 auto;
         }
 
-        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ (Категории) --- */
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
         .sidebar {
             width: 280px;
             background-color: #1a1b1f;
@@ -67,24 +67,79 @@
         .sidebar-menu {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
         }
 
+        /* Главная кнопка категории */
         .sidebar-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 10px 14px;
             color: #8a8d93;
             text-decoration: none;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
+            cursor: pointer;
             transition: background-color 0.2s, color 0.2s;
+            user-select: none;
         }
 
         .sidebar-item:hover, .sidebar-item.active {
             background-color: #202124;
             color: #ffffff;
+        }
+
+        /* Иконка стрелочки */
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        /* --- ВЫДВИЖНОЕ МЕНЮ РАБОТ / КРАЙМА --- */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px; /* Сдвиг вправо, как на маджестике */
+        }
+
+        /* Если подкатегория открыта */
+        .dropdown-container.open .submenu {
+            max-height: 500px; /* Даем раскрыться */
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg); /* Разворачиваем стрелку */
+            color: #ffffff;
+        }
+
+        /* Ссылки на конкретные работы внутри подменю */
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Подсветка страницы, на которой мы сейчас находимся */
+        .submenu-item.current-page {
+            color: #e11d48 !important; /* Выделяем малиновым/розовым цветом, как Почтальон на скриншоте */
+            font-weight: 600;
         }
 
         /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
@@ -110,7 +165,6 @@
             color: #b9bbc6;
         }
 
-        /* Стилизация списков требований/инструкций */
         .info-list {
             list-style: none;
             padding: 0;
@@ -134,7 +188,6 @@
             color: #6c7078;
         }
 
-        /* Разделитель звезд */
         .stars-divider {
             text-align: center;
             font-size: 20px;
@@ -143,7 +196,6 @@
             margin: 30px 0;
         }
 
-        /* Информационные плашки (Суть, Оплата и т.д.) */
         .info-block {
             background-color: #1a1b1f;
             border: 1px solid rgba(255, 255, 255, 0.03);
@@ -162,11 +214,10 @@
             gap: 8px;
         }
 
-        /* Заглушка / контейнер под видео с YouTube */
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* Пропорции 16:9 */
+            padding-bottom: 56.25%;
             background-color: #202124;
             border-radius: 12px;
             border: 1px dashed rgba(255, 255, 255, 0.1);
@@ -196,7 +247,6 @@
             font-size: 28px;
         }
 
-        /* Элементы нумерованного списка */
         .steps-list {
             counter-reset: step-counter;
             padding-left: 0;
@@ -230,7 +280,7 @@
             flex-shrink: 0;
         }
 
-        /* --- ПРАВАЯ ПАНЕЛЬ: СТАТИСТИКА СТАТЬИ --- */
+        /* --- ПРАВАЯ ПАНЕЛЬ --- */
         .meta-sidebar {
             width: 260px;
             padding: 40px 20px;
@@ -262,13 +312,13 @@
         }
 
         .meta-value.highlight {
-            color: #22c55e; /* Зеленый цвет для выплаты */
+            color: #22c55e;
         }
 
-        /* --- АДАПТИВНОСТЬ ПОД МОБИЛКИ --- */
+        /* АДАПТИВНОСТЬ */
         @media (max-width: 1024px) {
             .meta-sidebar {
-                display: none; /* Скрываем правую панель на планшетах */
+                display: none;
             }
         }
 
@@ -303,7 +353,27 @@
                 <div class="sidebar-section-title">Категории</div>
                 <div class="sidebar-menu">
                     <a href="map.html" class="sidebar-item">🗺️ Карта</a>
-                    <a href="jobs.html" class="sidebar-item active">💼 Работы</a>
+                    
+                    <div class="dropdown-container open" id="jobs-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item current-page">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item">Такси</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
                     <a href="documents.html" class="sidebar-item">📑 Документы</a>
                     <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
                     <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
@@ -311,7 +381,21 @@
                     <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
                     <a href="items.html" class="sidebar-item">📦 Предметы</a>
                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
-                    <a href="crime.html" class="sidebar-item">🥷 Крайм</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
                     <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
                     <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
                 </div>
@@ -394,5 +478,19 @@
 
     </div>
 
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+
+        // Автоматически раскрываем меню работ при загрузке, так как мы на странице работы
+        document.addEventListener("DOMContentLoaded", function() {
+            const jobsDropdown = document.getElementById('jobs-dropdown');
+            if(jobsDropdown) {
+                jobsDropdown.classList.add('open');
+            }
+        });
+    </script>
 </body>
 </html>
