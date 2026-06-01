@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Лесовоз</title>
+    <style>
+        /* Базовые настройки */
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* ОСНОВНОЙ ТРЁХБЛОЧНЫЙ КОНТЕЙНЕР */
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ (Категории) --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        /* Стилизация списков требований/инструкций */
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #6c7078;
+        }
+
+        /* Разделитель звезд */
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        /* Информационные плашки (Суть, Оплата и т.д.) */
+        .info-block {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Заглушка / контейнер под видео с YouTube */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* Пропорции 16:9 */
+            background-color: #202124;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6c7078;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .video-placeholder span {
+            font-size: 28px;
+        }
+
+        /* Элементы нумерованного списка */
+        .steps-list {
+            counter-reset: step-counter;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            background-color: #202124;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* --- ПРАВАЯ ПАНЕЛЬ: СТАТИСТИКА СТАТЬИ --- */
+        .meta-sidebar {
+            width: 260px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .meta-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #6c7078;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .meta-value.highlight {
+            color: #22c55e; /* Зеленый цвет для выплаты */
+        }
+
+        /* --- АДАПТИВНОСТЬ ПОД МОБИЛКИ --- */
+        @media (max-width: 1024px) {
+            .meta-sidebar {
+                display: none; /* Скрываем правую панель на планшетах */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    <a href="jobs.html" class="sidebar-item active">💼 Работы</a>
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    <a href="crime.html" class="sidebar-item">🥷 Крайм</a>
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content-body">
+            <h1>🌲 Работа: Лесовоз</h1>
+            <p>Одна из самых перспективных работ на сервере InteRPlay, но уже требует подготовки и аккуратного вождения.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">📋 Требования</div>
+                <ul class="info-list">
+                    <li>Водительские права категории C</li>
+                    <li>Перед трудоустройством необходимо уволиться с предыдущей работы и завершить текущую смену.</li>
+                </ul>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <span>🎬</span>
+                    <p>Видеогайд на стадии подготовки (скоро появится)</p>
+                </div>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <div class="info-block">
+                <div class="info-block-title">⚙️ Суть работы</div>
+                <p style="margin: 0;">Для начала вам нужно доехать до штабеля с бревнами на делянке. Загрузив бревна, вы получите точку на карте — место доставки. Ваша задача — аккуратно довезти груз до указанной точки.</p>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">⚠️ Важно помнить</div>
+                <p style="margin: 0; color: #f43f5e;">При доставке обязательно нужно правильно поставить транспорт — чтобы появился зелёный квадрат, подтверждающий успешную разгрузку.</p>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">💎 Почему стоит выбрать эту работу</div>
+                <ul class="info-list">
+                    <li>Интересный процесс с вождением</li>
+                    <li>Подходит тем, кто уже освоился в игре</li>
+                </ul>
+                <p style="margin: 10px 0 0 0;">Работа лесовоза — отличный вариант прокачать свой доход, если вы уверенно чувствуете себя за рулём.</p>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <h2>📍 Как устроиться на работу на InteRPlay</h2>
+            <p>Чтобы быстро попасть на любую работу на сервере, используйте удобную систему навигации.</p>
+            
+            <ul class="steps-list">
+                <li>Возьмите телефон</li>
+                <li>Откройте приложение Навигатор</li>
+                <li>Перейдите в раздел Работы</li>
+                <li>Выберите Лесопилка</li>
+                <li>Поставьте маршрут и доберитесь до точки работы</li>
+            </ul>
+            <p style="margin-top: 15px; font-weight: 500;">После этого вы сразу сможете начать выполнение заданий и зарабатывать деньги.</p>
+        </main>
+
+        <aside class="meta-sidebar">
+            <div class="meta-card">
+                <div class="meta-label">Категория</div>
+                <div class="meta-value">Работы</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Оплата за заказ</div>
+                <div class="meta-value highlight">+ 810$</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Время выполнения</div>
+                <div class="meta-value">~ 5–10 минут</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Аренда грузовика</div>
+                <div class="meta-value" style="color: #ef4444;">1 500$</div>
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>
