@@ -118,44 +118,46 @@ body {
         max-width: 500px; /* Сужаем контейнер для красивого вида на телефоне */
         gap: 10px;
     }
-    /* --- СТИЛИ ДЛЯ ПОИСКОВОЙ СТРОКИ --- */
+    /* --- СТИЛИ ДЛЯ ПОИСКОВОЙ СТРОКИ (ОБНОВЛЕННЫЙ И БОЛЬШОЙ) --- */
 .search-container {
     width: 100%;
-    max-width: 800px; /* Совпадает с максимальной шириной меню на ПК */
-    margin-bottom: 20px; /* Отступ до карточек */
+    max-width: 800px; /* Растягиваем ровно по ширине двух колонок на ПК */
+    margin-bottom: 25px; /* Отступ от поиска до карточек меню */
     box-sizing: border-box;
-}
-
-/* На экранах телефонов сужаем поиск под ширину мобильного меню */
-@media (max-width: 768px) {
-    .search-container {
-        max-width: 500px;
-    }
+    padding: 0;
 }
 
 #wiki-search {
     width: 100%;
-    padding: 14px 20px;
-    font-size: 15px;
-    background-color: #202124; /* Такой же темный цвет, как у плиток */
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
+    padding: 18px 24px; /* Сделали поле выше и просторнее */
+    font-size: 16px; /* Чуть увеличили шрифт ввода */
+    background-color: #202124; /* Фирменный цвет плиток меню */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Едва заметная аккуратная рамка */
+    border-radius: 12px; /* Такое же скругление, как у основных карточек */
     color: #e2e8f0;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
+    letter-spacing: 0.3px;
 }
 
-/* Эффект легкого свечения при клике в поле поиска */
+/* Эффект при клике (активное поле) */
 #wiki-search:focus {
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
-    background-color: #242529; /* Слегка подсвечиваем фон */
+    background-color: #242529; /* Слегка подсвечиваем плитку */
+    border-color: rgba(255, 255, 255, 0.15); /* Делаем рамку чуть отчетливее */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Добавляем мягкую тень */
 }
 
-/* Цвет текста подсказки (placeholder) */
+/* Цвет текста-подсказки внутри поиска */
 #wiki-search::placeholder {
-    color: #6c7078;
+    color: #6c7078; /* Красивый приглушенный серый цвет */
+}
+
+/* На экранах телефонов подгоняем под мобильную ширину */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 500px;
+    }
 }
 }
 
