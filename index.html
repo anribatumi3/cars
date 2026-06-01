@@ -15,6 +15,10 @@
         <span class="header-text">Wiki</span>
     </div>
 
+    <div class="search-container">
+        <input type="text" id="wiki-search" placeholder="🔍 Поиск по ключевым словам... (например: транспорт, крайм, работы)">
+    </div>
+
     <div class="menu-container">
         <a href="map.html" class="menu-card">
             <div class="card-content">
@@ -113,6 +117,24 @@
         </a>
 
     </div>
+    <script>
+        document.getElementById('wiki-search').addEventListener('input', function() {
+            let filter = this.value.toLowerCase();
+            let cards = document.querySelectorAll('.menu-card');
+
+            cards.forEach(function(card) {
+                // Ищем совпадения и в названии, и в описании карточки
+                let title = card.querySelector('.card-title').textContent.toLowerCase();
+                let desc = card.querySelector('.card-desc').textContent.toLowerCase();
+                
+                if (title.includes(filter) || desc.includes(filter)) {
+                    card.style.display = ""; // Показываем карточку
+                } else {
+                    card.style.display = "none"; // Скрываем карточку
+                }
+            });
+        });
+    </script>
 
 </body>
 
