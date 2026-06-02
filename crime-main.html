@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Криминальные организации</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 850px;
+        }
+
+        .crime-header {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .crime-header h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .crime-header p {
+            font-size: 16px;
+            color: #fca5a5;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        /* Двухколоночный блок банд и активностей */
+        .crime-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .crime-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .card-header {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 14.5px;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #6c7078;
+        }
+
+        .gangs-list li::before {
+            color: #f59e0b; /* Золотистый маркер для банд */
+        }
+
+        .activities-list li::before {
+            color: #ef4444; /* Красный маркер для нелегала */
+        }
+
+        .rule-box {
+            background-color: rgba(239, 68, 68, 0.03);
+            border-left: 4px solid #ef4444;
+            border-radius: 0 12px 12px 0;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .rule-box-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .forum-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #26272b;
+            color: #f87171;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 600;
+            margin-top: 12px;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .forum-link:hover {
+            background-color: #2e3035;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .crime-grid {
+                grid-template-columns: 1fr;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container open" id="crime-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-main.html" class="submenu-item current-page">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            
+            <div class="crime-header">
+                <h1>🥷 Крайм на сервере InteRPlay</h1>
+                <p>Добро пожаловать на теневую сторону штата. Риск, пушки, быстрые тачки и огромные деньги ждут тех, кто готов бросить вызов системе.</p>
+            </div>
+
+            <p>На сервере <strong>InteRPlay</strong> реализована масштабная и глубоко проработанная криминальная экосистема. Она предлагает игрокам абсолютно уникальный пласт геймплея, завязанный на постоянном адреналине, командных действиях и жестком противостоянии с правоохранительными органами. Если вы не хотите жить на одну зарплату обычного работяги — этот путь для вас.</p>
+
+            <!-- ДВУХКОЛОНОЧНЫЙ БЛОК -->
+            <div class="crime-grid">
+                
+                <!-- КАРТОЧКА БАНД -->
+                <div class="crime-card">
+                    <div class="card-header" style="color: #f59e0b;">👥 Уличные группировки</div>
+                    <ul class="info-list gangs-list">
+                        <li><strong>Marabunta</strong></li>
+                        <li><strong>Families</strong></li>
+                        <li><strong>Vagos</strong></li>
+                        <li><strong>Ballas</strong></li>
+                        <li><strong>Lost Angels</strong></li>
+                        <li><strong>Rednecks</strong></li>
+                    </ul>
+                </div>
+
+                <!-- КАРТОЧКА АКТИВНОСТЕЙ -->
+                <div class="crime-card">
+                    <div class="card-header" style="color: #ef4444;">🔥 Чем можно заниматься</div>
+                    <ul class="info-list activities-list">
+                        <li>Крафт различного оружия и предметов</li>
+                        <li>Профессиональный угон автомобилей</li>
+                        <li>Скрытные ограбления жилья</li>
+                        <li>Дерзкие ограбления бизнесов</li>
+                        <li>Кровопролитный перехват военных материалов</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- БЛОК ПРАВИЛ И ССЫЛОК -->
+            <div class="rule-box">
+                <div class="rule-box-title">⚠️ Важное уведомление перед стартом:</div>
+                <p style="margin: 0; font-size: 14.5px;">Прежде чем совершить свое первое преступление и вступить в ряды одной из банд, вы <strong>обязаны</strong> досконально изучить общие правила криминальных организаций. Это убережет вас от наказаний со стороны администрации сервера и поможет выстраивать качественный, интересный и грамотный RolePlay процесс при взаимодействии с другими игроками.</p>
+                
+                <a href="https://forum.interplay-rp.com/index.php?threads/obschie-pravila-kriminalnyx-organizacii.22/" target="_blank" class="forum-link">
+                    🌐 Изучить Общие правила крим. фракций на форуме
+                </a>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <div class="crime-card" style="text-align: center; background: rgba(255,255,255,0.01);">
+                <p style="margin: 0; color: #ffffff; font-size: 16px; font-weight: 500;">
+                    Крайм — это идеальный выбор для игроков, которые хотят динамичный, рискованный и максимально активный геймплей. Выбирай свой путь, собирай преданную команду и играй так, как тебе интересно! 🕶️
+                </p>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const crimeDropdown = document.getElementById('crime-dropdown');
+            if(crimeDropdown) crimeDropdown.classList.add('open');
+        });
+    </script>
+</body>
+</html>
