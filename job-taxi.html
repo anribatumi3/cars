@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Такси</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #e11d48 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 15px;
+            color: #ffffff;
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #6c7078;
+        }
+
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        .info-block {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tariff-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tariff-list li {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-bottom: 4px;
+            font-size: 14.5px;
+            color: #b9bbc6;
+        }
+
+        .tariff-name {
+            color: #e2e8f0;
+        }
+
+        .tariff-price {
+            color: #eab308;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            border-left: 4px solid #ef4444;
+            background-color: rgba(239, 68, 68, 0.05);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #fca5a5;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background-color: #202124;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6c7078;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .video-placeholder span {
+            font-size: 28px;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            background-color: #202124;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* --- ПРАВАЯ ПАНЕЛЬ --- */
+        .meta-sidebar {
+            width: 260px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .meta-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #6c7078;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 17px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .meta-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container open" id="jobs-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item current-page">Такси</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            <h1>🚖 Работа: Таксист</h1>
+            <p>Великолепный выбор для тех, кто по-настоящему кайфует от вождения, любит изучать каждый переулок города и хочет активно взаимодействовать и общаться с другими жителями сервера InteRPlay.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">📋 Требования к водителю</div>
+                <ul class="info-list">
+                    <li>Официальное <strong>Разрешение на работу</strong>.</li>
+                    <li>Действующие <strong>водительские права категории B</strong>.</li>
+                    <li>Перед открытием смены нужно уволиться с предыдущей работы и закрыть текущую смену.</li>
+                </ul>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <span>🎬</span>
+                    <p>Видеогайд по фишкам и работе таксопарка (в процессе записи)</p>
+                </div>
+            </div>
+
+            <h2>🚕 С чего начать карьеру?</h2>
+            <p>Доберитесь до таксопарка, заключите трудовой договор у специального <strong>NPC-менеджера</strong> и возьмите в долгосрочное пользование брендированный рабочий автомобиль. Стоимость суточной аренды авто составляет <strong style="color: #ef4444;">1000$</strong>.</p>
+
+            <h2>📲 Как устроена и функционирует система заказов</h2>
+            <p>На текущий момент на сервере развёрнута продвинутая p2p-система: вы работаете <strong>исключительно с реальными игроками</strong>, без участия фейковых NPC-ботов.</p>
+
+            <div class="info-block">
+                <h3>🔄 Логика вызова такси:</h3>
+                <p>Пассажир достаёт телефон, открывает клиентское приложение, отмечает конечную точку на карте и прожимает кнопку заказа. Диспетчерская система мгновенно начинает обрабатывать запрос:</p>
+                <ul class="info-list" style="margin-top: 10px;">
+                    <li>Сначала алгоритм ищет ближайших к маркеру свободных водителей на смене.</li>
+                    <li>Именно им в приоритетном порядке всплывает предложение взять данный заказ.</li>
+                    <li>Если в ближайшем радиусе никто не принял вызов, система начинает плавно расширять круг поиска и перенаправляет запрос другим экипажам.</li>
+                </ul>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">⏱️ Критически важные таймеры для водителя</div>
+                <ul class="tariff-list">
+                    <li><span class="tariff-name">Время на прибытие к маркеру вызова клиента</span> <span class="tariff-price" style="color: #3b82f6;">5 минут максимум</span></li>
+                    <li><span class="tariff-name">Время бесплатного ожидания пассажира на точке</span> <span class="tariff-price" style="color: #3b82f6;">3 минуты максимум</span></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                ⚠️ <strong>Важное правило отмены:</strong> Если вызвавшая вас персона по какой-то причине передумала, проигнорировала прибытие машины или ушла из зоны первоначального заказа — система автоматически аннулирует вызов, освобождая вас для других клиентов.
+            </div>
+
+            <p>Как только клиент открывает дверь и усаживается в салон вашего авто, ваш рабочий навигатор моментально подтягивает и подсвечивает точные GPS-координаты назначения, которые пассажир указал в своём приложении.</p>
+
+            <h2>💵 Ценообразование и Заработная плата</h2>
+            <p>Фиксированных статичных чеков нет! Встроенная в InteRPlay система тарификации рассчитывает стоимость каждого индивидуального рейса динамически, учитывая множество ключевых параметров:</p>
+            
+            <ul class="info-list" style="margin-bottom: 15px;">
+                <li>Минимальную базовую стоимость посадки</li>
+                <li>Общую протяженность построенного маршрута</li>
+                <li>Дистанцию, которую водитель преодолел в процессе подачи машины к клиенту</li>
+            </ul>
+            <p>В среднем по городу чистый доход за аккуратное и быстрое выполнение одного стандартного заказа составляет <strong>от 200$ до 300$</strong>.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">💎 Главные плюсы работы таксистом</div>
+                <ul class="info-list">
+                    <li>Идеальный выбор для тех, кто любит спокойный, размеренный геймплей и чилл за рулём.</li>
+                    <li>Постоянный живой интерактив, знакомства и увлекательное общение со множеством игроков.</li>
+                    <li>Отсутствие навязчивых мини-игр — только ваше водительское мастерство и знание карты.</li>
+                </ul>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <h2>📍 Как устроиться на работу на InteRPlay</h2>
+            <p>Чтобы без проблем отыскать центральный офис таксопарка, задействуйте встроенные возможности вашей навигационной системы.</p>
+            
+            <ul class="steps-list">
+                <li>Достаньте свой мобильный телефон</li>
+                <li>Перейдите в приложение Навигатор</li>
+                <li>Откройте специальный раздел Работы</li>
+                <li>Кликните по пункту Такси</li>
+                <li>Активируйте маркер пути и направляйтесь к точке назначения</li>
+            </ul>
+        </main>
+
+        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
+        <aside class="meta-sidebar">
+            <div class="meta-card">
+                <div class="meta-label">Категория</div>
+                <div class="meta-value">Пассажирские</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Средний чек</div>
+                <div class="meta-value" style="color: #22c55e;">200$ – 300$</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Аренда авто</div>
+                <div class="meta-value" style="color: #ef4444;">1000$</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Лицензия</div>
+                <div class="meta-value" style="color: #e2e8f0; font-size: 14px;">Категория B</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Документы</div>
+                <div class="meta-value" style="color: #ef4444; font-size: 14px;">Разрешение на работу</div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const jobsDropdown = document.getElementById('jobs-dropdown');
+            if(jobsDropdown) jobsDropdown.classList.add('open');
+        });
+    </script>
+</body>
+</html>
