@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Ограбление жилья</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 850px;
+        }
+
+        .crime-header {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .crime-header h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .crime-header p {
+            font-size: 16px;
+            color: #fca5a5;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        /* --- ВИДЕОПЛЕЕР --- */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin: 25px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.05);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #ef4444;
+        }
+
+        .info-block {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-tag {
+            background-color: #26272b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #f87171;
+            font-size: 14px;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            background-color: #1a1b1f;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.01);
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            background-color: #ef4444;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* --- СЕТКА ЛИМИТОВ ДОМОВ --- */
+        .house-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .house-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .house-card .type {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .house-card .limit {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .house-card .desc {
+            font-size: 13.5px;
+            color: #6c7078;
+        }
+
+        /* --- БЛОК ОПЛАТЫ --- */
+        .payment-box {
+            background-color: #1a1b1f;
+            border-left: 4px solid #22c55e;
+            border-radius: 0 12px 12px 0;
+            padding: 22px;
+            margin: 25px 0;
+        }
+
+        .payment-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .payment-split {
+            display: flex;
+            gap: 20px;
+        }
+
+        .split-card {
+            flex: 1;
+            background-color: #15161a;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .split-card .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .split-card .value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .danger-box {
+            background-color: rgba(239, 68, 68, 0.02);
+            border: 1px dashed rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .house-grid, .payment-split {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container open" id="crime-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="sidebar-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item current-page">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            
+            <div class="crime-header">
+                <h1>🏠 Ограбление жилья</h1>
+                <p>Теневой налёт на частную собственность. Действуйте бесшумно, выносите ценности и успейте скрыться до приезда полиции.</p>
+            </div>
+
+            <p>Ограбление домов на сервере <strong>InteRPlay</strong> — это прибыльный, но крайне рискованный способ криминального заработка. Здесь критически важно сохранять хладнокровие, действовать максимально быстро и быть предельно внимательным при обыске комнат.</p>
+
+            <h2>📺 Видео-руководство по ограблению</h2>
+            <div class="video-container">
+                <!-- Сюда вставишь ссылку на ролик, когда снимешь -->
+                <iframe src="https://www.youtube.com/embed/XXXXXX" allowfullscreen></iframe>
+            </div>
+
+            <h2>🛠️ Подготовка и инструменты</h2>
+            <div class="info-block">
+                <div class="info-block-title">🚪 Как начать дело</div>
+                <p style="margin: 0 0 15px 0;">Вся нелегальная контрабанда и наводки проходят через проверенных людей. Для старта вам необходимо устроиться у <strong>Куратора на Чёрном рынке</strong>.</p>
+
+                <div class="info-block-title">🔑 Специнвентарь</div>
+                <p style="margin: 0 0 10px 0;">Для скрытного вскрытия замков вам понадобятся специальные <strong>Отмычки для жилья</strong>. Приобрести их можно на точках Чёрного рынка:</p>
+                <ul class="info-list" style="margin: 0;">
+                    <li>🏚️ Точка в <strong>Стэб-Сити</strong> — <span class="price-tag">700$ / шт.</span></li>
+                    <li>🍓 Точка в <strong>Строуберри</strong> — <span class="price-tag">875$ / шт.</span></li>
+                </ul>
+            </div>
+
+            <h2>📋 Пошаговый алгоритм налёта</h2>
+            <ul class="steps-list">
+                <li>
+                    <div>
+                        <strong>Получение наводки:</strong> Ожидайте СМС-сообщение от диспетчера на ваш телефон. Внутри будут зашифрованы данные о целевом доме и его точные координаты на карте.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Проникновение:</strong> Прибыв на место, подойдите к двери, откройте модальное окно взаимодействия с домом и выберите пункт взлома, чтобы использовать отмычку.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Обыск и сбор:</strong> Заходите внутрь помещения и начинайте внимательно искать ценные вещи. Предметы нужно брать и выносить к машине по одному.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Сбыт добычи:</strong> Как только заберёте всё возможное, везите награбленное в специализированную точку сдачи. Помните: <strong>главное — не попасться патрулям полиции</strong>!
+                    </div>
+                </li>
+            </ul>
+
+            <h2>📦 Вместимость и типы недвижимости</h2>
+            <p>Количество доступного для выноса лута напрямую зависит от уровня достатка владельцев дома:</p>
+            
+            <div class="house-grid">
+                <div class="house-card" style="border-top: 4px solid #94a3b8;">
+                    <div class="type" style="color: #94a3b8;">Обычный дом</div>
+                    <div class="limit">до 8 предметов</div>
+                    <div class="desc">Средний класс, быстрый налёт</div>
+                </div>
+                <div class="house-card" style="border-top: 4px solid #eab308;">
+                    <div class="type" style="color: #eab308;">Элитный дом</div>
+                    <div class="limit">до 16 предметов</div>
+                    <div class="desc">Особняки богачей, жирный куш</div>
+                </div>
+            </div>
+
+            <h2>💰 Условия оплаты и распределение долей</h2>
+            <p>Фиксированная стоимость установлена за каждую успешно вынесенную и сданную ценность. Система автоматически делит доход между исполнителем и синдикатом:</p>
+
+            <div class="payment-box">
+                <div class="payment-title">💵 За каждую украденную ценность: <span style="color: #22c55e;">400$</span></div>
+                <div class="payment-split">
+                    <div class="split-card">
+                        <div class="label">В карман чистыми (Игроку)</div>
+                        <div class="value" style="color: #22c55e;">320$</div>
+                    </div>
+                    <div class="split-card">
+                        <div class="label">Доля фракции (В общак)</div>
+                        <div class="value" style="color: #ef4444;">80$</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">💎 Важные особенности ремесла</div>
+                <ul class="info-list" style="margin: 0;">
+                    <li><strong>Предельная скорость:</strong> Секундное промедление внутри дома может активировать сигнализацию. Действуйте слаженно.</li>
+                    <li><strong>Пространственное мышление:</strong> Нужно мгновенно запоминать планировку комнат, чтобы не плутать в коридорах с вещами в руках.</li>
+                    <li><strong>Высокий риск:</strong> Копы могут среагировать на подозрительную активность, так что держите пути отхода чистыми.</li>
+                </ul>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <div class="danger-box">
+                <p style="margin: 0; color: #ffffff; font-size: 15px; font-weight: 500;">
+                    Любите настоящий экшен, скрытные вылазки под покровом ночи и колоссальный риск? Ограбление жилья станет вашим любимым делом на сервере. Готовьте отмычки! 🏠🤫
+                </p>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const crimeDropdown = document.getElementById('crime-dropdown');
+            if(crimeDropdown) crimeDropdown.classList.add('open');
+        });
+    </script>
+</body>
+</html>
