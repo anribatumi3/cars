@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Дальнобойщик</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #e11d48 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #ffffff;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #6c7078;
+        }
+
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        .info-block {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Таблица автопарка */
+        .wiki-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14.5px;
+            text-align: left;
+        }
+
+        .wiki-table th {
+            background-color: #202124;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .wiki-table td {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #b9bbc6;
+        }
+
+        .wiki-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        .price-text {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .mat-text {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            border-left: 4px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #93c5fd;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background-color: #202124;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6c7078;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .video-placeholder span {
+            font-size: 28px;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            background-color: #202124;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* --- ПРАВАЯ ПАНЕЛЬ --- */
+        .meta-sidebar {
+            width: 260px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .meta-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #6c7078;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 17px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .meta-value.highlight {
+            color: #22c55e;
+        }
+
+        @media (max-width: 1024px) {
+            .meta-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container open" id="jobs-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item current-page">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item">Такси</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            <h1>🚛 Работа: Дальнобойщик</h1>
+            <p>Одна из самых масштабных, престижных и экономически важных профессий на сервере InteRPlay. Именно от дальнобойщиков напрямую зависит стабильность штата: без регулярных поставок на склады бизнесы останутся без товаров, а организации — без материалов.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">📋 Общие требования к водителю</div>
+                <ul class="info-list">
+                    <li>Наличие официального <strong>Разрешения на работу</strong>.</li>
+                    <li>Соответствующая водительская лицензия под выбранный тип транспорта.</li>
+                    <li>Достаточный уровень профессионального мастерства (скилла) для аренды тяжелых классов техники.</li>
+                    <li>Перед началом смены необходимо уволиться с предыдущей работы и завершить активную смену.</li>
+                </ul>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <span>🎬</span>
+                    <p>Видеогайд по маршрутам и логистике дальнобойщиков (скоро появится)</p>
+                </div>
+            </div>
+
+            <h2>🛞 Классификация транспорта и аренда</h2>
+            <p>Весь рабочий транспорт делится на 4 категории. Аренда техники оформляется <strong>бессрочно</strong> на время вашей текущей смены.</p>
+
+            <table class="wiki-table">
+                <thead>
+                    <tr>
+                        <th>Тип ТС</th>
+                        <th>Требуемые права</th>
+                        <th>Стоимость аренды</th>
+                        <th>Макс. вместимость</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1 тип</strong> (Легкие)</td>
+                        <td>Категория B</td>
+                        <td class="price-text">1500$</td>
+                        <td class="mat-text">до 150 мат.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2 тип</strong> (Средние)</td>
+                        <td>Категория C</td>
+                        <td class="price-text">3500$</td>
+                        <td class="mat-text">до 300 мат.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 тип</strong> (Тяжелые)</td>
+                        <td>Категория D</td>
+                        <td class="price-text">8000$</td>
+                        <td class="mat-text">до 600 мат.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4 тип</strong> (Фуры)</td>
+                        <td>Категория D</td>
+                        <td class="price-text">10000$</td>
+                        <td class="mat-text">до 1000 мат.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>📦 Виды логистических заказов</h2>
+            <p>Управление заказами полностью завязано на ваш рабочий КПК. Откройте <strong>планшет → приложение перевозок</strong> и выберите подходящий контракт. На выполнение любого заказа строго выделяется <strong style="color: #ffffff;">25 минут</strong>.</p>
+
+            <div class="info-block">
+                <h3>🏬 Складской заказ</h3>
+                <p style="margin: 0;">Классическая доставка готовой продукции из центрального распределительного хаба непосредственно в торговые точки и коммерческие объекты города. Самый стабильный, понятный и безопасный вариант для новичков.</p>
+                
+                <h3>💼 Бизнес-заказ</h3>
+                <p style="margin: 5px 0 0 0;">Эксклюзивные контракты, формируемые лично владельцами коммерческих предприятий. Объем груза здесь часто превышает возможности одной фуры, поэтому выполнять такой контракт можно параллельно на нескольких ТС.</p>
+                
+                <h3>🛡️ Государственный контракт <span style="font-size: 12px; color: #f43f5e; background: rgba(244,63,94,0.1); padding: 2px 6px; border-radius: 4px; margin-left: 5px;">Только 4 тип ТС</span></h3>
+                <p style="margin: 5px 0 0 0;">Крупногабаритные стратегические поставки, проходящие строго в <strong>два ключевых этапа</strong>:</p>
+                <ul class="info-list" style="margin-top: 5px;">
+                    <li><strong>1 этап:</strong> Сбор и доставка первичного сырья с производственных точек (шахта, лесопилка, нефтеперерабатывающий завод, ферма, SANG).</li>
+                    <li><strong>2 этап:</strong> После технологической переработки — транспортировка готовых материалов прямиком на базу SANG.</li>
+                </ul>
+            </div>
+
+            <h2>🛠️ Рабочий процесс: Загрузка и Разгрузка</h2>
+            <p>Прибыв на маркер погрузки, аккуратно выставьте свой грузовик — как только машина встанет правильно, на земле загорится <strong>зелёный квадрат</strong>, сигнализирующий о начале погрузки материалов.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">📦 Особенности разгрузки в точках сдачи:</div>
+                
+                <h4 style="margin: 0 0 5px 0; color: #ffffff;">🚚 Для легкого и среднего транспорта (1–2 тип):</h4>
+                <p style="margin: 0 0 15px 0; font-size: 14px;">Максимальный интерактив. Вам необходимо лично покинуть кабину, подойти к задней части автомобиля (к багажнику), вручную брать тяжелые ящики и относить их на маркер склада. В одном ящике помещается <strong>от 25 материалов</strong>.</p>
+
+                <h4 style="margin: 0 0 5px 0; color: #ffffff;">🚛 Для тяжелых тягачей и фур (3–4 тип):</h4>
+                <p style="margin: 0; font-size: 14px;">Чистая логистика. Таскать ящики руками не придётся — достаточно филигранно припарковаться в указанной зоне разгрузки, после чего процесс сдачи запустится <strong>автоматически</strong> (появится соответствующий прогресс-бар).</p>
+            </div>
+
+            <div class="warning-box">
+                ⏱️ <strong>Тайминги и Окупаемость:</strong> Время на выполнение одного полноценного рейса составляет от 5 до 20 минут. Чистая оплата за самый легкий рейс (1 тип ТС) варьируется от 200$ до 370$. Чем выше класс используемого транспорта и больше дистанция до точки — тем жирнее итоговый чек!
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">💎 Главные фишки профессии</div>
+                <ul class="info-list">
+                    <li>Прямое и весомое влияние на внутрисерверную экономику InteRPlay.</li>
+                    <li>Грамотное сочетание водительских навыков с элементами ручной погрузки.</li>
+                    <li>Широкий выбор техники — от юрких фургонов до массивных автопоездов.</li>
+                    <li>Гибкий выбор контрактов под любой стиль игры (от соло до кооперативного закрытия крупных бизнес-заказов).</li>
+                </ul>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <h2>📍 Как устроиться на работу на InteRPlay</h2>
+            <p>Диспетчерский центр грузоперевозок находится в городе. Чтобы быстро проложить к нему GPS-трек, используйте свой смартфон.</p>
+            
+            <ul class="steps-list">
+                <li>Достаньте мобильный телефон</li>
+                <li>Запустите приложение Навигатор</li>
+                <li>Зайдите во вкладку Работы</li>
+                <li>Кликните на пункт Грузоперевозки город</li>
+                <li>Активируйте маршрут и отправляйтесь к маркеру</li>
+            </ul>
+        </main>
+
+        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
+        <aside class="meta-sidebar">
+            <div class="meta-card">
+                <div class="meta-label">Категория</div>
+                <div class="meta-value">Логистика</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Оплата (1 тип)</div>
+                <div class="meta-value">200$ – 370$ / рейс</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Доходность фур</div>
+                <div class="meta-value highlight">Максимальная</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Лицензии</div>
+                <div class="meta-value" style="color: #3b82f6; font-size: 14px;">B / C / D (от типа ТС)</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Документы</div>
+                <div class="meta-value" style="color: #ef4444; font-size: 14px;">Разрешение на работу</div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const jobsDropdown = document.getElementById('jobs-dropdown');
+            if(jobsDropdown) jobsDropdown.classList.add('open');
+        });
+    </script>
+</body>
+</html>
