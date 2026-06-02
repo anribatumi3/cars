@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Документы и Лицензии</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- САЙДБАР НАВИГАЦИИ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .dropdown-container { display: flex; flex-direction: column; }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; display: flex; flex-direction: column; gap: 4px; padding-left: 24px; }
+        .dropdown-container.open .submenu { max-height: 300px; margin-top: 6px; margin-bottom: 6px; }
+        
+        .submenu-item {
+            font-size: 13.5px;
+            color: #8a8d93;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        .submenu-item:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.03); }
+        .arrow-icon { font-size: 10px; transition: transform 0.2s; color: #6c7078; }
+        .dropdown-container.open .arrow-icon { transform: rotate(90deg); color: #ffffff; }
+
+        /* --- КОНТЕНТНАЯ ЧАСТЬ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 950px;
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 { font-size: 32px; color: #ffffff; margin: 0 0 12px 0; }
+        .page-header p { font-size: 15px; color: #93c5fd; margin: 0; line-height: 1.6; }
+
+        /* --- ЭТАПЫ ПОЛУЧЕНИЯ (ТАЙМЛАЙН) --- */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .step-card {
+            background-color: #1e1f23;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .step-num {
+            font-size: 12px;
+            font-weight: 800;
+            color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .step-title { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+        .step-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+        /* --- АКЦЕНТНЫЙ БЛОК: СКИДКА 50% --- */
+        .discount-banner {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+            border-left: 4px solid #10b981;
+            border-radius: 4px;
+            padding: 16px 20px;
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .discount-icon { font-size: 24px; }
+        .discount-text { font-size: 14.5px; color: #e2e8f0; line-height: 1.5; }
+        .discount-text b { color: #10b981; }
+
+        /* --- ТАБЫ ДЛЯ ФРАКЦИЙ/ЛИЦЕНЗИЙ --- */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8a8d93;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* --- ТАБЛИЦЫ ЦЕН --- */
+        .license-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e1f23;
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .license-table th, .license-table td { padding: 14px 18px; text-align: left; }
+        .license-table th { background-color: rgba(0, 0, 0, 0.15); color: #6c7078; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .license-table td { border-bottom: 1px solid rgba(255, 255, 255, 0.02); color: #e2e8f0; }
+        .license-table tr:last-child td { border-bottom: none; }
+
+        .price-full { color: #f43f5e; font-weight: 600; text-decoration: line-through; font-size: 13px; margin-right: 6px; }
+        .price-employee { color: #10b981; font-weight: 700; font-size: 15px; }
+        
+        .req-badge {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* --- ИНСТРУКЦИЯ НАВИГАТОРА --- */
+        .nav-guide {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 35px;
+        }
+
+        .nav-guide-title { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .nav-steps { display: flex; flex-direction: column; gap: 10px; padding-left: 5px; }
+        .nav-step { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #94a3b8; }
+        .nav-step span { color: #ffffff; font-weight: 600; background-color: rgba(255, 255, 255, 0.05); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.05); }
+
+        @media (max-width: 768px) {
+            .wiki-layout { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; box-sizing: border-box; }
+            .steps-container { grid-template-columns: 1fr; }
+            .content-body { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- САЙДБАР (Общий шаблон) -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span> <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                        </div>
+                    </div>
+                    <a href="documents.html" class="sidebar-item active">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span> <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                        </div>
+                    </div>
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <div class="dropdown-container" id="crafts-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                            <span>🛠️ Крафты</span> <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
+                            <a href="crafts-legal.html" class="submenu-item">Легальный крафт</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            
+            <div class="page-header">
+                <h1>📑 Документы и Лицензии</h1>
+                <p>Полное руководство по оформлению документов на сервере InteRPlay. Узнайте стоимость, условия прохождения экзаменов и точки продажи лицензий.</p>
+            </div>
+
+            <!-- ЭТАПЫ ПОЛУЧЕНИЯ -->
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">Теория</div>
+                    <div class="step-desc">Сдайте примитивный теоретический экзамен. Достаточно проявить немного внимательности.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">Практика</div>
+                    <div class="step-desc">Продемонстрируйте базовые навыки управления транспортом или понимания правил.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">Получение</div>
+                    <div class="step-desc">Отправляйтесь в нужный госорган и забирайте официальный документ.</div>
+                </div>
+            </div>
+
+            <!-- БАННЕР СО СКИДКОЙ -->
+            <div class="discount-banner">
+                <div class="discount-icon">🔥</div>
+                <div class="discount-text">
+                    <b>Экономьте свои деньги!</b> При приобретении абсолютно любой лицензии напрямую <b>у сотрудников ведомств</b>, её стоимость составит ровно <b>-50%</b> от полной цены у бота.
+                </div>
+            </div>
+
+            <!-- НАВИГАЦИЯ ПО ТАБАМ -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab(event, 'tab-sahp')">🚔 Водительские (SAHP)</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-other')">🏛️ Другие Лицензии</button>
+            </div>
+
+            <!-- ТАБ 1: ПРАВА SAHP -->
+            <div id="tab-sahp" class="tab-content active">
+                <table class="license-table">
+                    <thead>
+                        <tr>
+                            <th>Тип лицензии / Транспорт</th>
+                            <th>У бота</th>
+                            <th>У сотрудников (-50%)</th>
+                            <th>Условие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Права категории A</b> (Мотоциклы)</td>
+                            <td><span class="price-full">4.000$</span></td>
+                            <td><span class="price-employee">2.000$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                        <tr>
+                            <td><b>Права категории B, C</b> (Легковые и малотоннажные авто)</td>
+                            <td><span class="price-full">5.400$</span></td>
+                            <td><span class="price-employee">2.700$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                        <tr>
+                            <td><b>Права категории D</b> (Крупнотоннажные грузовики)</td>
+                            <td><span class="price-full">7.000$</span></td>
+                            <td><span class="price-employee">3.500$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                        <tr>
+                            <td><b>Права категории E</b> (Пассажирские автобусы)</td>
+                            <td><span class="price-full">4.000$</span></td>
+                            <td><span class="price-employee">2.000$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                        <tr>
+                            <td><b>Права категории H</b> (Воздушный транспорт)</td>
+                            <td><span class="price-full">40.000$</span></td>
+                            <td><span class="price-employee">20.000$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                        <tr>
+                            <td><b>Права категории G</b> (Водный транспорт)</td>
+                            <td><span class="price-full">27.000$</span></td>
+                            <td><span class="price-employee">13.500$</span></td>
+                            <td>Теория + Практика</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ТАБ 2: ДРУГИЕ ГОС. СТРУКТУРЫ -->
+            <div id="tab-other" class="tab-content">
+                <table class="license-table">
+                    <thead>
+                        <tr>
+                            <th>Документ / Ведомство</th>
+                            <th>У бота</th>
+                            <th>У сотрудников (-50%)</th>
+                            <th>Особые требования</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>🏥 Медицинская карта</b> (Продается в EMS)</td>
+                            <td><span class="price-full">27.000$</span></td>
+                            <td><span class="price-employee">13.500$</span></td>
+                            <td><span class="req-badge">Быть полностью здоровым</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>💼 Разрешение на работу</b> (Продается в GOV)</td>
+                            <td><span class="price-full">3.000$</span></td>
+                            <td><span class="price-employee">1.500$</span></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td><b>🎣 Лицензия на рыбалку и охоту</b> (В LSSD)</td>
+                            <td><span class="price-full">7.000$</span></td>
+                            <td><span class="price-employee">3.500$</span></td>
+                            <td>Знание закона о рыболовстве/охоте</td>
+                        </tr>
+                        <tr>
+                            <td><b>🔫 Лицензия на оружие</b> (Продается в LSPD)</td>
+                            <td><span class="price-full">54.000$</span></td>
+                            <td><span class="price-employee">27.000$</span></td>
+                            <td><span class="req-badge">Наличие Мед.карты</span> + Знание закона об оружии</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ИНСТРУКЦИЯ ПО НАВИГАТОРУ -->
+            <div class="nav-guide">
+                <div class="nav-guide-title">📱 Как быстро найти ведомство в игре?</div>
+                <div class="nav-steps">
+                    <div class="nav-step">1. Достаньте свой <span>Телефон</span></div>
+                    <div class="nav-step">2. Запустите встроенное приложение <span>Навигатор</span></div>
+                    <div class="nav-step">3. Перейдите в категорию <span>Гос. структуры</span></div>
+                    <div class="nav-step">4. Выберите нужное учреждение из списка (SAHP, EMS, GOV, LSSD, LSPD)</div>
+                    <div class="nav-step">5. Нажмите на пункт, чтобы проложить быстрый маршрут!</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- СКРИПТЫ ТАБОВ И ДРОПДАУНОВ -->
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+
+        function switchTab(evt, tabId) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
