@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Категории Крафта</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Шапка как на главной */
+        .wiki-header {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .wiki-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Контейнер для сетки (центрирует меню по ширине, как в работах) */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* Сетка один в один как на image_9adeb7.png */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        /* Стили карточек */
+        .menu-card {
+            background-color: #1d1e22;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            transition: background-color 0.2s, border-color 0.2s;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .menu-card:hover {
+            background-color: #24252a;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #6c7078;
+            line-height: 1.4;
+        }
+
+        /* Кнопка-стрелочка в правом углу карточки */
+        .card-btn {
+            width: 34px;
+            height: 34px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a4b50;
+            font-size: 12px;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .menu-card:hover .card-btn {
+            background-color: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Карточка в разработке (WIP) */
+        .card-locked {
+            cursor: not-allowed;
+        }
+
+        .card-locked:hover {
+            background-color: #1d1e22;
+            border-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .card-locked .card-title, .card-locked .card-desc {
+            opacity: 0.4;
+        }
+
+        .badge-dev {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Адаптив под мобилки */
+        @media (max-width: 650px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Логотип сверху по центру -->
+    <div class="wiki-header">
+        <h1>InterPlay <span style="color: #3b82f6;">❖</span> Wiki</h1>
+    </div>
+
+    <!-- Основной контейнер с меню выбора -->
+    <div class="main-container">
+        <div class="menu-grid">
+            
+            <!-- КАТЕГОРИЯ: НЕЛЕГАЛЬНЫЙ КРАФТ -->
+            <a href="crafts-illegal.html" class="menu-card">
+                <div class="card-info">
+                    <div class="card-title">🥷 Нелегальный крафт</div>
+                    <div class="card-desc">Добыча ресурсов и сборка предметов криминальными структурами</div>
+                </div>
+                <div class="card-btn">↗</div>
+            </a>
+
+            <!-- КАТЕГОРИЯ: ЛЕГАЛЬНЫЙ КРАФТ -->
+            <div class="menu-card card-locked">
+                <div class="card-info">
+                    <div class="card-title">
+                        🌱 Легальный крафт 
+                        <span class="badge-dev">WIP</span>
+                    </div>
+                    <div class="card-desc">Создание бытовых предметов, инструментов и снаряжения для гражданских</div>
+                </div>
+                <div class="card-btn">🔒</div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
