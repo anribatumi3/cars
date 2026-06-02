@@ -418,6 +418,14 @@
                         <div class="submenu">
                             <a href="job-builder.html" class="submenu-item">Строитель</a>
                             <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item">Такси</a>
                             <a href="job-postman.html" class="submenu-item">Почтальон</a>
                         </div>
                     </div>
@@ -437,7 +445,7 @@
                         </div>
                         <div class="submenu">
                             <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
-                            <a href="crime-car-theft.html" class="submenu-item current-page">🏎️ Угонка</a>
+                            <a href="crime-car-theft.html" class="sidebar-item current-page">🏎️ Угонка</a>
                             <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
                             <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
                             <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
@@ -445,7 +453,15 @@
                     </div>
 
                     <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
-                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                    <div class="dropdown-container" id="crafts-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                    <span>🛠️ Крафты</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="crafts-illegal.html" class="submenu-item current-page">Нелегальный крафт</a>
+                    <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                </div>
                 </div>
             </div>
         </aside>
