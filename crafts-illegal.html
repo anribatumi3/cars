@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Нелегальный крафт</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #3b82f6 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК С КОНТЕНТОМ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 900px;
+            box-sizing: border-box;
+        }
+
+        /* Хедер страницы */
+        .page-header {
+            background: linear-gradient(135deg, #2e1065 0%, #0f172a 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header p {
+            font-size: 15px;
+            color: #c084fc;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Мотивационный футер/блок внизу */
+        .info-footer {
+            background-color: rgba(255, 255, 255, 0.02);
+            border-left: 4px solid #8b5cf6;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        /* --- КАРТОЧКИ ФРАКЦИЙ --- */
+        .faction-card {
+            background-color: #1e1f23;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .faction-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 12px;
+        }
+
+        .craft-focus {
+            font-size: 14px;
+            color: #8b5cf6;
+            background-color: rgba(139, 92, 246, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Списки и разметка внутри карточек */
+        .section-block {
+            margin-top: 15px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .info-text {
+            font-size: 14.5px;
+            color: #e2e8f0;
+            margin: 0 0 8px 0;
+            line-height: 1.5;
+        }
+
+        .info-list {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 14.5px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        /* --- СТИЛЬ ТАБЛИЦ С ЦЕНАМИ --- */
+        .price-table {
+            width: 100%;
+            max-width: 500px;
+            border-collapse: collapse;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            font-size: 13.5px;
+        }
+
+        .price-table th, .price-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .price-table th {
+            color: #6c7078;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .price-table td {
+            color: #e2e8f0;
+        }
+
+        .price-tag {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    
+                    <div class="dropdown-container open" id="crafts-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('crafts-dropdown')">
+                            <span>🛠️ Крафты</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crafts-illegal.html" class="submenu-item current-page">Нелегальный крафт</a>
+                            <a href="crafts-legal.html" class="submenu-item">Легальный крафт</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК КОНТЕНТА -->
+        <main class="content-body">
+            
+            <div class="page-header">
+                <h1>🥷 Нелегальный крафт</h1>
+                <p>Разные фракции в крайме имеют свои особенности и способы заработка. Каждое криминальное формирование специализируется на производстве уникальной контрабанды.</p>
+            </div>
+
+            <!-- БЛОК 1: ГОРОДСКИЕ БАНДЫ -->
+            <div class="faction-card">
+                <div class="faction-title">
+                    <span>🟢 Городские банды</span>
+                    <span class="craft-focus">Крафт косяка</span>
+                </div>
+                
+                <div class="section-block">
+                    <div class="section-label">Что нужно:</div>
+                    <ul class="info-list">
+                        <li>Дикая трава</li>
+                    </ul>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Где взять траву:</div>
+                    <p class="info-text">— Собирается на удаленных островах.</p>
+                    <p class="info-text">— Покупается у дилеров на черном рынке.</p>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Как добыть самостоятельно:</div>
+                    <p class="info-text">— С помощью инструмента <b>Секатор</b>.</p>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Цены на Черном рынке (Секатор и Трава):</div>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Товар</th>
+                                <th>Рынок Стэб-Сити</th>
+                                <th>Рынок Строуберри</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>✂️ Секатор</td>
+                                <td class="price-tag">1.000$</td>
+                                <td class="price-tag">1.250$</td>
+                            </tr>
+                            <tr>
+                                <td>🌿 Дикая Трава</td>
+                                <td class="price-tag">200$</td>
+                                <td class="price-tag">250$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- БЛОК 2: БАЙКЕРЫ -->
+            <div class="faction-card">
+                <div class="faction-title">
+                    <span>🦅 Байкерские банды</span>
+                    <span class="craft-focus">Крафт синего порошка</span>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Что нужно:</div>
+                    <ul class="info-list">
+                        <li>Мухомор</li>
+                        <li>Фасовочный пакетик</li>
+                    </ul>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Где взять ингредиенты:</div>
+                    <p class="info-text">— <b>Мухомор:</b> купить на чёрном рынке или напрямую у игроков, занимающихся сбором грибов в лесах.</p>
+                    <p class="info-text">— <b>Пакетик:</b> приобретается в любом стандартном магазине 24/7 по фиксированной стоимости <span class="price-tag">90$</span>.</p>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Стоимость Мухомора на рынках:</div>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Локация</th>
+                                <th>Цена за шт.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🏚️ Черный рынок Стэб-Сити</td>
+                                <td class="price-tag">150$</td>
+                            </tr>
+                            <tr>
+                                <td>🍓 Черный рынок Строуберри</td>
+                                <td class="price-tag">188$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- БЛОК 3: РЕДНЕКИ -->
+            <div class="faction-card">
+                <div class="faction-title">
+                    <span>🚜 Реднеки</span>
+                    <span class="craft-focus">Крафт самогона</span>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Что нужно:</div>
+                    <ul class="info-list">
+                        <li>Пустая бутылка</li>
+                        <li>Мухомор</li>
+                    </ul>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Где взять ингредиенты:</div>
+                    <p class="info-text">— <b>Мухомор:</b> покупается на черном рынке или с рук у грибников.</p>
+                    <p class="info-text">— <b>Пустая бутылка:</b> можно закупить в любом магазине 24/7, цена составляет <span class="price-tag">150$</span>.</p>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-label">Стоимость Мухомора на рынках:</div>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Локация</th>
+                                <th>Цена за шт.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🏚️ Черный рынок Стэб-Сити</td>
+                                <td class="price-tag">150$</td>
+                            </tr>
+                            <tr>
+                                <td>🍓 Черный рынок Строуберри</td>
+                                <td class="price-tag">188$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ЗАКЛЮЧИТЕЛЬНЫЙ БЛОК -->
+            <div class="info-footer">
+                💡 Каждая фракция имеет свой уникальный путь заработка — выбирайте то, что вам ближе по стилю игры, собирайте надежную команду и развивайтесь в выбранном направлении!
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
