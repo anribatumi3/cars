@@ -434,7 +434,17 @@
                     <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
                     <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
                     <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
-                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <div class="dropdown-container" id="items-dropdown">
+                    <div class="sidebar-item" onclick="toggleDropdown('resources-dropdown')">
+                            <span>🌲 Ресурсы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="items-mushrooms.html" class="submenu-item">🍄 Грибы</a>
+                            <a href="items-fish.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🐟 Рыбы</a>
+                            <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
+                        </div>
+                    </div>
                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
                     <div class="dropdown-container" id="crime-dropdown">
