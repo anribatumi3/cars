@@ -304,65 +304,63 @@
 
         <!-- 1. ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
         <aside class="sidebar">
-            <a href="index.html" class="sidebar-logo">
-                <img src="logo.png" alt="Logo">
-                <span>InteRPlay Wiki</span>
-            </a>
+    <a href="index.html" class="sidebar-logo">
+        <img src="logo.png" alt="Logo">
+        <span>InteRPlay Wiki</span>
+    </a>
+    
+    <div>
+        <div class="sidebar-section-title">Категории</div>
+        <div class="sidebar-menu">
+            <a href="map.html" class="sidebar-item">🗺️ Карта</a>
             
-            <div>
-                <div class="sidebar-section-title">Категории</div>
-                <div class="sidebar-menu">
-                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
-                    
-                    <div class="dropdown-container" id="jobs-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
-                            <span>💼 Работы</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="job-builder.html" class="submenu-item">Строитель</a>
-                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
-                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
-                        </div>
-                    </div>
-
-                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
-                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
-                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
-                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
-                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
-                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
-                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
-                    
-                    <div class="dropdown-container" id="crime-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
-                            <span>🥷 Крайм</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
-                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
-                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
-                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
-                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
-                        </div>
-                    </div>
-
-                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
-                    
-                    <div class="dropdown-container open" id="crafts-dropdown">
-                        <div class="sidebar-item active" onclick="toggleDropdown('crafts-dropdown')">
-                            <span>🛠️ Крафты</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="crafts-illegal.html" class="submenu-item current-page">Нелегальный крафт</a>
-                            <a href="crafts-legal.html" class="submenu-item">Легальный крафт</a>
-                        </div>
-                    </div>
+            <div class="dropdown-container" id="jobs-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                    <span>💼 Работы</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="job-builder.html" class="submenu-item">Строитель</a>
+                    <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                    <a href="job-postman.html" class="submenu-item">Почтальон</a>
                 </div>
             </div>
-        </aside>
+
+            <a href="documents.html" class="sidebar-item">📑 Документы</a>
+            <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+            <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+            <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+            <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+            <a href="items.html" class="sidebar-item">📦 Предметы</a>
+            <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+            
+            <div class="dropdown-container" id="crime-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                    <span>🥷 Крайм</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                    <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                    <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                </div>
+            </div>
+
+            <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+            
+            <div class="dropdown-container" id="crafts-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                    <span>🛠️ Крафты</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
+                    <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
 
         <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК КОНТЕНТА -->
         <main class="content-body">
