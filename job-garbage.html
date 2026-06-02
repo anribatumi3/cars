@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Мусорщик</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- ЛЕВАЯ ПАНЕЛЬ: НАВИГАЦИЯ --- */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1b1f;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6c7078;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            color: #8a8d93;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #202124;
+            color: #ffffff;
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            transition: transform 0.2s;
+            color: #6c7078;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 20px;
+        }
+
+        .dropdown-container.open .submenu {
+            max-height: 500px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        .submenu-item {
+            padding: 8px 14px;
+            font-size: 13.5px;
+            color: #6c7078;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .submenu-item.current-page {
+            color: #e11d48 !important;
+            font-weight: 600;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ БЛОК: СТАТЬЯ --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 40px 50px;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 15px;
+            color: #ffffff;
+            margin: 15px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #b9bbc6;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        .info-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #6c7078;
+        }
+
+        .stars-divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #4a4d52;
+            margin: 30px 0;
+        }
+
+        .info-block {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tariff-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tariff-list li {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-bottom: 4px;
+            font-size: 14.5px;
+            color: #b9bbc6;
+        }
+
+        .tariff-name {
+            color: #e2e8f0;
+        }
+
+        .tariff-price {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            border-left: 4px solid #f59e0b;
+            background-color: rgba(245, 158, 11, 0.05);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #fde68a;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background-color: #202124;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6c7078;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .video-placeholder span {
+            font-size: 28px;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            background-color: #202124;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* --- ПРАВАЯ ПАНЕЛЬ --- */
+        .meta-sidebar {
+            width: 260px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .meta-card {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #6c7078;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .meta-value.highlight {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 1024px) {
+            .meta-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wiki-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container open" id="jobs-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item current-page">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item">Такси</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    <a href="items.html" class="sidebar-item">📦 Предметы</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
+        <main class="content-body">
+            <h1>🗑️ Работа: Мусорщик</h1>
+            <p>Не самая «чистая», но чрезвычайно стабильная, цикличная и прибыльная работа на сервере InteRPlay. Предлагает отличные условия как для заработка в одиночку, так и для веселого фарма в компании друзей.</p>
+
+            <div class="info-block">
+                <div class="info-block-title">📋 Общие требования</div>
+                <ul class="info-list">
+                    <li>Перед трудоустройством необходимо уволиться с предыдущей работы и завершить текущую смену.</li>
+                </ul>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <span>🎬</span>
+                    <p>Видеогайд на стадии подготовки (скоро появится)</p>
+                </div>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <h2>👤 Одиночный режим (Соло-сортировка)</h2>
+            <div class="info-block">
+                <p><strong>Суть работы:</strong> Вы берёте плотный мусорный пакет из отмеченного контейнера и относите его в нужный сортировочный бокс. После этого запускается интерактивная мини-игра.</p>
+                
+                <h3 style="margin-top: 15px;">🎮 Механика мини-игры:</h3>
+                <p>Перед вами появляются различные типы отходов — каждый предмет необходимо безошибочно поместить в соответствующий ему контейнер.</p>
+                <div class="warning-box">
+                    ⚠️ Будьте внимательны! Если вы ошибётесь при сортировке отходов, то мгновенно получите чувствительный штраф ко времени выполнения.
+                </div>
+
+                <h3 style="margin-top: 15px;">💵 Оплата и тайминги (Соло):</h3>
+                <ul class="tariff-list">
+                    <li><span class="tariff-name">Успешно рассортированный пакет (1 шт.)</span> <span class="tariff-price">42$</span></li>
+                    <li><span class="tariff-name">Среднее время обработки одного пакета</span> <span class="tariff-price">35–40 сек.</span></li>
+                </ul>
+            </div>
+
+            <h2>👥 Командный режим (Экипаж мусоровоза)</h2>
+            <div class="info-block">
+                <p>Вы можете собрать эффективную команду <strong>до 3 человек</strong>, чтобы превратить рутину в весёлый кооперативный процесс с огромным профитом!</p>
+                
+                <h3>📋 Дополнительные требования для пати:</h3>
+                <ul class="info-list" style="margin-bottom: 15px;">
+                    <li>Хотя бы у одного из игроков (водителя) должны быть <strong>водительские права категории C</strong>.</li>
+                </ul>
+
+                <h3>🚛 Суть процесса:</h3>
+                <p>Вашей бригаде выдаётся массивный служебный мусоровоз. Один из игроков берёт на себя управление транспортом, пока остальная команда на ходу собирает мусорные пакеты по улицам города. Как только кузов заполняется до предела — вы отправляетесь в центр сортировки, чтобы сдать накопленный груз.</p>
+
+                <h3 style="margin-top: 15px;">💵 Оплата и тайминги (Команда):</h3>
+                <ul class="tariff-list">
+                    <li><span class="tariff-name">Сдача одного полного мусоровоза (каждому участнику)</span> <span class="tariff-price">600$</span></li>
+                    <li><span class="tariff-name">Время выполнения одного полного цикла</span> <span class="tariff-price">5–8 минут</span></li>
+                </ul>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">💎 Почему стоит попробовать</div>
+                <ul class="info-list">
+                    <li>Превосходно подходит новичкам для быстрого старта прямо в соло-режиме без документов.</li>
+                    <li>Интересная и развивающая скорость мышления мини-игра с сортировкой.</li>
+                    <li>Размеренный, фановый и спокойный геймплей в пати с друзьями.</li>
+                    <li>Высокий, стабильный доход, который напрямую зависит от вашей личной скорости и сыгранности команды.</li>
+                </ul>
+                <p style="margin: 12px 0 0 0; text-align: center; font-weight: 500; color: #ffffff;">Работа мусорщика — это идеальный баланс простоты механик, стабильного заработка и крутого командного взаимодействия! 🧹</p>
+            </div>
+
+            <div class="stars-divider">***</div>
+
+            <h2>📍 Как устроиться на работу на InteRPlay</h2>
+            <p>Чтобы быстро проложить маршрут к месту сбора, используйте систему навигации в телефоне вашего персонажа.</p>
+            
+            <ul class="steps-list">
+                <li>Возьмите телефон</li>
+                <li>Откройте приложение Навигатор</li>
+                <li>Перейдите в раздел Работы</li>
+                <li>Выберите пункт Свалка</li>
+                <li>Поставьте маршрут и доберитесь до точки работы</li>
+            </ul>
+            <p style="margin-top: 15px; font-weight: 500;">После прибытия на точку вы сразу сможете переодеться, начать смену и приступить к очистке штата.</p>
+        </main>
+
+        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
+        <aside class="meta-sidebar">
+            <div class="meta-card">
+                <div class="meta-label">Категория</div>
+                <div class="meta-value">Работы</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Оплата (Соло)</div>
+                <div class="meta-value">42$ / пакет</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Рейс (Команда)</div>
+                <div class="meta-value highlight">600$ / чел.</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Лицензия</div>
+                <div class="meta-value" style="color: #eab308; font-size: 14px;">C (только для водителя)</div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const jobsDropdown = document.getElementById('jobs-dropdown');
+            if(jobsDropdown) jobsDropdown.classList.add('open');
+        });
+    </script>
+</body>
+</html>
