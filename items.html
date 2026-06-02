@@ -48,13 +48,13 @@
             font-weight: 400;
         }
 
-        /* --- СЕТКА КАРТОЧЕК (GRID) КАК НА СКРИНШОТЕ --- */
+        /* --- СЕТКА КАРТОЧЕК (GRID) КАК В РАБОТАХ --- */
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Ровно 2 колонки */
+            grid-template-columns: repeat(2, 1fr); /* Ровно 2 колонки как на image_57367b.png */
             gap: 20px;
             width: 100%;
-            max-width: 1000px; /* Чтобы по ширине было один в один как работы */
+            max-width: 1000px;
         }
 
         /* Стиль карточки */
@@ -97,7 +97,7 @@
             font-weight: 400;
         }
 
-        /* Кнопка-стрелочка в углу */
+        /* Кнопка-стрелочка в углу карточки */
         .arrow-btn {
             width: 36px;
             height: 36px;
@@ -116,7 +116,7 @@
             color: #ffffff;
         }
 
-        /* Адаптив под мобилки */
+        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             .resources-grid {
                 grid-template-columns: 1fr;
@@ -131,20 +131,20 @@
 
     <div class="wiki-layout">
         
-        <!-- Сюда вставляется твой сайдбар (aside), если он нужен на этой странице -->
+        <!-- Сюда вставляется твой сайдбар (aside), если он используется на этой странице -->
 
         <main class="content-body">
             
-            <!-- Заголовок в стиле InteRPlay Wiki -->
+            <!-- Заголовок Wiki -->
             <div class="wiki-title">
                 InteRPlay <span>⚡</span> Wiki
             </div>
 
-            <!-- Сетка меню ресурсов -->
+            <!-- Сетка подкатегорий ресурсов -->
             <div class="resources-grid">
 
-                <!-- КАРТОЧКА: ГРИБЫ -->
-                <a href="resources-mushrooms.html" class="resource-card">
+                <!-- ПОДКАТЕГОРИЯ: ГРИБЫ -->
+                <a href="items-mushrooms.html" class="resource-card">
                     <div class="resource-info">
                         <div class="resource-name">🍄 Грибы</div>
                         <div class="resource-desc">Сбор редких и обычных грибов в лесах штата</div>
@@ -154,8 +154,8 @@
                     </div>
                 </a>
 
-                <!-- КАРТОЧКА: РЫБЫ -->
-                <a href="resources-fish.html" class="resource-card">
+                <!-- ПОДКАТЕГОРИЯ: РЫБЫ -->
+                <a href="items-fish.html" class="resource-card">
                     <div class="resource-info">
                         <div class="resource-name">🐟 Рыбы</div>
                         <div class="resource-desc">Ловля рыбы в пресных водоёмах и океане</div>
@@ -165,8 +165,8 @@
                     </div>
                 </a>
 
-                <!-- КАРТОЧКА: ЖИВОТНЫЕ -->
-                <a href="resources-animals.html" class="resource-card">
+                <!-- ПОДКАТЕГОРИЯ: ЖИВОТНЫЕ -->
+                <a href="items-animals.html" class="resource-card">
                     <div class="resource-info">
                         <div class="resource-name">🦌 Животные</div>
                         <div class="resource-desc">Охота на диких зверей и добыча ценной пушнины</div>
