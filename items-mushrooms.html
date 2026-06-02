@@ -24,7 +24,114 @@
             margin: 0 auto;
         }
 
-        /* --- КОНТЕНТНАЯ ЧАСТЬ --- */
+        /* --- СТИЛИ САЙДБАРА (ЛЕВОЕ МЕНЮ) --- */
+        .sidebar {
+            width: 260px;
+            min-width: 260px;
+            background-color: #1e1f23;
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            min-height: 100vh;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6c7078;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            color: #a0aec0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14.5px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #ffffff;
+        }
+
+        /* Выпадающие списки */
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .submenu {
+            display: none; /* Переключается скриптом */
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 28px;
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .submenu-item {
+            padding: 8px 12px;
+            color: #6c7078;
+            text-decoration: none;
+            font-size: 13.5px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .submenu-item:hover, .submenu-item.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .arrow-icon {
+            font-size: 10px;
+            color: #6c7078;
+            transition: transform 0.2s;
+        }
+
+        .dropdown-container.open .submenu {
+            display: flex;
+        }
+
+        .dropdown-container.open .arrow-icon {
+            transform: rotate(90deg);
+            color: #ffffff;
+        }
+
+        /* --- КОНТЕНТНАЯ ЧАСТЬ (ПРАВАЯ СТОРОНА) --- */
         .content-body {
             flex-grow: 1;
             padding: 40px 50px;
@@ -43,7 +150,6 @@
         .page-header h1 { font-size: 32px; color: #ffffff; margin: 0 0 12px 0; }
         .page-header p { font-size: 15px; color: #a0aec0; margin: 0; line-height: 1.6; }
 
-        /* --- ВАЖНОЕ ПРЕДУПРЕЖДЕНИЕ --- */
         .warning-banner {
             background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
             border-left: 4px solid #ef4444;
@@ -56,7 +162,6 @@
         }
         .warning-banner b { color: #ef4444; }
 
-        /* --- ИНСТРУМЕНТЫ ДЛЯ СБОРА --- */
         .setup-section {
             background-color: #1e1f23;
             border: 1px solid rgba(255, 255, 255, 0.02);
@@ -71,7 +176,6 @@
         .setup-value { font-size: 15px; color: #ffffff; font-weight: 700; }
         .setup-value.price { color: #10b981; }
 
-        /* --- ВИДЫ ГРИБОВ --- */
         .mushrooms-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 35px; }
         .mushroom-card { background-color: #1e1f23; border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 25px; display: flex; flex-direction: column; gap: 12px; }
         .mush-title { font-size: 20px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; }
@@ -82,7 +186,6 @@
         .mush-price-block { background-color: rgba(0, 0, 0, 0.15); padding: 12px 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .mush-price-val { font-weight: 700; color: #10b981; }
 
-        /* --- ЧЕРНЫЙ РЫНОК ТАБЛИЦА --- */
         .market-table {
             width: 100%;
             border-collapse: collapse;
@@ -99,13 +202,13 @@
         .price-profit { color: #10b981; font-weight: 700; }
         .price-fraction { color: #a0aec0; font-weight: 500; font-size: 13px; }
 
-        /* --- КАРТА СБОРА --- */
         .map-section { background-color: #1e1f23; border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 25px; }
         .map-wrapper { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); background-color: #0f1013; margin-top: 15px; }
         .map-img { width: 100%; height: auto; display: block; }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .wiki-layout { flex-direction: column; }
+            .sidebar { width: 100%; min-height: auto; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
             .setup-grid, .mushrooms-container { grid-template-columns: 1fr; }
             .content-body { padding: 20px; }
         }
@@ -115,8 +218,83 @@
 
     <div class="wiki-layout">
 
-        <!-- Место для твоего основного сайдбара -->
+        <!-- ЛЕВЫЙ БАР (САЙДБАР) -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="Logo">
+                <span>InteRPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <!-- РАБОТЫ -->
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
 
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    
+                    <!-- НАШЕ МЕНЮ РЕСУРСОВ (СТРАНИЦА ITEMS.HTML) -->
+                    <div class="dropdown-container open" id="resources-dropdown">
+                        <div class="sidebar-item active" onclick="toggleDropdown('resources-dropdown')">
+                            <span>🌲 Ресурсы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="items-mushrooms.html" class="submenu-item active">🍄 Грибы</a>
+                            <a href="items-fish.html" class="submenu-item">🐟 Рыбы</a>
+                            <a href="items-animals.html" class="submenu-item">🦌 Животные</a>
+                        </div>
+                    </div>
+                    
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <!-- КРАЙМ -->
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    
+                    <!-- КРАФТЫ -->
+                    <div class="dropdown-container" id="crafts-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                            <span>🛠️ Крафты</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
+                            <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ПРАВАЯ (КОНТЕНТНАЯ) ЧАСТЬ -->
         <main class="content-body">
             
             <div class="page-header">
@@ -124,12 +302,10 @@
                 <p>Тихий, но крайне прибыльный способ заработка в лесных массивах штата. Собирайте обычные боровики для легальной продажи или мухоморы для теневого оборота.</p>
             </div>
 
-            <!-- ВАЖНОЕ ОГРАНИЧЕНИЕ -->
             <div class="warning-banner">
                 ⚠️ <b>Важное правило:</b> Заниматься сбором грибов запрещено, если вы в данный момент находитесь в какой-либо <b>государственной фракции</b>.
             </div>
 
-            <!-- ЧТО НУЖНО ДЛЯ СБОРА -->
             <div class="setup-section">
                 <div class="section-title">🔪 Подготовка к сбору</div>
                 <div class="setup-grid">
@@ -148,11 +324,9 @@
                 </div>
             </div>
 
-            <!-- ВИДЫ ГРИБОВ -->
             <div class="section-title">🌿 Доступные виды грибов</div>
             <div class="mushrooms-container">
                 
-                <!-- БОРОВИК -->
                 <div class="mushroom-card">
                     <div class="mush-title">
                         <span>Боровик</span>
@@ -160,12 +334,11 @@
                     </div>
                     <p class="mush-desc">Абсолютно легальный гриб. Растет повсеместно в лесной местности. Отличный выбор для безопасного старта и заработка новеньких игроков.</p>
                     <div class="mush-price-block">
-                        <span style="color: #6c7078;">Куда сдавать: Севеpный рынок</span>
+                        <span style="color: #6c7078;">Куда сдавать: Северный рынок</span>
                         <span class="mush-price-val">+50$ / шт.</span>
                     </div>
                 </div>
 
-                <!-- МУХОМОР -->
                 <div class="mushroom-card">
                     <div class="mush-title">
                         <span>Мухомор</span>
@@ -180,7 +353,6 @@
 
             </div>
 
-            <!-- ТЕНЕВОЙ ОБОРОТ (ЧЁРНЫЙ РЫНОК) -->
             <div class="section-title">🥷 Сбыт мухоморов на Чёрном рынке (Для крайм-фракций)</div>
             <table class="market-table">
                 <thead>
@@ -210,18 +382,24 @@
                 </tbody>
             </table>
 
-            <!-- КАРТА ГРИБНЫХ МЕСТ -->
             <div class="map-section">
                 <div class="section-title">🗺️ Карта расположения грибных мест</div>
                 <p class="mush-desc" style="margin-bottom: 10px;">На карте ниже отмечены основные районы и лесные зоны, где зафиксировано появление грибных полян.</p>
                 <div class="map-wrapper">
-                    <!-- Подключаем присланный файл карты -->
                     <img src="image_56df4f.png" alt="Карта грибных мест InteRPlay" class="map-img">
                 </div>
             </div>
 
         </main>
     </div>
+
+    <!-- СКРИПТ ДЛЯ ОТКРЫТИЯ/ЗАКРЫТИЯ ДРОПДАУНОВ -->
+    <script>
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('open');
+        }
+    </script>
 
 </body>
 </html>
