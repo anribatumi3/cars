@@ -431,7 +431,15 @@
                     </div>
 
                     <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
-                    <a href="crafts.html" class="sidebar-item">🛠️ Крафты</a>
+                    <div class="dropdown-container" id="crafts-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                    <span>🛠️ Крафты</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="crafts-illegal.html" class="submenu-item current-page">Нелегальный крафт</a>
+                    <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                </div>
                 </div>
             </div>
         </aside>
