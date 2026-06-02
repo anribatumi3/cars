@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Ресурсы</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- КОНТЕНТНАЯ ЧАСТЬ (ЦЕНТР) --- */
+        .content-body {
+            flex-grow: 1;
+            padding: 60px 50px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wiki-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wiki-title span {
+            color: #8a8d93;
+            font-weight: 400;
+        }
+
+        /* --- СЕТКА КАРТОЧЕК (GRID) КАК НА СКРИНШОТЕ --- */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Ровно 2 колонки */
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px; /* Чтобы по ширине было один в один как работы */
+        }
+
+        /* Стиль карточки */
+        .resource-card {
+            background-color: #1e1f23;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            background-color: #24252a;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .resource-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .resource-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resource-desc {
+            font-size: 13.5px;
+            color: #6c7078;
+            font-weight: 400;
+        }
+
+        /* Кнопка-стрелочка в углу */
+        .arrow-btn {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c7078;
+            transition: all 0.2s;
+        }
+
+        .resource-card:hover .arrow-btn {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        /* Адаптив под мобилки */
+        @media (max-width: 768px) {
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            .content-body {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+        
+        <!-- Сюда вставляется твой сайдбар (aside), если он нужен на этой странице -->
+
+        <main class="content-body">
+            
+            <!-- Заголовок в стиле InteRPlay Wiki -->
+            <div class="wiki-title">
+                InteRPlay <span>⚡</span> Wiki
+            </div>
+
+            <!-- Сетка меню ресурсов -->
+            <div class="resources-grid">
+
+                <!-- КАРТОЧКА: ГРИБЫ -->
+                <a href="resources-mushrooms.html" class="resource-card">
+                    <div class="resource-info">
+                        <div class="resource-name">🍄 Грибы</div>
+                        <div class="resource-desc">Сбор редких и обычных грибов в лесах штата</div>
+                    </div>
+                    <div class="arrow-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </div>
+                </a>
+
+                <!-- КАРТОЧКА: РЫБЫ -->
+                <a href="resources-fish.html" class="resource-card">
+                    <div class="resource-info">
+                        <div class="resource-name">🐟 Рыбы</div>
+                        <div class="resource-desc">Ловля рыбы в пресных водоёмах и океане</div>
+                    </div>
+                    <div class="arrow-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </div>
+                </a>
+
+                <!-- КАРТОЧКА: ЖИВОТНЫЕ -->
+                <a href="resources-animals.html" class="resource-card">
+                    <div class="resource-info">
+                        <div class="resource-name">🦌 Животные</div>
+                        <div class="resource-desc">Охота на диких зверей и добыча ценной пушнины</div>
+                    </div>
+                    <div class="arrow-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </div>
+                </a>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
