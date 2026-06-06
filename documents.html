@@ -273,7 +273,7 @@
                             <span class="arrow-icon">▶</span>
                         </div>
                         <div class="submenu">
-                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-builder.html" class="submenu-item current-page">Строитель</a>
                             <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
                             <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
                             <a href="job-electrician.html" class="submenu-item">Электрик</a>
@@ -291,7 +291,23 @@
                     <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
                     <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
                     <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
-                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    
+                    <div class="dropdown-container" id="businesses-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('businesses-dropdown')">
+                            <span>💰 Бизнесы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="biz-info.html" class="submenu-item">Общая информация</a>
+                            <a href="biz-ammunation.html" class="submenu-item">Оружейный магазин</a>
+                            <a href="biz-barbershop.html" class="submenu-item">Барбершоп</a>
+                            <a href="biz-shop247.html" class="submenu-item">Магазин 24/7</a>
+                            <a href="biz-tattoo.html" class="submenu-item">Тату-салон</a>
+                            <a href="biz-customs.html" class="submenu-item">Тюнинг салон</a>
+                            <a href="biz-clothes.html" class="submenu-item">Магазин одежды</a>
+                            <a href="biz-gas.html" class="submenu-item">АЗС</a>
+                        </div>
+                    </div>
                     <div class="dropdown-container" id="items-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('items-dropdown')">
                             <span>🌲 Ресурсы</span>
@@ -303,8 +319,7 @@
                             <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
                         </div>
                     </div>
-                    </div>
-                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
                     <div class="dropdown-container" id="crime-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
@@ -313,7 +328,7 @@
                         </div>
                         <div class="submenu">
                             <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
-                            <a href="crime-car-theft.html" class="sidebar-item">🏎️ Угонка</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
                             <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
                             <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
                             <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
