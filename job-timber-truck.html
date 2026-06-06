@@ -206,44 +206,47 @@
             gap: 8px;
         }
 
-        /* --- НОВЫЙ ИНТЕРАКТИВНЫЙ БЛОК ДЛЯ ВИДЕО (ЗАМЕНА IFRAME) --- */
-        .video-preview-card {
+        /* --- КРАСИВЫЙ АДАПТИВНЫЙ КОНТЕЙНЕР ДЛЯ КАРТОЧКИ И ПЛЕЕРА --- */
+        .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* Соотношение 16:9 */
-            background-image: linear-gradient(rgba(21, 22, 26, 0.3), rgba(21, 22, 26, 0.65)), url('https://img.youtube.com/vi/ltG54fNe-Qc/maxresdefault.jpg');
-            background-size: cover;
-            background-position: center;
+            padding-bottom: 56.25%; /* Пропорции 16:9 */
+            background-color: #202124;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
             margin: 25px 0;
-            display: block;
-            text-decoration: none;
             overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .video-preview-card:hover {
-            transform: translateY(-2px);
-            border-color: #e11d48;
-        }
-
-        .video-overlay-content {
+        /* Стиль интерактивной карточки-превью */
+        .video-interactive-card {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            box-sizing: border-box;
-            padding: 30px;
+            background-image: linear-gradient(rgba(21, 22, 26, 0.3), rgba(21, 22, 26, 0.65)), url('https://img.youtube.com/vi/ltG54fNe-Qc/maxresdefault.jpg');
+            background-size: cover;
+            background-position: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background: linear-gradient(to top, rgba(21, 22, 26, 0.95) 35%, rgba(21, 22, 26, 0.2) 100%);
+            box-sizing: border-box;
+            padding: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, border-color 0.2s;
+            z-index: 2;
+        }
+
+        .video-interactive-card:hover {
+            border-radius: 12px;
+            border: 1px solid #e11d48;
         }
 
         .video-badge {
-            background-color: rgba(225, 29, 72, 0.9);
+            background-color: rgba(225, 29, 72, 0.95);
             color: #ffffff;
             font-size: 11px;
             font-weight: 700;
@@ -259,6 +262,9 @@
             justify-content: space-between;
             align-items: flex-end;
             gap: 20px;
+            background: linear-gradient(to top, rgba(21, 22, 26, 0.95) 40%, rgba(21, 22, 26, 0) 100%);
+            margin: -30px;
+            padding: 40px 30px 30px 30px;
         }
 
         .video-card-title h3 {
@@ -270,29 +276,42 @@
 
         .video-card-title p {
             margin: 0;
-            color: #8a8d93;
+            color: #a0a4af;
             font-size: 13.5px;
         }
 
         .video-play-button {
             background-color: #ffffff;
             color: #15161a;
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 16px;
+            font-size: 18px;
+            padding-left: 3px; /* Центровка иконки плеера */
+            box-sizing: border-box;
             flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s, background-color 0.2s, color 0.2s;
         }
 
-        .video-preview-card:hover .video-play-button {
+        .video-interactive-card:hover .video-play-button {
             transform: scale(1.1);
             background-color: #e11d48;
             color: #ffffff;
+        }
+
+        /* Сам iframe, который изначально спрятан или вставляется через JS */
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            z-index: 1;
         }
 
         .steps-list {
@@ -453,7 +472,7 @@
                             <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
                         </div>
                     </div>
-                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
                     <div class="dropdown-container" id="crime-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
@@ -510,18 +529,18 @@
                 </ul>
             </div>
 
-            <a href="https://www.youtube.com/watch?v=ltG54fNe-Qc" target="_blank" class="video-preview-card">
-                <div class="video-overlay-content">
+            <div class="video-wrapper" id="videoWrapper">
+                <div class="video-interactive-card" onclick="startVideo()">
                     <div class="video-badge">ВИДЕО-ГАЙД</div>
                     <div class="video-card-footer">
                         <div class="video-card-title">
                             <h3>Работа Лесовоза | InteRPlay</h3>
-                            <p>Нажмите, чтобы запустить подробный разбор маршрута и заработка напрямую на YouTube</p>
+                            <p>Нажмите, чтобы запустить подробный разбор маршрута и заработка прямо здесь</p>
                         </div>
                         <div class="video-play-button">▶</div>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <div class="stars-divider">***</div>
 
@@ -585,6 +604,13 @@
             const el = document.getElementById(id);
             el.classList.toggle('open');
         }
+
+        // Функция мгновенной подмены карточки на плеер с автовоспроизведением
+        function startVideo() {
+            const wrapper = document.getElementById('videoWrapper');
+            wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/ltG54fNe-Qc?si=JtITXZIhvETnNjL3&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const jobsDropdown = document.getElementById('jobs-dropdown');
             if(jobsDropdown) jobsDropdown.classList.add('open');
