@@ -331,8 +331,16 @@
                             <span class="arrow-icon">▶</span>
                         </div>
                         <div class="submenu">
-                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-builder.html" class="submenu-item current-page">Строитель</a>
                             <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-timber-truck.html" class="submenu-item">Лесовоз</a>
+                            <a href="job-electrician.html" class="submenu-item">Электрик</a>
+                            <a href="job-garbage.html" class="submenu-item">Мусоровоз</a>
+                            <a href="job-oranges.html" class="submenu-item">Сборщик апельсинов</a>
+                            <a href="job-trucker.html" class="submenu-item">Дальнобойщик</a>
+                            <a href="job-bus.html" class="submenu-item">Автобусник</a>
+                            <a href="job-collector.html" class="submenu-item">Инкассатор</a>
+                            <a href="job-taxi.html" class="submenu-item">Такси</a>
                             <a href="job-postman.html" class="submenu-item">Почтальон</a>
                         </div>
                     </div>
@@ -358,6 +366,43 @@
                             <a href="biz-gas.html" class="submenu-item active-sub">АЗС</a>
                         </div>
                     </div>
+                    <div class="dropdown-container" id="items-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('items-dropdown')">
+                            <span>🌲 Ресурсы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="items-mushrooms.html" class="submenu-item">🍄 Грибы</a>
+                            <a href="items-fish.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🐟 Рыбы</a>
+                            <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
+                        </div>
+                    </div>
+                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">🔫 Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">🏎️ Угонка</a>
+                            <a href="crime-house-robbery.html" class="submenu-item">🏠 Ограбление жилья</a>
+                            <a href="crime-business-robbery.html" class="submenu-item">💵 Ограбление бизнеса</a>
+                            <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
+                        </div>
+                    </div>
+
+                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+                    <div class="dropdown-container" id="crafts-dropdown">
+                <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                    <span>🛠️ Крафты</span>
+                    <span class="arrow-icon">▶</span>
+                </div>
+                <div class="submenu">
+                    <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
+                    <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                </div>
                 </div>
             </div>
         </aside>
