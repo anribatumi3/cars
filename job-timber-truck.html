@@ -206,37 +206,61 @@
             gap: 8px;
         }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            background-color: #202124;
+        /* ОБНОВЛЕННЫЙ СТИЛЬНЫЙ ВИДЕО-БЛОК ВЗАМЕН IFRAME */
+        .video-link-container {
+            background-color: #1a1b1f;
+            border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-            margin: 25px 0;
+            padding: 24px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            justify-content: space-between;
+            text-decoration: none;
+            margin: 25px 0;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
         }
 
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .video-link-container:hover {
+            transform: translateY(-2px);
+            border-color: rgba(225, 29, 72, 0.3);
+            background-color: #202124;
+        }
+
+        .video-text-content {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 4px;
+        }
+
+        .video-text-content h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 16px;
+            display: flex;
             align-items: center;
-            color: #6c7078;
-            font-size: 14px;
             gap: 10px;
         }
 
-        .video-placeholder span {
-            font-size: 28px;
+        .video-text-content p {
+            margin: 0;
+            color: #6c7078;
+            font-size: 13.5px;
+        }
+
+        .video-play-btn {
+            background-color: #e11d48;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s;
+        }
+
+        .video-link-container:hover .video-play-btn {
+            background-color: #be123c;
         }
 
         .steps-list {
@@ -334,7 +358,6 @@
 
     <div class="wiki-layout">
 
-        <!-- 1. ЛЕВАЯ ПАНЕЛЬ -->
         <aside class="sidebar">
             <a href="index.html" class="sidebar-logo">
                 <img src="logo.png" alt="Logo">
@@ -398,7 +421,7 @@
                             <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
                         </div>
                     </div>
-                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
                     <div class="dropdown-container" id="crime-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
@@ -413,7 +436,6 @@
                             <a href="crime-military-materials.html" class="submenu-item">💣 Перехват материалов</a>
                         </div>
                     </div>
-
 
                     <div class="dropdown-container" id="gov-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('gov-dropdown')">
@@ -430,19 +452,19 @@
                     </div>
                     
                     <div class="dropdown-container" id="crafts-dropdown">
-                <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
-                    <span>🛠️ Крафты</span>
-                    <span class="arrow-icon">▶</span>
-                </div>
-                <div class="submenu">
-                    <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
-                    <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
-                </div>
+                        <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
+                            <span>🛠️ Крафты</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
+                            <a href="crafts-legal.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">Легальный крафт</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
         <main class="content-body">
             <h1>🌲 Работа: Лесовоз</h1>
             <p>Одна из самых перспективных работ на сервере InteRPlay, но уже требует подготовки и аккуратного вождения.</p>
@@ -456,9 +478,13 @@
                 </ul>
             </div>
 
-            <div class="video-container">
-    <iframe src="https://www.youtube.com/watch?v=ltG54fNe-Qc" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-</div>
+            <a href="https://www.youtube.com/watch?v=ltG54fNe-Qc" target="_blank" class="video-link-container">
+                <div class="video-text-content">
+                    <h3>🎬 Смотреть видео-руководство</h3>
+                    <p>Официальный видео-гайд по работе Лесовоза откроется напрямую на YouTube в новой вкладке</p>
+                </div>
+                <div class="video-play-btn">Смотреть</div>
+            </a>
 
             <div class="stars-divider">***</div>
 
@@ -496,7 +522,6 @@
             <p style="margin-top: 15px; font-weight: 500;">После этого вы сразу сможете начать выполнение заданий и зарабатывать деньги.</p>
         </main>
 
-        <!-- 3. ПРАВАЯ ПАНЕЛЬ -->
         <aside class="meta-sidebar">
             <div class="meta-card">
                 <div class="meta-label">Категория</div>
