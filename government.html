@@ -24,7 +24,7 @@
             margin: 0 auto;
         }
 
-        /* --- СИСТЕМНЫЙ САЙДБАР --- */
+        /* --- САЙДБАР (КАК НА С КРИНШОТЕ 1) --- */
         .sidebar {
             width: 240px;
             min-width: 240px;
@@ -86,6 +86,7 @@
             color: #ffffff;
         }
 
+        /* Активная плашка Гос. структур */
         .sidebar-item.active-category {
             background-color: #212328;
             color: #ffffff;
@@ -147,7 +148,7 @@
         }
 
         .page-header h1 { 
-            font-size: 28px; 
+            font-size: 24px; 
             color: #ffffff; 
             margin: 0 0 12px 0; 
             display: flex;
@@ -155,75 +156,22 @@
             gap: 10px;
         }
         
-        .page-header p { font-size: 14.5px; color: #718096; margin: 0; line-height: 1.6; }
-
-        .section-title { 
-            font-size: 18px; 
-            font-weight: 700; 
-            color: #ffffff; 
-            margin-top: 35px;
-            margin-bottom: 20px; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-        }
-        .section-title:first-of-type { margin-top: 0; }
-
-        /* Блок информации / Требований */
-        .info-block {
-            background-color: #1e1f24;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
+        .page-header p { 
+            font-size: 14px; 
+            color: #718096; 
+            margin: 0; 
+            line-height: 1.6; 
         }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .info-item {
-            background-color: #15161a;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .info-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #4a5568;
-            font-weight: 600;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-
-        .info-value {
-            font-size: 14px;
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        /* Списки правил */
-        .rules-list {
-            margin: 0;
-            padding-left: 20px;
-            color: #cbd5e0;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-        .rules-list li b { color: #ffffff; }
-
-        /* --- СЕТКА ДЛЯ ПОДКАТЕГОРИЙ --- */
-        .gov-grid {
+        /* --- СЕТКА ДЛЯ КАРТОЧЕК (ТОЧНО КАК НА ФОТО С КРАФТАМИ/РАБОТАМИ) --- */
+        .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 16px;
             width: 100%;
         }
 
-        .gov-card {
+        .menu-card {
             background-color: #1e1f24;
             border-radius: 12px;
             padding: 24px;
@@ -235,17 +183,17 @@
             cursor: pointer;
         }
 
-        .gov-card:hover {
+        .menu-card:hover {
             background-color: #24252a;
         }
 
-        .gov-info {
+        .card-content {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .gov-name {
+        .card-title {
             font-size: 16px;
             font-weight: 700;
             color: #ffffff;
@@ -254,13 +202,14 @@
             gap: 8px;
         }
 
-        .gov-desc {
+        .card-desc {
             font-size: 13px;
             color: #718096;
             line-height: 1.5;
         }
 
-        .arrow-btn {
+        /* Квадратная плашка со стрелочкой из оригинального интерфейса */
+        .card-arrow {
             width: 36px;
             height: 36px;
             background-color: rgba(255, 255, 255, 0.02);
@@ -271,9 +220,10 @@
             justify-content: center;
             color: #6c7078;
             transition: all 0.2s;
+            font-size: 14px;
         }
 
-        .gov-card:hover .arrow-btn {
+        .menu-card:hover .card-arrow {
             background-color: rgba(255, 255, 255, 0.08);
             color: #ffffff;
         }
@@ -281,7 +231,7 @@
         @media (max-width: 900px) {
             .wiki-layout { flex-direction: column; }
             .sidebar { width: 100%; min-height: auto; }
-            .gov-grid, .info-grid { grid-template-columns: 1fr; }
+            .menu-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -349,10 +299,10 @@
                             <span class="arrow-icon">▼</span>
                         </div>
                         <div class="submenu">
-                            <a href="gov-police.html" class="submenu-item">🚓 Полиция (LSPD, LSSD, SAHP)</a>
-                            <a href="gov-ems.html" class="submenu-item">🚑 Больница (EMS)</a>
-                            <a href="gov-sang.html" class="submenu-item">🪖 Армия (SANG)</a>
-                            <a href="gov-gov.html" class="submenu-item">🏛️ Правительство (GOV)</a>
+                            <a href="gov-police.html" class="submenu-item">Полиция (LSPD, LSSD, SAHP)</a>
+                            <a href="gov-ems.html" class="submenu-item">Больница (EMS)</a>
+                            <a href="gov-sang.html" class="submenu-item">Армия (SANG)</a>
+                            <a href="gov-gov.html" class="submenu-item">Правительство (GOV)</a>
                         </div>
                     </div>
                     
@@ -372,80 +322,42 @@
         <main class="content-body">
             
             <div class="page-header">
-                <h1>🛡️ Государственные структуры</h1>
-                <p>Фракции, законы, уставы и правила для государственных служащих штата InteRPlay. Выберите интересующее ведомство для изучения внутренней структуры.</p>
+                <h1>🛡️ Гос. структуры</h1>
+                <p>Фракции, законы, уставы и правила для гос. служащих.</p>
             </div>
 
-            <div class="section-title">📝 Базовые требования для вступления</div>
-            <div class="info-block">
-                <p class="gov-desc" style="margin: 0 0 15px 0;">Чтобы успешно пройти собеседование или академический отбор в любую государственную организацию, ваш персонаж должен подходить под минимальные критерии штата:</p>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Проживание в штате</div>
-                        <div class="info-value">От 3-х лет (уровень)</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Документы</div>
-                        <div class="info-value">Паспорт, Лицензия на авто</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Законопослушность</div>
-                        <div class="info-value">Отсутствие розыска / судимостей</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-title">⚖️ Свод главных правил гос. служащего</div>
-            <div class="info-block">
-                <ul class="rules-list">
-                    <li><b>Соблюдение субординации:</b> Обращение к коллегам и гражданским лицам строго на «Вы», уважительный тон, выполнение прямых приказов старшего состава.</li>
-                    <li><b>Рабочий регламент и форма:</b> Использование фракционного транспорта, спецсредств и служебной формы разрешено только во время нахождения на дежурстве (в рабочей смене).</li>
-                    <li><b>Правила рации:</b> Запрещен любой флуд, нецензурная брань или передача ООС-информации в IC-каналы департамента фракции.</li>
-                    <li><b>Запрет на криминал:</b> Любая связь с преступными синдикатами, продажа гос. имущества, получение взяток или хранение нелегальных предметов жестко наказывается (вплоть до увольнения с занесением в ЧС).</li>
-                </ul>
-            </div>
-
-            <div class="section-title">🏢 Направления ведомств</div>
-            <div class="gov-grid">
+            <div class="menu-grid">
                 
-                <a href="gov-police.html" class="gov-card">
-                    <div class="gov-info">
-                        <div class="gov-name">🚓 Силовые структуры</div>
-                        <div class="gov-desc">Обеспечение правопорядка: LSPD, LSSD, SAHP</div>
+                <a href="gov-police.html" class="menu-card">
+                    <div class="card-content">
+                        <div class="card-title">🚓 Полиция</div>
+                        <div class="card-desc">LSPD, LSSD, SAHP</div>
                     </div>
-                    <div class="arrow-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                    </div>
+                    <div class="card-arrow">↗</div>
                 </a>
 
-                <a href="gov-ems.html" class="gov-card">
-                    <div class="gov-info">
-                        <div class="gov-name">🚑 Медицинская служба</div>
-                        <div class="gov-desc">Экстренная помощь, лечение и выдача справок: EMS</div>
+                <a href="gov-ems.html" class="menu-card">
+                    <div class="card-content">
+                        <div class="card-title">🚑 Больница</div>
+                        <div class="card-desc">EMS</div>
                     </div>
-                    <div class="arrow-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                    </div>
+                    <div class="card-arrow">↗</div>
                 </a>
 
-                <a href="gov-sang.html" class="gov-card">
-                    <div class="gov-info">
-                        <div class="gov-name">🪖 Национальная гвардия</div>
-                        <div class="gov-desc">Охрана базы Форт-Занкудо и поставка материалов: SANG</div>
+                <a href="gov-sang.html" class="menu-card">
+                    <div class="card-content">
+                        <div class="card-title">🪖 Армия</div>
+                        <div class="card-desc">SANG</div>
                     </div>
-                    <div class="arrow-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                    </div>
+                    <div class="card-arrow">↗</div>
                 </a>
 
-                <a href="gov-gov.html" class="gov-card">
-                    <div class="gov-info">
-                        <div class="gov-name">🏛️ Правительство</div>
-                        <div class="gov-desc">Законодательная власть, суды и лицензирование: GOV</div>
+                <a href="gov-gov.html" class="menu-card">
+                    <div class="card-content">
+                        <div class="card-title">🏛️ Правительство</div>
+                        <div class="card-desc">GOV</div>
                     </div>
-                    <div class="arrow-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                    </div>
+                    <div class="card-arrow">↗</div>
                 </a>
 
             </div>
