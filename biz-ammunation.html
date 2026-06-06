@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Оружейный магазин (Ammu-Nation)</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wiki-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- СИСТЕМНЫЙ САЙДБАР --- */
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background-color: #1a1b1f;
+            min-height: 100vh;
+            padding: 35px 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-logo img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #55585e;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 12px;
+            color: #8e929a;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: color 0.15s;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            color: #ffffff;
+        }
+
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            gap: 1px;
+            padding-left: 20px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        .dropdown-container.open .submenu {
+            display: flex;
+        }
+
+        .submenu-item {
+            padding: 8px 12px;
+            color: #61646a;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .submenu-item:hover {
+            color: #ffffff;
+        }
+
+        .submenu-item.active-sub {
+            color: #ff4b5f;
+            font-weight: 600;
+        }
+
+        .arrow-icon {
+            font-size: 8px;
+            color: #55585e;
+        }
+
+        /* --- ОСНОВНОЙ КОНТЕНТ С ПРАВЫМ ИНФО-БЛОКОМ --- */
+        .content-wrap {
+            flex-grow: 1;
+            display: flex;
+            gap: 25px;
+            padding: 40px 50px;
+            box-sizing: border-box;
+        }
+
+        .content-body {
+            flex-grow: 1;
+            max-width: 650px;
+        }
+
+        .page-header {
+            background-color: #1e1f24;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 { 
+            font-size: 24px; 
+            color: #ffffff; 
+            margin: 0 0 12px 0; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-header p { 
+            font-size: 14px; 
+            color: #cbd5e0; 
+            margin: 0; 
+            line-height: 1.6; 
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ИНТЕРАКТИВНЫЕ ПЕРЕКЛЮЧАТЕЛИ НАЦЕНКИ */
+        .markup-selector {
+            display: flex;
+            gap: 8px;
+            background-color: #1a1b1f;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .markup-btn {
+            background: none;
+            border: none;
+            color: #8e929a;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .markup-btn:hover {
+            color: #ffffff;
+        }
+
+        .markup-btn.active {
+            background-color: #ff4b5f;
+            color: #ffffff;
+        }
+
+        /* ТАБЛИЦА АССОРТИМЕНТА */
+        .ammo-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e1f24;
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .ammo-table th {
+            background-color: #24252a;
+            color: #55585e;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-align: left;
+            padding: 14px 20px;
+        }
+
+        .ammo-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            color: #cbd5e0;
+        }
+
+        .ammo-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ammo-table .item-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .ammo-table .item-price {
+            font-weight: 700;
+            color: #2ed573;
+            text-align: right;
+        }
+
+        .ammo-table th:last-child {
+            text-align: right;
+        }
+
+        .category-row {
+            background-color: rgba(255, 255, 255, 0.01);
+            font-weight: 700;
+            color: #ff4b5f !important;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 20px !important;
+        }
+
+        /* --- ПРАВАЯ ИНФО-ПАНЕЛЬ --- */
+        .right-sidebar {
+            width: 260px;
+            min-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .meta-card {
+            background-color: #1e1f24;
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #55585e;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .meta-value.highlight {
+            color: #ff4b5f;
+        }
+
+        .meta-value.success {
+            color: #2ed573;
+        }
+
+        @media (max-width: 1100px) {
+            .content-wrap { flex-direction: column; }
+            .right-sidebar { width: 100%; min-width: auto; }
+        }
+
+        @media (max-width: 900px) {
+            .wiki-layout { flex-direction: column; }
+            .sidebar { width: 100%; min-height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-layout">
+
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-logo">
+                <img src="logo.png" alt="⚡">
+                <span>InterPlay Wiki</span>
+            </a>
+            
+            <div>
+                <div class="sidebar-section-title">Категории</div>
+                <div class="sidebar-menu">
+                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
+                    
+                    <div class="dropdown-container" id="jobs-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
+                            <span>💼 Работы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="job-builder.html" class="submenu-item">Строитель</a>
+                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
+                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
+                        </div>
+                    </div>
+
+                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
+                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
+                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
+                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
+                    
+                    <div class="dropdown-container open" id="businesses-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('businesses-dropdown')">
+                            <span>💰 Бизнесы</span>
+                            <span class="arrow-icon">▼</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="biz-info.html" class="submenu-item">Общая информация</a>
+                            <a href="biz-ammunation.html" class="submenu-item active-sub">Оружейный магазин</a>
+                            <a href="biz-barbershop.html" class="submenu-item">Барбершоп</a>
+                            <a href="biz-shop247.html" class="submenu-item">Магазин 24/7</a>
+                            <a href="biz-tattoo.html" class="submenu-item">Тату-салон</a>
+                            <a href="biz-customs.html" class="submenu-item">Тюнинг салон</a>
+                            <a href="biz-clothes.html" class="submenu-item">Магазин одежды</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown-container" id="resources-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('resources-dropdown')">
+                            <span>🌲 Ресурсы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="items-mushrooms.html" class="submenu-item">🍄 Грибы</a>
+                            <a href="items-fish.html" class="submenu-item">🐟 Рыбы</a>
+                            <a href="items-animals.html" class="submenu-item">🦌 Животные</a>
+                        </div>
+                    </div>
+                    
+                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                    
+                    <div class="dropdown-container" id="crime-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
+                            <span>🥷 Крайм</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="crime-gangs.html" class="submenu-item">Банды</a>
+                            <a href="crime-car-theft.html" class="submenu-item">Угонка</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-container" id="gov-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('gov-dropdown')">
+                            <span>🛡️ Гос. структуры</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="gov-info.html" class="submenu-item">Общая информация</a>
+                            <a href="gov-police.html" class="submenu-item">Полиция (LSPD, LSSD, SAHP)</a>
+                            <a href="gov-ems.html" class="submenu-item">Больница (EMS)</a>
+                            <a href="gov-sang.html" class="submenu-item">Армия (SANG)</a>
+                            <a href="gov-gov.html" class="submenu-item">Правительство (GOV)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="content-wrap">
+            
+            <main class="content-body">
+                
+                <div class="page-header">
+                    <h1>🔫 Оружейный магазин (Ammu-Nation)</h1>
+                    <p>Специализированная сеть торговых точек, предназначенная для легального приобретения средств самообороны, огнестрельного оружия, патронов, а также прокачки стрелковых навыков.</p>
+                </div>
+
+                <div class="section-title">📊 Интерактивный прайс-лист</div>
+                <p style="font-size: 13px; color: #718096; margin-top: -6px; margin-bottom: 16px;">Выберите наценку бизнеса ниже, чтобы пересчитать текущую розничную цену в магазине:</p>
+                
+                <div class="markup-selector">
+                    <button class="markup-btn active" onclick="changeMarkup(0)">0% (Базовая)</button>
+                    <button class="markup-btn" onclick="changeMarkup(50)">50% наценка</button>
+                    <button class="markup-btn" onclick="changeMarkup(100)">100% наценка</button>
+                </div>
+
+                <table class="ammo-table">
+                    <thead>
+                        <tr>
+                            <th>Наименование товара</th>
+                            <th>Стоимость ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="2" class="category-row">Оружие и спецсредства</td></tr>
+                        <tr>
+                            <td class="item-name">Фонарик</td>
+                            <td class="item-price" id="item-flashlight">$600</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Кастет</td>
+                            <td class="item-price" id="item-brass">$600</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Пистолет (9x19mm)</td>
+                            <td class="item-price" id="item-pistol">$1 140</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Малый ПП (9x19mm)</td>
+                            <td class="item-price" id="item-smg">$1 680</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Помповый дробовик (12x70mm)</td>
+                            <td class="item-price" id="item-shotgun">$2 000</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Карабин (5.56x45mm)</td>
+                            <td class="item-price" id="item-carbine">$2 400</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">Продвинутая винтовка (5.56x45mm)</td>
+                            <td class="item-price" id="item-rifle">$2 600</td>
+                        </tr>
+
+                        <tr><td colspan="2" class="category-row">Боеприпасы</td></tr>
+                        <tr>
+                            <td class="item-name">9x19mm (12 патронов)</td>
+                            <td class="item-price" id="ammo-9mm">$400</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">5.56x45mm (30 патронов)</td>
+                            <td class="item-price" id="ammo-556">$600</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">7.62x39mm (30 патронов)</td>
+                            <td class="item-price" id="ammo-762">$600</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">12x70mm (12 патронов)</td>
+                            <td class="item-price" id="ammo-12cal">$400</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </main>
+
+            <aside class="right-sidebar">
+                
+                <div class="meta-card">
+                    <div class="meta-label">Категория</div>
+                    <div class="meta-value highlight">Бизнес / Сеть</div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-label">Всего филиалов</div>
+                    <div class="meta-value">10 точек на карте</div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-label">Вход в тир (🎯)</div>
+                    <div class="meta-value success">$500</div>
+                </div>
+
+                <div class="meta-card">
+                    <div class="meta-label">Для покупки оружия</div>
+                    <div class="meta-value">Требуется лицензия LSPD</div>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <script>
+        // Базовая база данных цен при 0%, 50% и 100%
+        const prices = {
+            'item-flashlight': { 0: 600, 50: 900, 100: 1200 },
+            'item-brass': { 0: 600, 50: 900, 100: 1200 },
+            'item-pistol': { 0: 1140, 50: 1710, 100: 2280 },
+            'item-smg': { 0: 1680, 50: 2520, 100: 3360 },
+            'item-shotgun': { 0: 2000, 50: 3000, 100: 4000 },
+            'item-carbine': { 0: 2400, 50: 3600, 100: 4800 },
+            'item-rifle': { 0: 2600, 50: 3900, 100: 5200 },
+            'ammo-9mm': { 0: 400, 50: 600, 100: 800 },
+            'ammo-556': { 0: 600, 50: 900, 100: 1200 },
+            'ammo-762': { 0: 600, 50: 900, 100: 1200 },
+            'ammo-12cal': { 0: 400, 50: 600, 100: 800 }
+        };
+
+        function changeMarkup(percent) {
+            // Меняем активный класс у кнопок
+            const buttons = document.querySelectorAll('.markup-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            event.target.classList.add('active');
+
+            // Пересчитываем цены в таблице
+            for (let id in prices) {
+                const element = document.getElementById(id);
+                if (element) {
+                    const price = prices[id][percent];
+                    // Форматируем число с пробелом тысяч (например, 1 140 вместо 1140)
+                    element.textContent = '$' + price.toLocaleString('ru-RU');
+                }
+            }
+        }
+
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const arrow = dropdown.querySelector('.arrow-icon');
+            dropdown.classList.toggle('open');
+            
+            if (dropdown.classList.contains('open')) {
+                arrow.textContent = '▼';
+            } else {
+                arrow.textContent = '▶';
+            }
+        }
+    </script>
+
+</body>
+</html>
