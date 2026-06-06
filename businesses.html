@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteRPlay Wiki — Бизнесы</title>
+    <style>
+        body {
+            background-color: #15161a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- ВЕРХНЯЯ ШАПКА ЛОГОТИПА --- */
+        .wiki-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 60px;
+            margin-bottom: 50px;
+            text-decoration: none;
+        }
+
+        .wiki-header h1 {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .wiki-header span {
+            color: #ffffff;
+            font-weight: 400;
+        }
+
+        .wiki-header img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        /* --- СЕТКА ДЛЯ КАРТОЧЕК БИЗНЕСОВ --- */
+        .menu-container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        .menu-card {
+            background-color: #1e1f24;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            transition: background-color 0.15s;
+            cursor: pointer;
+            min-height: 82px;
+            box-sizing: border-box;
+        }
+
+        .menu-card:hover {
+            background-color: #24252a;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.4;
+        }
+
+        .card-arrow {
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #55585e;
+            transition: all 0.15s;
+        }
+
+        .menu-card:hover .card-arrow {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .wiki-header {
+                margin-top: 35px;
+                margin-bottom: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="wiki-header">
+        <h1>InterPlay</h1>
+        <img src="logo.png" alt="⚡">
+        <h1><span>Wiki</span></h1>
+    </a>
+
+    <div class="menu-container">
+        <div class="menu-grid">
+            
+            <a href="biz-info.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">📊 Общая информация о бизнесе</div>
+                    <div class="card-desc">Приобретение коммерции, уплата налогов, баланс и заказ сырья/материалов</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-ammunation.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🔫 Оружейный магазин (Ammu-Nation)</div>
+                    <div class="card-desc">Покупка легального вооружения, бронежилетов и патронов разного калибра</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-barbershop.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">💈 Барбершоп</div>
+                    <div class="card-desc">Изменение причёски, бороды, цвета волос и стиля макияжа персонажа</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-shop247.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🛒 Магазин 24/7</div>
+                    <div class="card-desc">Покупка продуктов питания, ремкомплектов, канистр и полезных гаджетов</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-tattoo.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🎨 Тату-салон</div>
+                    <div class="card-desc">Каталог уникальных татуировок для кастомизации тела вашего персонажа</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-customs.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🔧 Тюнинг салон (LSC)</div>
+                    <div class="card-desc">Улучшение характеристик двигателя, стайлинг кузова и перекраска авто</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+            <a href="biz-clothes.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🛍️ Магазин одежды</div>
+                    <div class="card-desc">Брендовые вещи, обувь, эксклюзивные аксессуары и головные уборы</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>
