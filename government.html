@@ -86,7 +86,6 @@
             color: #ffffff;
         }
 
-        /* Активная плашка категории (Гос. структуры) */
         .sidebar-item.active-category {
             background-color: #212328;
             color: #ffffff;
@@ -140,7 +139,6 @@
             box-sizing: border-box;
         }
 
-        /* Общая карточка заголовка */
         .page-header {
             background-color: #1e1f24;
             border-radius: 12px;
@@ -163,13 +161,61 @@
             font-size: 18px; 
             font-weight: 700; 
             color: #ffffff; 
+            margin-top: 35px;
             margin-bottom: 20px; 
             display: flex; 
             align-items: center; 
             gap: 8px; 
         }
+        .section-title:first-of-type { margin-top: 0; }
 
-        /* --- СЕТКА ДЛЯ ПОДКАТЕГОРИЙ (СТИЛЬ ФОТО ИЗ РАБОТ) --- */
+        /* Блок информации / Требований */
+        .info-block {
+            background-color: #1e1f24;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            background-color: #15161a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* Списки правил */
+        .rules-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #cbd5e0;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .rules-list li b { color: #ffffff; }
+
+        /* --- СЕТКА ДЛЯ ПОДКАТЕГОРИЙ --- */
         .gov-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -185,9 +231,8 @@
             align-items: center;
             justify-content: space-between;
             text-decoration: none;
-            transition: background-color 0.2s, border-color 0.2s;
+            transition: background-color 0.2s;
             cursor: pointer;
-            border: 1px solid transparent;
         }
 
         .gov-card:hover {
@@ -201,7 +246,7 @@
         }
 
         .gov-name {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: #ffffff;
             display: flex;
@@ -212,11 +257,9 @@
         .gov-desc {
             font-size: 13px;
             color: #718096;
-            font-weight: 400;
             line-height: 1.5;
         }
 
-        /* Кнопка-стрелочка внутри карточки */
         .arrow-btn {
             width: 36px;
             height: 36px;
@@ -238,7 +281,7 @@
         @media (max-width: 900px) {
             .wiki-layout { flex-direction: column; }
             .sidebar { width: 100%; min-height: auto; }
-            .gov-grid { grid-template-columns: 1fr; }
+            .gov-grid, .info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -333,8 +376,36 @@
                 <p>Фракции, законы, уставы и правила для государственных служащих штата InteRPlay. Выберите интересующее ведомство для изучения внутренней структуры.</p>
             </div>
 
+            <div class="section-title">📝 Базовые требования для вступления</div>
+            <div class="info-block">
+                <p class="gov-desc" style="margin: 0 0 15px 0;">Чтобы успешно пройти собеседование или академический отбор в любую государственную организацию, ваш персонаж должен подходить под минимальные критерии штата:</p>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Проживание в штате</div>
+                        <div class="info-value">От 3-х лет (уровень)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Документы</div>
+                        <div class="info-value">Паспорт, Лицензия на авто</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Законопослушность</div>
+                        <div class="info-value">Отсутствие розыска / судимостей</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">⚖️ Свод главных правил гос. служащего</div>
+            <div class="info-block">
+                <ul class="rules-list">
+                    <li><b>Соблюдение субординации:</b> Обращение к коллегам и гражданским лицам строго на «Вы», уважительный тон, выполнение прямых приказов старшего состава.</li>
+                    <li><b>Рабочий регламент и форма:</b> Использование фракционного транспорта, спецсредств и служебной формы разрешено только во время нахождения на дежурстве (в рабочей смене).</li>
+                    <li><b>Правила рации:</b> Запрещен любой флуд, нецензурная брань или передача ООС-информации в IC-каналы департамента фракции.</li>
+                    <li><b>Запрет на криминал:</b> Любая связь с преступными синдикатами, продажа гос. имущества, получение взяток или хранение нелегальных предметов жестко наказывается (вплоть до увольнения с занесением в ЧС).</li>
+                </ul>
+            </div>
+
             <div class="section-title">🏢 Направления ведомств</div>
-            
             <div class="gov-grid">
                 
                 <a href="gov-police.html" class="gov-card">
