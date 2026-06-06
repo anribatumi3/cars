@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InteRPlay Wiki — Гос. структуры</title>
+    <title>InteRPlay Wiki — Государственные структуры</title>
     <style>
         body {
             background-color: #15161a;
@@ -13,157 +13,49 @@
             padding: 0;
             box-sizing: border-box;
             display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .wiki-layout {
-            display: flex;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* --- САЙДБАР (КАК НА С КРИНШОТЕ 1) --- */
-        .sidebar {
-            width: 240px;
-            min-width: 240px;
-            background-color: #1a1b1f;
-            min-height: 100vh;
-            padding: 35px 24px;
-            box-sizing: border-box;
-            display: flex;
             flex-direction: column;
-            gap: 30px;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .sidebar-logo {
+        /* --- ВЕРХНЯЯ ШАПКА ЛОГОТИПА --- */
+        .wiki-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 60px;
+            margin-bottom: 50px;
             text-decoration: none;
+        }
+
+        .wiki-header h1 {
+            font-size: 24px;
             color: #ffffff;
-            font-size: 16px;
             font-weight: 700;
+            margin: 0;
             letter-spacing: 0.5px;
         }
 
-        .sidebar-logo img {
-            width: 20px;
-            height: 20px;
+        .wiki-header span {
+            color: #ffffff;
+            font-weight: 400;
+        }
+
+        .wiki-header img {
+            width: 24px;
+            height: 24px;
             object-fit: contain;
         }
 
-        .sidebar-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #55585e;
-            margin-bottom: 18px;
-            font-weight: 600;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 12px;
-            color: #8e929a;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 13px;
-            transition: color 0.15s;
-            cursor: pointer;
-        }
-
-        .sidebar-item:hover {
-            color: #ffffff;
-        }
-
-        /* Активная плашка Гос. структур */
-        .sidebar-item.active-category {
-            background-color: #212328;
-            color: #ffffff;
-        }
-
-        .dropdown-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .submenu {
-            display: none;
-            flex-direction: column;
-            gap: 1px;
-            padding-left: 20px;
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
-
-        .dropdown-container.open .submenu {
-            display: flex;
-        }
-
-        .submenu-item {
-            padding: 8px 12px;
-            color: #61646a;
-            text-decoration: none;
-            font-size: 13px;
-            border-radius: 4px;
-            transition: color 0.15s;
-        }
-
-        .submenu-item:hover {
-            color: #ffffff;
-        }
-
-        .arrow-icon {
-            font-size: 8px;
-            color: #55585e;
-        }
-
-        .dropdown-container.open .arrow-icon {
-            color: #ffffff;
-        }
-
-        /* --- КОНТЕНТНАЯ ЧАСТЬ --- */
-        .content-body {
-            flex-grow: 1;
-            padding: 40px 50px;
-            max-width: 950px;
+        /* --- СЕТКА ДЛЯ 5 МЕНЮШЕК (ЦЕНТРИРОВАННАЯ, БЕЗ САЙДБАРА) --- */
+        .menu-container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 20px;
             box-sizing: border-box;
         }
 
-        .page-header {
-            background-color: #1e1f24;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .page-header h1 { 
-            font-size: 24px; 
-            color: #ffffff; 
-            margin: 0 0 12px 0; 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .page-header p { 
-            font-size: 14px; 
-            color: #718096; 
-            margin: 0; 
-            line-height: 1.6; 
-        }
-
-        /* --- СЕТКА ДЛЯ КАРТОЧЕК (ТОЧНО КАК НА ФОТО С КРАФТАМИ/РАБОТАМИ) --- */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -179,8 +71,10 @@
             align-items: center;
             justify-content: space-between;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: background-color 0.15s;
             cursor: pointer;
+            min-height: 82px;
+            box-sizing: border-box;
         }
 
         .menu-card:hover {
@@ -194,7 +88,7 @@
         }
 
         .card-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #ffffff;
             display: flex;
@@ -205,22 +99,21 @@
         .card-desc {
             font-size: 13px;
             color: #718096;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
-        /* Квадратная плашка со стрелочкой из оригинального интерфейса */
+        /* Маленькая квадратная кнопка со стрелочкой из оригинального UI */
         .card-arrow {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             background-color: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c7078;
-            transition: all 0.2s;
-            font-size: 14px;
+            color: #55585e;
+            transition: all 0.15s;
         }
 
         .menu-card:hover .card-arrow {
@@ -228,156 +121,84 @@
             color: #ffffff;
         }
 
-        @media (max-width: 900px) {
-            .wiki-layout { flex-direction: column; }
-            .sidebar { width: 100%; min-height: auto; }
-            .menu-grid { grid-template-columns: 1fr; }
+        /* Адаптивность под мобилки */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .wiki-header {
+                margin-top: 35px;
+                margin-bottom: 35px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="wiki-layout">
+    <a href="index.html" class="wiki-header">
+        <h1>InterPlay</h1>
+        <img src="logo.png" alt="⚡">
+        <h1><span>Wiki</span></h1>
+    </a>
 
-        <aside class="sidebar">
-            <a href="index.html" class="sidebar-logo">
-                <img src="logo.png" alt="⚡">
-                <span>InterPlay Wiki</span>
-            </a>
+    <div class="menu-container">
+        <div class="menu-grid">
             
-            <div>
-                <div class="sidebar-section-title">Категории</div>
-                <div class="sidebar-menu">
-                    <a href="map.html" class="sidebar-item">🗺️ Карта</a>
-                    
-                    <div class="dropdown-container" id="jobs-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('jobs-dropdown')">
-                            <span>💼 Работы</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="job-builder.html" class="submenu-item">Строитель</a>
-                            <a href="job-lumberjack.html" class="submenu-item">Лесоруб</a>
-                            <a href="job-postman.html" class="submenu-item">Почтальон</a>
-                        </div>
-                    </div>
-
-                    <a href="documents.html" class="sidebar-item">📑 Документы</a>
-                    <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
-                    <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
-                    <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
-                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
-                    
-                    <div class="dropdown-container" id="resources-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('resources-dropdown')">
-                            <span>🌲 Ресурсы</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="items-mushrooms.html" class="submenu-item">🍄 Грибы</a>
-                            <a href="items-fish.html" class="submenu-item">🐟 Рыбы</a>
-                            <a href="items-animals.html" class="submenu-item">🦌 Животные</a>
-                        </div>
-                    </div>
-                    
-                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
-                    
-                    <div class="dropdown-container" id="crime-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
-                            <span>🥷 Крайм</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="crime-gangs.html" class="submenu-item">Банды</a>
-                            <a href="crime-car-theft.html" class="submenu-item">Угонка</a>
-                        </div>
-                    </div>
-
-                    <div class="dropdown-container open" id="gov-dropdown">
-                        <div class="sidebar-item active-category" onclick="toggleDropdown('gov-dropdown')">
-                            <span>🛡️ Гос. структуры</span>
-                            <span class="arrow-icon">▼</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="gov-police.html" class="submenu-item">Полиция (LSPD, LSSD, SAHP)</a>
-                            <a href="gov-ems.html" class="submenu-item">Больница (EMS)</a>
-                            <a href="gov-sang.html" class="submenu-item">Армия (SANG)</a>
-                            <a href="gov-gov.html" class="submenu-item">Правительство (GOV)</a>
-                        </div>
-                    </div>
-                    
-                    <div class="dropdown-container" id="crafts-dropdown">
-                        <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
-                            <span>🛠️ Крафты</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="submenu">
-                            <a href="crafts-illegal.html" class="submenu-item">Нелегальный крафт</a>
-                        </div>
-                    </div>
+            <a href="gov-info.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">📝 Общая информация для гос. служащего</div>
+                    <div class="card-desc">Базовые правила, законы, субординация и требования к сотрудникам</div>
                 </div>
-            </div>
-        </aside>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
 
-        <main class="content-body">
-            
-            <div class="page-header">
-                <h1>🛡️ Гос. структуры</h1>
-                <p>Фракции, законы, уставы и правила для гос. служащих.</p>
-            </div>
+            <a href="gov-police.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🚓 Полиция</div>
+                    <div class="card-desc">Департаменты исполнительной власти штата: LSPD, LSSD, SAHP</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
 
-            <div class="menu-grid">
-                
-                <a href="gov-police.html" class="menu-card">
-                    <div class="card-content">
-                        <div class="card-title">🚓 Полиция</div>
-                        <div class="card-desc">LSPD, LSSD, SAHP</div>
-                    </div>
-                    <div class="card-arrow">↗</div>
-                </a>
+            <a href="gov-ems.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🚑 Больница</div>
+                    <div class="card-desc">Медицинская служба экстренной помощи и выдачи справок: EMS</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
 
-                <a href="gov-ems.html" class="menu-card">
-                    <div class="card-content">
-                        <div class="card-title">🚑 Больница</div>
-                        <div class="card-desc">EMS</div>
-                    </div>
-                    <div class="card-arrow">↗</div>
-                </a>
+            <a href="gov-sang.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🪖 Армия</div>
+                    <div class="card-desc">Национальная гвардия, оборона Форт-Занкудо и снабжение: SANG</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
 
-                <a href="gov-sang.html" class="menu-card">
-                    <div class="card-content">
-                        <div class="card-title">🪖 Армия</div>
-                        <div class="card-desc">SANG</div>
-                    </div>
-                    <div class="card-arrow">↗</div>
-                </a>
+            <a href="gov-gov.html" class="menu-card">
+                <div class="card-content">
+                    <div class="card-title">🏛️ Правительство</div>
+                    <div class="card-desc">Законодательный орган, судейская коллегия и мэрия: GOV</div>
+                </div>
+                <div class="card-arrow">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                </div>
+            </a>
 
-                <a href="gov-gov.html" class="menu-card">
-                    <div class="card-content">
-                        <div class="card-title">🏛️ Правительство</div>
-                        <div class="card-desc">GOV</div>
-                    </div>
-                    <div class="card-arrow">↗</div>
-                </a>
-
-            </div>
-
-        </main>
+        </div>
     </div>
 
-    <script>
-        function toggleDropdown(id) {
-            const dropdown = document.getElementById(id);
-            const arrow = dropdown.querySelector('.arrow-icon');
-            dropdown.classList.toggle('open');
-            
-            if (dropdown.classList.contains('open')) {
-                arrow.textContent = '▼';
-            } else {
-                arrow.textContent = '▶';
-            }
-        }
-    </script>
+</body>
+</html>
 
 </body>
 </html>
