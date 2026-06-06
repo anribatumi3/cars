@@ -399,7 +399,7 @@
                     <div class="dropdown-container open" id="jobs-dropdown">
                         <div class="sidebar-item active" onclick="toggleDropdown('jobs-dropdown')">
                             <span>💼 Работы</span>
-                            <span class="arrow-icon">▶</span>
+                            <span class="arrow-icon">▼</span>
                         </div>
                         <div class="submenu">
                             <a href="job-builder.html" class="submenu-item">Строитель</a>
@@ -420,9 +420,25 @@
                     <a href="cars.html" class="sidebar-item">🚗 Транспорт</a>
                     <a href="clothes.html" class="sidebar-item">👔 Одежда</a>
                     <a href="realestate.html" class="sidebar-item">🏠 Недвижимость</a>
-                    <a href="businesses.html" class="sidebar-item">💰 Бизнесы</a>
+                    
+                    <div class="dropdown-container" id="businesses-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('businesses-dropdown')">
+                            <span>💰 Бизнесы</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="biz-info.html" class="submenu-item">Общая информация</a>
+                            <a href="biz-ammunation.html" class="submenu-item">Оружейный магазин</a>
+                            <a href="biz-barbershop.html" class="submenu-item">Барбершоп</a>
+                            <a href="biz-shop247.html" class="submenu-item">Магазин 24/7</a>
+                            <a href="biz-tattoo.html" class="submenu-item">Тату-салон</a>
+                            <a href="biz-customs.html" class="submenu-item">Тюнинг салон</a>
+                            <a href="biz-clothes.html" class="submenu-item">Магазин одежды</a>
+                            <a href="biz-gas.html" class="submenu-item">АЗС</a>
+                        </div>
+                    </div>
                     <div class="dropdown-container" id="items-dropdown">
-                    <div class="sidebar-item" onclick="toggleDropdown('items-dropdown')">
+                        <div class="sidebar-item" onclick="toggleDropdown('items-dropdown')">
                             <span>🌲 Ресурсы</span>
                             <span class="arrow-icon">▶</span>
                         </div>
@@ -432,7 +448,7 @@
                             <a href="items-animals.html" class="submenu-item" style="opacity: 0.4; cursor: not-allowed;">🦌 Животные</a>
                         </div>
                     </div>
-                    <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
+                     <a href="weapons.html" class="sidebar-item">🔫 Оружие</a>
                     
                     <div class="dropdown-container" id="crime-dropdown">
                         <div class="sidebar-item" onclick="toggleDropdown('crime-dropdown')">
@@ -448,7 +464,21 @@
                         </div>
                     </div>
 
-                    <a href="government.html" class="sidebar-item">🛡️ Гос. структуры</a>
+
+                    <div class="dropdown-container" id="gov-dropdown">
+                        <div class="sidebar-item" onclick="toggleDropdown('gov-dropdown')">
+                            <span>🛡️ Гос. структуры</span>
+                            <span class="arrow-icon">▶</span>
+                        </div>
+                        <div class="submenu">
+                            <a href="gov-info.html" class="submenu-item">Общая информация</a>
+                            <a href="gov-police.html" class="submenu-item">Полиция (LSPD, LSSD, SAHP)</a>
+                            <a href="gov-ems.html" class="submenu-item">Больница (EMS)</a>
+                            <a href="gov-sang.html" class="submenu-item">Армия (SANG)</a>
+                            <a href="gov-gov.html" class="submenu-item">Правительство (GOV)</a>
+                        </div>
+                    </div>
+                    
                     <div class="dropdown-container" id="crafts-dropdown">
                 <div class="sidebar-item" onclick="toggleDropdown('crafts-dropdown')">
                     <span>🛠️ Крафты</span>
@@ -461,7 +491,6 @@
                 </div>
             </div>
         </aside>
-
         <!-- 2. ЦЕНТРАЛЬНЫЙ БЛОК -->
         <main class="content-body">
             <h1>🚖 Работа: Таксист</h1>
